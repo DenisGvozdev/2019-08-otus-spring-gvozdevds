@@ -1,0 +1,18 @@
+INSERT INTO STATUSES (ID, `NAME`) VALUES (1, 'active');
+INSERT INTO STATUSES (ID, `NAME`) VALUES (0, 'inactive');
+
+INSERT INTO AUTHORS (ID, FIRSTNAME, SECONDNAME, THIRDNAME, BIRTH_DATE, STATUS)
+VALUES (1, 'Ник', 'Перумов', '', null, 1);
+INSERT INTO AUTHORS (ID, FIRSTNAME, SECONDNAME, THIRDNAME, BIRTH_DATE, STATUS)
+VALUES (2, 'Даниэль', 'Дефо', '', null, 1);
+INSERT INTO AUTHORS (ID, FIRSTNAME, SECONDNAME, THIRDNAME, BIRTH_DATE, STATUS)
+VALUES (3, 'Михаил', 'Афанасьевич', 'Булгаков', null, 1);
+
+INSERT INTO GENRES (ID, `NAME`) VALUES (1, 'Фэнтези');
+INSERT INTO GENRES (ID, `NAME`) VALUES (2, 'Приключения');
+INSERT INTO GENRES (ID, `NAME`) VALUES (3, 'Роман');
+
+INSERT INTO BOOKS (ID, `NAME`, CREATE_DATE, DESCRIPTION, `IMAGE`, GENRE, STATUS, AUTHOR)
+VALUES (1, 'Кольцо тьмы', null, 'Магия, миры, приключения...', NULL, 1, 1, 1);
+INSERT INTO BOOKS (ID, `NAME`, CREATE_DATE, DESCRIPTION, `IMAGE`, GENRE, STATUS, AUTHOR)
+VALUES (2, 'Робинзон Крузо', null, 'Как выжить на необитаемом острове', NULL, 1, 1, 1);
