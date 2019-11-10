@@ -7,12 +7,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import ru.gds.spring.config.Config;
 import ru.gds.spring.domain.Status;
+import ru.gds.spring.interfaces.StatusRepository;
 
 import java.util.List;
 
@@ -20,17 +19,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = Config.class)
+@ContextConfiguration("/app-config.xml")
 @Import(JdbcStatusRepository.class)
 public class JdbcStatusRepositoryTest {
 
     @Autowired
-    @Qualifier("jdbcStatusRepository")
-    JdbcStatusRepository jdbcStatusRepository;
+    StatusRepository jdbcStatusRepository;
 
     @Test
-    void insertAuthor() {
-        Boolean result = jdbcStatusRepository.insert("archive");
+    void insertStatus() {
+        Status status = new Status("archive");
+        boolean result = jdbcStatusRepository.insert(status);
         assumeTrue(result);
         System.out.println("Статус добавлен: " + result);
 
@@ -39,12 +38,14 @@ public class JdbcStatusRepositoryTest {
     }
 
     @Test
-    void updateAuthor() {
-        Boolean result = jdbcStatusRepository.update(1, "activeStatus");
+    void updateStatus() {
+        Status status = jdbcStatusRepository.getById(1);
+        status.setName("activeStatus");
+        boolean result = jdbcStatusRepository.update(status);
         assumeTrue(result);
         System.out.println("Статус обновлен: " + result);
 
-        Status status = jdbcStatusRepository.getById(1);
+        status = jdbcStatusRepository.getById(1);
         System.out.println("Новые данные: " + status.toString());
     }
 
@@ -61,6 +62,16 @@ public class JdbcStatusRepositoryTest {
         List<Status> statusList = jdbcStatusRepository.getAll();
         assumeTrue(statusList.size() == 2);
         System.out.println("Количество статусов: " + statusList.size());
+    }
+
+    @Test
+    void removeStatus() {
+        boolean result = jdbcStatusRepository.removeById(0);
+        assumeTrue(result);
+        System.out.println("Статус удален: " + result);
+
+        List<Status> statusList = jdbcStatusRepository.getAll();
+        System.out.println("Все статусы: " + statusList);
     }
 
     @BeforeAll

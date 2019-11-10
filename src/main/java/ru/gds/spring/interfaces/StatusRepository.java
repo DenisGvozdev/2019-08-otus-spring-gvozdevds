@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface StatusRepository {
 
-    boolean insert(String name);
+    boolean insert(Status status);
 
     List<Status> getAll();
 
@@ -14,5 +14,5 @@ public interface StatusRepository {
 
     boolean removeById(long id);
 
-    boolean update(long id, String name);
+    boolean update(Status status);
 }

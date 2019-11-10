@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface GenreRepository {
 
-    boolean insert(String name);
+    boolean insert(Genre genre);
 
     List<Genre> getAll();
 
@@ -14,5 +14,5 @@ public interface GenreRepository {
 
     boolean removeById(long id);
 
-    boolean update(long id, String name);
+    boolean update(Genre genre);
 }

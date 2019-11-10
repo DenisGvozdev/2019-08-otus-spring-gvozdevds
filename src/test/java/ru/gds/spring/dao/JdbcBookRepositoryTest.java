@@ -7,12 +7,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import ru.gds.spring.config.Config;
+import ru.gds.spring.domain.Author;
 import ru.gds.spring.domain.Book;
+import ru.gds.spring.domain.Genre;
+import ru.gds.spring.domain.Status;
+import ru.gds.spring.interfaces.AuthorRepository;
+import ru.gds.spring.interfaces.BookRepository;
+import ru.gds.spring.interfaces.GenreRepository;
+import ru.gds.spring.interfaces.StatusRepository;
 
 import java.util.Date;
 import java.util.List;
@@ -21,17 +26,30 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = Config.class)
-@Import(JdbcBookRepository.class)
+@ContextConfiguration("/app-config.xml")
+@Import({JdbcBookRepository.class,JdbcAuthorRepository.class,JdbcGenreRepository.class,JdbcStatusRepository.class})
 public class JdbcBookRepositoryTest {
 
     @Autowired
-    @Qualifier("jdbcBookRepository")
-    JdbcBookRepository jdbcBookRepository;
+    BookRepository jdbcBookRepository;
+
+    @Autowired
+    AuthorRepository jdbcAuthorRepository;
+
+    @Autowired
+    GenreRepository jdbcGenreRepository;
+
+    @Autowired
+    StatusRepository jdbcStatusRepository;
 
     @Test
     void insertBook() {
-        Boolean result = jdbcBookRepository.insert("Мастер и Маргарита", new Date(), "Классика", null, 1, 1, 1);
+        Genre genre = jdbcGenreRepository.getById(1);
+        Status status = jdbcStatusRepository.getById(1);
+        Author author = jdbcAuthorRepository.getById(1);
+        Book book = new Book("Мастер и Маргарита", new Date(), "Классика", null, genre, status, author);
+
+        boolean result = jdbcBookRepository.insert(book);
         assumeTrue(result);
         System.out.println("Книга добавлена: " + result);
 
@@ -41,11 +59,22 @@ public class JdbcBookRepositoryTest {
 
     @Test
     void updateBook() {
-        Boolean result = jdbcBookRepository.update(1, "Кольцо тьмы обновление", new Date(), "Сказки", null, 1, 1, 1);
+        Genre genre = jdbcGenreRepository.getById(1);
+        Status status = jdbcStatusRepository.getById(1);
+        Author author = jdbcAuthorRepository.getById(1);
+        Book book = jdbcBookRepository.getById(1);
+        book.setName("Кольцо тьмы обновление");
+        book.setDescription("Сказки");
+        book.setImage(null);
+        book.setGenre(genre);
+        book.setAuthor(author);
+        book.setStatus(status);
+
+        boolean result = jdbcBookRepository.update(book);
         assumeTrue(result);
         System.out.println("Книга обновлена: " + result);
 
-        Book book = jdbcBookRepository.getById(1);
+        book = jdbcBookRepository.getById(1);
         System.out.println("Новое название: " + book.getName());
     }
 
@@ -60,8 +89,18 @@ public class JdbcBookRepositoryTest {
     @Test
     void getAll() {
         List<Book> bookList = jdbcBookRepository.getAll();
-        assumeTrue(bookList.size()==2);
+        assumeTrue(bookList.size() == 2);
         System.out.println("Размер библиотеки: " + bookList.size());
+    }
+
+    @Test
+    void removeBook() {
+        boolean result = jdbcBookRepository.removeById(1);
+        assumeTrue(result);
+        System.out.println("Книга удалена: " + result);
+
+        List<Book> bookList = jdbcBookRepository.getAll();
+        System.out.println("Все книги: " + bookList);
     }
 
     @BeforeAll

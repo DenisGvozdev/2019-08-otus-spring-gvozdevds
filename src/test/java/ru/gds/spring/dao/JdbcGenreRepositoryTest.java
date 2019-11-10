@@ -7,12 +7,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import ru.gds.spring.config.Config;
 import ru.gds.spring.domain.Genre;
+import ru.gds.spring.interfaces.GenreRepository;
 
 import java.util.List;
 
@@ -20,17 +19,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = Config.class)
+@ContextConfiguration("/app-config.xml")
 @Import(JdbcGenreRepository.class)
 public class JdbcGenreRepositoryTest {
 
     @Autowired
-    @Qualifier("jdbcGenreRepository")
-    JdbcGenreRepository jdbcGenreRepository;
+    GenreRepository jdbcGenreRepository;
 
     @Test
     void insertGenre() {
-        Boolean result = jdbcGenreRepository.insert("Исторический");
+        Genre genre = new Genre("Исторический");
+        boolean result = jdbcGenreRepository.insert(genre);
         assumeTrue(result);
         System.out.println("Жанр добавлен: " + result);
 
@@ -40,11 +39,13 @@ public class JdbcGenreRepositoryTest {
 
     @Test
     void updateGenre() {
-        Boolean result = jdbcGenreRepository.update(1, "Фэнтези+");
+        Genre genre = jdbcGenreRepository.getById(1);
+        genre.setName("Фэнтези+");
+        boolean result = jdbcGenreRepository.update(genre);
         assumeTrue(result);
         System.out.println("Жанр обновлен: " + result);
 
-        Genre genre = jdbcGenreRepository.getById(1);
+        genre = jdbcGenreRepository.getById(1);
         System.out.println("Новые данные: " + genre.toString());
     }
 
@@ -61,6 +62,16 @@ public class JdbcGenreRepositoryTest {
         List<Genre> genreList = jdbcGenreRepository.getAll();
         assumeTrue(genreList.size() == 3);
         System.out.println("Количество жанров: " + genreList.size());
+    }
+
+    @Test
+    void removeGenre() {
+        boolean result = jdbcGenreRepository.removeById(3);
+        assumeTrue(result);
+        System.out.println("Жанр удален: " + result);
+
+        List<Genre> genreList = jdbcGenreRepository.getAll();
+        System.out.println("Все жанры: " + genreList);
     }
 
     @BeforeAll
