@@ -1,15 +1,13 @@
 package ru.gds.spring.dao;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.gds.spring.domain.Author;
 import ru.gds.spring.domain.Book;
 import ru.gds.spring.domain.Genre;
@@ -22,12 +20,13 @@ import ru.gds.spring.interfaces.StatusRepository;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assume.assumeTrue;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration("/app-config.xml")
-@Import({JdbcBookRepository.class,JdbcAuthorRepository.class,JdbcGenreRepository.class,JdbcStatusRepository.class})
+@JdbcTest
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:/app-config.xml")
+@Import({JdbcBookRepository.class, JdbcAuthorRepository.class, JdbcGenreRepository.class, JdbcStatusRepository.class})
 public class JdbcBookRepositoryTest {
 
     @Autowired
@@ -43,7 +42,7 @@ public class JdbcBookRepositoryTest {
     StatusRepository jdbcStatusRepository;
 
     @Test
-    void insertBook() {
+    public void insertBook() {
         Genre genre = jdbcGenreRepository.getById(1);
         Status status = jdbcStatusRepository.getById(1);
         Author author = jdbcAuthorRepository.getById(1);
@@ -58,7 +57,7 @@ public class JdbcBookRepositoryTest {
     }
 
     @Test
-    void updateBook() {
+    public void updateBook() {
         Genre genre = jdbcGenreRepository.getById(1);
         Status status = jdbcStatusRepository.getById(1);
         Author author = jdbcAuthorRepository.getById(1);
@@ -79,7 +78,7 @@ public class JdbcBookRepositoryTest {
     }
 
     @Test
-    void getById() {
+    public void getById() {
         Book book = jdbcBookRepository.getById(1);
         assumeTrue(book != null);
         assertEquals("Кольцо тьмы", book.getName());
@@ -87,39 +86,19 @@ public class JdbcBookRepositoryTest {
     }
 
     @Test
-    void getAll() {
+    public void getAll() {
         List<Book> bookList = jdbcBookRepository.getAll();
         assumeTrue(bookList.size() == 2);
         System.out.println("Размер библиотеки: " + bookList.size());
     }
 
     @Test
-    void removeBook() {
+    public void removeBook() {
         boolean result = jdbcBookRepository.removeById(1);
         assumeTrue(result);
         System.out.println("Книга удалена: " + result);
 
         List<Book> bookList = jdbcBookRepository.getAll();
         System.out.println("Все книги: " + bookList);
-    }
-
-    @BeforeAll
-    static void initAll() {
-        System.out.println("---Inside initAll---");
-    }
-
-    @BeforeEach
-    void init() {
-        System.out.println("Start...");
-    }
-
-    @AfterEach
-    void tearDown() {
-        System.out.println("Finished...");
-    }
-
-    @AfterAll
-    static void tearDownAll() {
-        System.out.println("---Inside tearDownAll---");
     }
 }

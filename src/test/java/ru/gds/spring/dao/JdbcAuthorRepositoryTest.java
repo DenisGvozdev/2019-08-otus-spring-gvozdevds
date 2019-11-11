@@ -1,15 +1,12 @@
 package ru.gds.spring.dao;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.gds.spring.domain.Author;
 import ru.gds.spring.domain.Status;
 import ru.gds.spring.interfaces.AuthorRepository;
@@ -18,11 +15,12 @@ import ru.gds.spring.interfaces.StatusRepository;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assume.assumeTrue;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration("/app-config.xml")
+@JdbcTest
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration("classpath:/app-config.xml")
 @Import({JdbcAuthorRepository.class, JdbcStatusRepository.class})
 public class JdbcAuthorRepositoryTest {
 
@@ -33,7 +31,7 @@ public class JdbcAuthorRepositoryTest {
     StatusRepository jdbcStatusRepository;
 
     @Test
-    void insertAuthor() {
+    public void insertAuthor() {
         Status status = jdbcStatusRepository.getById(1);
         Author author = new Author("Михаил", "Александрович", "Шолохов", new Date(), status);
         boolean result = jdbcAuthorRepository.insert(author);
@@ -45,7 +43,7 @@ public class JdbcAuthorRepositoryTest {
     }
 
     @Test
-    void updateAuthor() {
+    public void updateAuthor() {
         Status status = jdbcStatusRepository.getById(1);
         Author author = jdbcAuthorRepository.getById(1);
         author.setFirstName("Николай");
@@ -62,7 +60,7 @@ public class JdbcAuthorRepositoryTest {
     }
 
     @Test
-    void getById() {
+    public void getById() {
         Author author = jdbcAuthorRepository.getById(1);
         assumeTrue(author != null);
         assertEquals("Ник", author.getFirstName());
@@ -70,39 +68,19 @@ public class JdbcAuthorRepositoryTest {
     }
 
     @Test
-    void getAll() {
+    public void getAll() {
         List<Author> authorList = jdbcAuthorRepository.getAll();
         assumeTrue(authorList.size() == 3);
         System.out.println("Количество авторов: " + authorList.size());
     }
 
     @Test
-    void removeBook() {
+    public void removeBook() {
         boolean result = jdbcAuthorRepository.removeById(3);
         assumeTrue(result);
         System.out.println("Автор удален: " + result);
 
         List<Author> authorList = jdbcAuthorRepository.getAll();
         System.out.println("Все авторы: " + authorList);
-    }
-
-    @BeforeAll
-    static void initAll() {
-        System.out.println("---Inside initAll---");
-    }
-
-    @BeforeEach
-    void init() {
-        System.out.println("Start...");
-    }
-
-    @AfterEach
-    void tearDown() {
-        System.out.println("Finished...");
-    }
-
-    @AfterAll
-    static void tearDownAll() {
-        System.out.println("---Inside tearDownAll---");
     }
 }
