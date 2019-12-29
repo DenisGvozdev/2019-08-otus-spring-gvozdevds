@@ -1,6 +1,6 @@
 package ru.otus.spring.service;
 
-public interface TestService {
+public interface StudentTestService {
 
     void testStart();
 }

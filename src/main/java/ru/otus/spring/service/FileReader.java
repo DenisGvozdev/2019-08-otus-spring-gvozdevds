@@ -4,8 +4,8 @@ import ru.otus.spring.domain.Question;
 
 import java.util.List;
 
-public interface FileReaderCSV {
+public interface FileReader {
 
-    public List<Question> prepareData();
+    List<Question> prepareData() throws Exception;
 
 }

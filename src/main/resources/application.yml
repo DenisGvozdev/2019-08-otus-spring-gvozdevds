@@ -1,0 +1,5 @@
+app:
+  testMode: false
+  filePath: questions.csv
+  locale: ru_RU
+  #locale: en_US
