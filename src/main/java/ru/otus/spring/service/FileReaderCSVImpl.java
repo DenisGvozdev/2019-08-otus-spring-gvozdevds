@@ -2,7 +2,6 @@ package ru.otus.spring.service;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import ru.otus.spring.config.AppConfig;
 import ru.otus.spring.domain.Question;
 
 import java.io.BufferedReader;
@@ -18,10 +17,15 @@ import java.util.List;
 public class FileReaderCSVImpl implements FileReader {
 
     private final String filePath;
+    private final String locale;
+    private final MessageService ms;
     private final List<Question> questionsAndAnswers = new ArrayList<>();
 
-    public FileReaderCSVImpl(String filePath) {
+
+    public FileReaderCSVImpl(String filePath, String locale, MessageService ms) {
         this.filePath = filePath;
+        this.locale = locale;
+        this.ms = ms;
     }
 
     /**
@@ -34,8 +38,6 @@ public class FileReaderCSVImpl implements FileReader {
     public List<Question> prepareData() throws Exception {
         try {
 
-            MessageServiceImpl ms = AppConfig.getMessageService();
-
             InputStream is = Controller.class.getClassLoader().getResourceAsStream(this.filePath);
             if (is == null) {
                 throw new Exception("file not found: " + this.filePath);
@@ -46,17 +48,27 @@ public class FileReaderCSVImpl implements FileReader {
             while (bReader.ready()) {
 
                 String line = bReader.readLine();
+
+                if (line.isEmpty()) {
+                    continue;
+                }
+
                 String[] row = line.split(",");
 
-                if (row.length < 4) {
+                if (row.length < 5) {
                     // Указаны не все параметры
                     throw new Exception(ms.getLocalizedMessage("test.error.row", new Object[]{line}));
                 }
 
+                if (!locale.equals(row[1])) {
+                    // этот вопрос не для текущей локали
+                    continue;
+                }
+
                 String number = row[0];
-                String question = ms.getLocalizedMessage(row[1], null);
-                String variants = ms.getLocalizedMessage(row[2], null);
-                String rightAnswers = ms.getLocalizedMessage(row[3], null);
+                String question = row[2];
+                String variants = row[3];
+                String rightAnswers = row[4];
 
                 if (StringUtils.isEmpty(number)
                         || StringUtils.isEmpty(question)

@@ -1,7 +1,6 @@
 package ru.otus.spring.service;
 
 import org.springframework.stereotype.Service;
-import ru.otus.spring.config.AppConfig;
 import ru.otus.spring.domain.Question;
 
 import java.util.List;
@@ -12,17 +11,25 @@ import java.util.List;
 @Service
 public class StudentTestServiceImpl implements StudentTestService {
 
+    private final MessageService ms;
+    private final ConsoleService cs;
+    private final FileReader fileReader;
+
+    public StudentTestServiceImpl(MessageService ms, ConsoleService cs, FileReader fileReader) {
+        this.ms = ms;
+        this.cs = cs;
+        this.fileReader = fileReader;
+    }
+
     /**
      * Главный метод, запускающий тест
      */
     @Override
     public void testStart() {
         try {
-            MessageServiceImpl ms = AppConfig.getMessageService();
-            ConsoleServiceImpl cs = AppConfig.getConsoleService();
 
             // Начитываем вопросы и ответы из файла questions.csv
-            List<Question> questionsAndAnswers = AppConfig.getFileReaderCSVer().prepareData();
+            List<Question> questionsAndAnswers = fileReader.prepareData();
 
             // Начинаем работу
 

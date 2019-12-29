@@ -2,10 +2,14 @@ package ru.otus.spring.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import ru.otus.spring.service.ConsoleServiceImpl;
 import ru.otus.spring.service.FileReaderCSVImpl;
+import ru.otus.spring.service.MessageService;
 import ru.otus.spring.service.MessageServiceImpl;
 
 /**
@@ -16,9 +20,8 @@ import ru.otus.spring.service.MessageServiceImpl;
 @PropertySource("classpath:application.properties")
 public class AppConfig {
 
-    private static FileReaderCSVImpl fileReaderCSVer;
-    private static MessageServiceImpl messageService;
-    private static ConsoleServiceImpl consoleService;
+    private MessageSource messageSource;
+    private MessageService messageService;
 
     /**
      * Подключаем бандлы
@@ -27,23 +30,11 @@ public class AppConfig {
      */
     @Bean
     public MessageSource messageSource() {
-        //
         ReloadableResourceBundleMessageSource ms = new ReloadableResourceBundleMessageSource();
         ms.setBasename("classpath:bundle");
         ms.setDefaultEncoding("UTF-8");
+        messageSource = ms;
         return ms;
-    }
-
-    /**
-     * Сервис чтения файла questions.csv
-     *
-     * @param filePath путь к CSV файлу с вопросами
-     * @return FileReaderCSVImpl
-     */
-    @Bean
-    FileReaderCSVImpl fileReaderCSVImpl(@Value("${app.filePath}") String filePath) {
-        fileReaderCSVer = new FileReaderCSVImpl(filePath);
-        return fileReaderCSVer;
     }
 
     /**
@@ -53,9 +44,22 @@ public class AppConfig {
      * @return MessageServiceImpl
      */
     @Bean
-    MessageServiceImpl messageServiceImpl(@Value("${app.locale}") String locale) {
-        messageService = new MessageServiceImpl(locale);
+    MessageService messageServiceImpl(@Value("${app.locale}") String locale) {
+        messageService = new MessageServiceImpl(locale, messageSource);
         return messageService;
+    }
+
+    /**
+     * Сервис чтения файла questions.csv
+     *
+     * @param filePath путь к CSV файлу с вопросами
+     * @return FileReaderCSVImpl
+     */
+    @Bean
+    FileReaderCSVImpl fileReaderCSVImpl(
+            @Value("${app.filePath}") String filePath,
+            @Value("${app.locale}") String locale) {
+        return new FileReaderCSVImpl(filePath, locale, messageService);
     }
 
     /**
@@ -65,19 +69,6 @@ public class AppConfig {
      */
     @Bean
     ConsoleServiceImpl ConsoleService() {
-        consoleService = new ConsoleServiceImpl();
-        return consoleService;
-    }
-
-    public static FileReaderCSVImpl getFileReaderCSVer() {
-        return fileReaderCSVer;
-    }
-
-    public static MessageServiceImpl getMessageService() {
-        return messageService;
-    }
-
-    public static ConsoleServiceImpl getConsoleService() {
-        return consoleService;
+        return new ConsoleServiceImpl();
     }
 }

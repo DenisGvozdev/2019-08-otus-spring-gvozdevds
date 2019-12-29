@@ -3,11 +3,12 @@ package main.ru.otus.spring.service;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.context.annotation.Import;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.otus.spring.config.AppConfig;
 import ru.otus.spring.domain.Question;
+import ru.otus.spring.service.FileReader;
 
 import java.util.List;
 
@@ -15,14 +16,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = AppConfig.class)
-@Import({AppConfig.class})
 class StudentTestServiceImplTest {
+
+    @Autowired
+    private FileReader fileReader;
 
     @Test
     @DisplayName("Test method testStart")
     void testStart() {
         try {
-            List<Question> questionsAndAnswers = AppConfig.getFileReaderCSVer().prepareData();
+            List<Question> questionsAndAnswers = fileReader.prepareData();
 
             Question question1 = questionsAndAnswers.get(0);
             assertTrue(question1.checkAnswer("я"));
