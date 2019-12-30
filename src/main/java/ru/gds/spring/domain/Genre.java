@@ -1,7 +1,5 @@
 package ru.gds.spring.domain;
 
-import java.util.Date;
-
 public class Genre {
 
     private long id;

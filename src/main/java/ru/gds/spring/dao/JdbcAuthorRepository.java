@@ -1,6 +1,6 @@
 package ru.gds.spring.dao;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -15,25 +15,23 @@ import java.util.*;
 @Repository
 public class JdbcAuthorRepository implements AuthorRepository {
 
-    private NamedParameterJdbcTemplate jdbc;
-
-    private final String INSERT = "INSERT INTO AUTHORS (FIRSTNAME, SECONDNAME, THIRDNAME, BIRTH_DATE, STATUS) " +
+    private static final String INSERT = "INSERT INTO AUTHORS (FIRSTNAME, SECONDNAME, THIRDNAME, BIRTH_DATE, STATUS) " +
             " VALUES (:FIRSTNAME,:SECONDNAME,:THIRDNAME,:BIRTH_DATE,:STATUS)";
 
-    private final String SELECT_ALL = "SELECT a.ID, a.FIRSTNAME, a.SECONDNAME, a.THIRDNAME, a.BIRTH_DATE, a.STATUS, " +
+    private static final String SELECT_ALL = "SELECT a.ID, a.FIRSTNAME, a.SECONDNAME, a.THIRDNAME, a.BIRTH_DATE, a.STATUS, " +
             " ast.ID AS AUTHOR_STATUS_ID, ast.NAME AS AUTHOR_STATUS_NAME " +
             " FROM AUTHORS a " +
             " LEFT JOIN STATUSES ast ON a.STATUS = ast.ID ";
 
-    private final String SELECT_BY_ID = "SELECT a.ID, a.FIRSTNAME, a.SECONDNAME, a.THIRDNAME, a.BIRTH_DATE, a.STATUS, " +
+    private static final String SELECT_BY_ID = "SELECT a.ID, a.FIRSTNAME, a.SECONDNAME, a.THIRDNAME, a.BIRTH_DATE, a.STATUS, " +
             " ast.ID AS AUTHOR_STATUS_ID, ast.NAME AS AUTHOR_STATUS_NAME " +
             " FROM AUTHORS a " +
             " LEFT JOIN STATUSES ast ON a.STATUS = ast.ID " +
             " WHERE a.ID = :ID";
 
-    String DELETE_BY_ID = "DELETE FROM AUTHORS WHERE ID = :ID";
+    private static final String DELETE_BY_ID = "DELETE FROM AUTHORS WHERE ID = :ID";
 
-    String UPDATE_BY_ID = "UPDATE AUTHORS SET" +
+    private static final String UPDATE_BY_ID = "UPDATE AUTHORS SET" +
             " FIRSTNAME = :FIRSTNAME," +
             " SECONDNAME = :SECONDNAME," +
             " THIRDNAME = :THIRDNAME," +
@@ -41,9 +39,12 @@ public class JdbcAuthorRepository implements AuthorRepository {
             " STATUS = :STATUS" +
             " WHERE ID = :ID";
 
-    @Autowired
+    private static final Logger logger = Logger.getLogger(JdbcAuthorRepository.class);
+
+    private final NamedParameterJdbcTemplate jdbc;
+
     JdbcAuthorRepository(NamedParameterJdbcTemplate namedJdbcTemplate) {
-        this.jdbc = namedJdbcTemplate;
+        jdbc = namedJdbcTemplate;
     }
 
     @Override
@@ -59,7 +60,7 @@ public class JdbcAuthorRepository implements AuthorRepository {
             return true;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(Arrays.asList(e.getStackTrace()));
         }
         return false;
     }
@@ -70,9 +71,9 @@ public class JdbcAuthorRepository implements AuthorRepository {
             return jdbc.getJdbcOperations().query(SELECT_ALL, new JdbcAuthorRepository.AuthorMapper());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(Arrays.asList(e.getStackTrace()));
         }
-        return new ArrayList<Author>();
+        return new ArrayList<>();
     }
 
     @Override
@@ -83,7 +84,7 @@ public class JdbcAuthorRepository implements AuthorRepository {
             return jdbc.queryForObject(SELECT_BY_ID, params, new JdbcAuthorRepository.AuthorMapper());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(Arrays.asList(e.getStackTrace()));
         }
         return null;
     }
@@ -96,7 +97,7 @@ public class JdbcAuthorRepository implements AuthorRepository {
             jdbc.update(DELETE_BY_ID, params);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(Arrays.asList(e.getStackTrace()));
         }
         return false;
     }
@@ -115,7 +116,7 @@ public class JdbcAuthorRepository implements AuthorRepository {
             return true;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(Arrays.asList(e.getStackTrace()));
         }
         return false;
     }

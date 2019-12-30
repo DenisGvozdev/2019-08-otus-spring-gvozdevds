@@ -1,6 +1,6 @@
 package ru.gds.spring.dao;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -17,12 +17,10 @@ import java.util.*;
 @Repository
 public class JdbcBookRepository implements BookRepository {
 
-    private NamedParameterJdbcTemplate jdbc;
-
-    private final String INSERT = "INSERT INTO BOOKS (`NAME`, CREATE_DATE, DESCRIPTION, `IMAGE`, GENRE, STATUS, AUTHOR) " +
+    private static final String INSERT = "INSERT INTO BOOKS (`NAME`, CREATE_DATE, DESCRIPTION, `IMAGE`, GENRE, STATUS, AUTHOR) " +
             "VALUES (:NAME, :CREATE_DATE, :DESCRIPTION, :IMAGE, :GENRE, :STATUS, :AUTHOR)";
 
-    private final String SELECT_ALL = "SELECT b.ID, b.NAME, b.CREATE_DATE, b.DESCRIPTION, b.IMAGE, " +
+    private static final String SELECT_ALL = "SELECT b.ID, b.NAME, b.CREATE_DATE, b.DESCRIPTION, b.IMAGE, " +
             " g.ID AS GENRE_ID, g.NAME AS GENRE_NAME, " +
             " s.ID AS STATUS_ID, s.NAME AS STATUS_NAME, " +
             " a.ID AS AUTHOR_ID, a.FIRSTNAME AS AUTHOR_FIRSTNAME, " +
@@ -35,7 +33,7 @@ public class JdbcBookRepository implements BookRepository {
             " LEFT JOIN STATUSES s ON b.STATUS = s.ID " +
             " LEFT JOIN STATUSES ast ON a.STATUS = ast.ID ";
 
-    private final String SELECT_BY_ID = "SELECT b.ID, b.NAME, b.CREATE_DATE, b.DESCRIPTION, b.IMAGE, " +
+    private static final String SELECT_BY_ID = "SELECT b.ID, b.NAME, b.CREATE_DATE, b.DESCRIPTION, b.IMAGE, " +
             " g.ID AS GENRE_ID, g.NAME AS GENRE_NAME, " +
             " s.ID AS STATUS_ID, s.NAME AS STATUS_NAME, " +
             " a.ID AS AUTHOR_ID, a.FIRSTNAME AS AUTHOR_FIRSTNAME, " +
@@ -49,9 +47,9 @@ public class JdbcBookRepository implements BookRepository {
             " LEFT JOIN STATUSES ast ON a.STATUS = ast.ID " +
             " WHERE b.ID = :ID";
 
-    String DELETE_BY_ID = "DELETE FROM BOOKS WHERE ID = :ID";
+    private static final String DELETE_BY_ID = "DELETE FROM BOOKS WHERE ID = :ID";
 
-    String UPDATE_BY_ID = "UPDATE BOOKS SET" +
+    private static final String UPDATE_BY_ID = "UPDATE BOOKS SET" +
             " NAME = :NAME," +
             " CREATE_DATE = :CREATE_DATE," +
             " DESCRIPTION = :DESCRIPTION," +
@@ -61,9 +59,12 @@ public class JdbcBookRepository implements BookRepository {
             " AUTHOR = :AUTHOR" +
             " WHERE ID = :ID";
 
-    @Autowired
+    private static final Logger logger = Logger.getLogger(JdbcBookRepository.class);
+
+    private final NamedParameterJdbcTemplate jdbc;
+
     JdbcBookRepository(NamedParameterJdbcTemplate namedJdbcTemplate) {
-        this.jdbc = namedJdbcTemplate;
+        jdbc = namedJdbcTemplate;
     }
 
     @Override
@@ -81,7 +82,7 @@ public class JdbcBookRepository implements BookRepository {
             return true;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(Arrays.asList(e.getStackTrace()));
         }
         return false;
     }
@@ -92,7 +93,7 @@ public class JdbcBookRepository implements BookRepository {
             return jdbc.getJdbcOperations().query(SELECT_ALL, new BookMapper());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(Arrays.asList(e.getStackTrace()));
         }
         return new ArrayList<Book>();
     }
@@ -105,7 +106,7 @@ public class JdbcBookRepository implements BookRepository {
             return jdbc.queryForObject(SELECT_BY_ID, params, new BookMapper());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(Arrays.asList(e.getStackTrace()));
         }
         return null;
     }
@@ -117,8 +118,9 @@ public class JdbcBookRepository implements BookRepository {
             params.put("ID", id);
             jdbc.update(DELETE_BY_ID, params);
             return true;
+
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(Arrays.asList(e.getStackTrace()));
         }
         return false;
     }
@@ -139,7 +141,7 @@ public class JdbcBookRepository implements BookRepository {
             return true;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(Arrays.asList(e.getStackTrace()));
         }
         return false;
     }

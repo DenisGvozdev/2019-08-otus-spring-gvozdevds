@@ -1,6 +1,6 @@
 package ru.gds.spring.dao;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -9,29 +9,27 @@ import ru.gds.spring.interfaces.GenreRepository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class JdbcGenreRepository implements GenreRepository {
 
-    private NamedParameterJdbcTemplate jdbc;
+    private static final String INSERT = "INSERT INTO GENRES (`NAME`) VALUES (:NAME)";
 
-    private final String INSERT = "INSERT INTO GENRES (`NAME`) VALUES (:NAME)";
+    private static final String SELECT_ALL = "SELECT ID, `NAME` FROM GENRES";
 
-    private final String SELECT_ALL = "SELECT ID, `NAME` FROM GENRES";
+    private static final String SELECT_BY_ID = "SELECT g.ID, g.NAME FROM GENRES g WHERE g.ID = :ID";
 
-    private final String SELECT_BY_ID = "SELECT g.ID, g.NAME FROM GENRES g WHERE g.ID = :ID";
+    private static final String DELETE_BY_ID = "DELETE FROM GENRES WHERE ID = :ID";
 
-    String DELETE_BY_ID = "DELETE FROM GENRES WHERE ID = :ID";
+    private static final String UPDATE_BY_ID = "UPDATE GENRES SET `NAME` = :NAME WHERE ID = :ID";
 
-    String UPDATE_BY_ID = "UPDATE GENRES SET `NAME` = :NAME WHERE ID = :ID";
+    private static final Logger logger = Logger.getLogger(JdbcGenreRepository.class);
 
-    @Autowired
+    private final NamedParameterJdbcTemplate jdbc;
+
     JdbcGenreRepository(NamedParameterJdbcTemplate namedJdbcTemplate) {
-        this.jdbc = namedJdbcTemplate;
+        jdbc = namedJdbcTemplate;
     }
 
     @Override
@@ -43,7 +41,7 @@ public class JdbcGenreRepository implements GenreRepository {
             return true;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(Arrays.asList(e.getStackTrace()));
         }
         return false;
     }
@@ -54,7 +52,7 @@ public class JdbcGenreRepository implements GenreRepository {
             return jdbc.getJdbcOperations().query(SELECT_ALL, new JdbcGenreRepository.GenreMapper());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(Arrays.asList(e.getStackTrace()));
         }
         return new ArrayList<Genre>();
     }
@@ -67,7 +65,7 @@ public class JdbcGenreRepository implements GenreRepository {
             return jdbc.queryForObject(SELECT_BY_ID, params, new JdbcGenreRepository.GenreMapper());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(Arrays.asList(e.getStackTrace()));
         }
         return null;
     }
@@ -80,7 +78,7 @@ public class JdbcGenreRepository implements GenreRepository {
             jdbc.update(DELETE_BY_ID, params);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(Arrays.asList(e.getStackTrace()));
         }
         return false;
     }
@@ -95,7 +93,7 @@ public class JdbcGenreRepository implements GenreRepository {
             return true;
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(Arrays.asList(e.getStackTrace()));
         }
         return false;
     }
