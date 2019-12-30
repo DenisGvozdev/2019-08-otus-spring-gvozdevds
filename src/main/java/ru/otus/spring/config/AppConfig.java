@@ -20,9 +20,6 @@ import ru.otus.spring.service.MessageServiceImpl;
 @PropertySource("classpath:application.properties")
 public class AppConfig {
 
-    private MessageSource messageSource;
-    private MessageService messageService;
-
     /**
      * Подключаем бандлы
      *
@@ -33,7 +30,6 @@ public class AppConfig {
         ReloadableResourceBundleMessageSource ms = new ReloadableResourceBundleMessageSource();
         ms.setBasename("classpath:bundle");
         ms.setDefaultEncoding("UTF-8");
-        messageSource = ms;
         return ms;
     }
 
@@ -44,9 +40,10 @@ public class AppConfig {
      * @return MessageServiceImpl
      */
     @Bean
-    MessageService messageServiceImpl(@Value("${app.locale}") String locale) {
-        messageService = new MessageServiceImpl(locale, messageSource);
-        return messageService;
+    MessageService messageServiceImpl(
+            @Value("${app.locale}") String locale,
+            MessageSource messageSource) {
+        return new MessageServiceImpl(locale, messageSource);
     }
 
     /**
@@ -59,7 +56,7 @@ public class AppConfig {
     FileReaderCSVImpl fileReaderCSVImpl(
             @Value("${app.filePath}") String filePath,
             @Value("${app.locale}") String locale) {
-        return new FileReaderCSVImpl(filePath, locale, messageService);
+        return new FileReaderCSVImpl(filePath, locale);
     }
 
     /**

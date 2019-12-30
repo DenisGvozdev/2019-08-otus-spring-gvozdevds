@@ -1,4 +1,4 @@
-package main.ru.otus.spring.service;
+package ru.otus.spring.service;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,7 +8,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.otus.spring.config.AppConfig;
 import ru.otus.spring.domain.Question;
-import ru.otus.spring.service.FileReader;
 
 import java.util.List;
 
