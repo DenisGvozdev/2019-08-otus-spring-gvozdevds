@@ -5,12 +5,6 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Объект который хранит в себе:
- * number - порядковый номер вопроса
- * question - вопрос
- * answerList - список возможных ответов
- */
 public class Question {
 
     private String number;

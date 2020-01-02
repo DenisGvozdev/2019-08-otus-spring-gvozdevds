@@ -1,10 +1,5 @@
 package ru.otus.spring.domain;
 
-/**
- * Объект который хранит в себе:
- * answer - ответ
- * right - флаг о том что ответ правильный
- */
 public class Answer {
 
     private String answer;

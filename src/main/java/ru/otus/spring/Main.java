@@ -7,8 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Main {
 
     /**
-     * Запуск приложения осуществляется в StudentTestServiceImpl.testStart()
-     * StudentTestServiceImpl создается в AppConfig
+     * Для запуска необходимо наличие настройки testMode: false в файле application.yml
      */
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
