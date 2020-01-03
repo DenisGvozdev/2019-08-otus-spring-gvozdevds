@@ -1,14 +1,12 @@
 package ru.otus.spring;
 
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import ru.otus.spring.service.TestService;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+@SpringBootApplication
 public class Main {
 
     public static void main(String[] args) {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring-context.xml");
-        TestService testService = context.getBean(TestService.class);
-        testService.testStart();
+        SpringApplication.run(Main.class, args);
     }
-
 }

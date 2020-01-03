@@ -1,0 +1,10 @@
+spring:
+  application:
+    filePath: questions.csv
+    locale: ru_RU
+    #locale: en_US
+  profiles:
+    active: development
+  messages:
+    encoding: UTF-8
+    basename: locale/bundle

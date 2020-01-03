@@ -1,19 +1,54 @@
 package ru.otus.spring.domain;
 
+import org.springframework.util.StringUtils;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class Question {
 
     private String number;
     private String question;
-    private List<String> variants;
-    private List<String> rightAnswers;
+    private List<Answer> answerList = new ArrayList<>();
 
     public Question(String number, String question, List<String> variants, List<String> rightAnswers) {
         this.number = number;
         this.question = question;
-        this.variants = variants;
-        this.rightAnswers = rightAnswers;
+
+        for (String variantAnswer : variants) {
+            Answer answer = new Answer();
+            answer.setAnswer(variantAnswer);
+            answer.setRight(rightAnswers.contains(variantAnswer));
+            answerList.add(answer);
+        }
+    }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("number: ").append(this.number);
+        sb.append("; question = ").append(this.question);
+        for (Answer answer : answerList) {
+            sb.append(answer.toString());
+        }
+        return sb.toString();
+    }
+
+    public String getVariants() {
+        StringBuilder sb = new StringBuilder();
+        for (Answer itm : answerList) {
+            sb.append(itm.getAnswer()).append(",");
+        }
+        String str = sb.toString();
+        return StringUtils.isEmpty(str) ? "" : str.substring(0, str.length() - 1);
+    }
+
+    public boolean checkAnswer(String answer) {
+        for (Answer itm : answerList) {
+            if (answer.equalsIgnoreCase(itm.getAnswer()) && itm.isRight()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public String getNumber() {
@@ -30,30 +65,5 @@ public class Question {
 
     public void setQuestion(String question) {
         this.question = question;
-    }
-
-    public List<String> getVariants() {
-        return variants;
-    }
-
-    public void setVariants(List<String> variants) {
-        this.variants = variants;
-    }
-
-    public List<String> getRightAnswers() {
-        return rightAnswers;
-    }
-
-    public void setRightAnswers(List<String> rightAnswers) {
-        this.rightAnswers = rightAnswers;
-    }
-
-    public String toString() {
-        return "number: " + this.number + "; question = " + this.question +
-                "; variants = " + this.variants + "; rightAnswers = " + rightAnswers;
-    }
-
-    public boolean checkAnswer(String answer) {
-        return rightAnswers.contains(answer);
     }
 }
