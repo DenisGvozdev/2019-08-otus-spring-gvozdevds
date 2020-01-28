@@ -1,41 +1,64 @@
 package ru.gds.spring.domain;
 
-import java.util.Date;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
+import javax.persistence.*;
+import java.util.*;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "BOOKS")
+@NamedEntityGraph(name = "books-entity-graph", attributeNodes = {
+        @NamedAttributeNode("authors"),
+        @NamedAttributeNode("genres")})
 public class Book {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(name = "NAME", nullable = false)
     private String name;
+
+    @Column(name = "CREATE_DATE")
     private Date createDate;
+
+    @Column(name = "DESCRIPTION")
     private String description;
+
+    @Column(name = "IMAGE", length = 100000)
     private byte[] image;
-    private Genre genre;
+
+    @OneToOne(targetEntity = Status.class, cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JoinColumn(name = "STATUS")
     private Status status;
-    private Author author;
+
+    @Column(name = "GENRE")
+    @OneToMany(targetEntity = Genre.class, mappedBy = "id", cascade = CascadeType.MERGE)
+    @Fetch(value = FetchMode.SUBSELECT)
+    private Set<Genre> genres;
+
+    @Column(name = "AUTHOR")
+    @OneToMany(targetEntity = Author.class, mappedBy = "id", cascade = CascadeType.MERGE)
+    @Fetch(value = FetchMode.SUBSELECT)
+    private Set<Author> authors;
 
     public Book(String name, Date createDate,
                 String description, byte[] image,
-                Genre genre, Status status, Author author) {
+                Set<Genre> genres, Set<Author> authors, Status status) {
         this.name = name;
         this.createDate = createDate;
         this.description = description;
-        this.image = image;
-        this.genre = genre;
+        this.image = (image != null) ? image : new byte[]{};
+        this.genres = (genres == null) ? new HashSet<Genre>() : genres;
         this.status = status;
-        this.author = author;
-    }
-
-    public Book(long id, String name, Date createDate,
-                String description, byte[] image,
-                Genre genre, Status status, Author author) {
-        this.id = id;
-        this.name = name;
-        this.createDate = createDate;
-        this.description = description;
-        this.image = image;
-        this.genre = genre;
-        this.status = status;
-        this.author = author;
+        this.authors = (authors == null) ? new HashSet<Author>() : authors;
     }
 
     public long getId() {
@@ -71,19 +94,11 @@ public class Book {
     }
 
     public byte[] getImage() {
-        return image;
+        return (image != null) ? image : new byte[]{};
     }
 
     public void setImage(byte[] image) {
         this.image = image;
-    }
-
-    public Genre getGenre() {
-        return genre;
-    }
-
-    public void setGenre(Genre genre) {
-        this.genre = genre;
     }
 
     public Status getStatus() {
@@ -94,27 +109,19 @@ public class Book {
         this.status = status;
     }
 
-    public Author getAuthor() {
-        return author;
+    public Set<Genre> getGenres() {
+        return genres;
     }
 
-    public void setAuthor(Author author) {
-        this.author = author;
+    public void setGenres(Set<Genre> genres) {
+        this.genres = genres;
     }
 
-    public String toString() {
+    public Set<Author> getAuthors() {
+        return authors;
+    }
 
-        String genre = (this.getGenre() != null) ? this.getGenre().toString() : "";
-        String status = (this.getStatus() != null) ? this.getStatus().toString() : "";
-        String author = (this.getAuthor() != null) ? this.getAuthor().toString() : "";
-
-        return " id: " + getId() +
-                " name: " + getName() +
-                " createDate: " + getCreateDate() +
-                " description: " + getDescription() +
-                " image: " + getImage() +
-                " genre: " + genre +
-                " status: " + status +
-                " author: " + author;
+    public void setAuthors(Set<Author> authors) {
+        this.authors = authors;
     }
 }

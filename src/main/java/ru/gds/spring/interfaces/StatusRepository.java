@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface StatusRepository {
 
-    boolean insert(Status status);
+    Status save(Status status);
 
-    List<Status> getAll();
+    List<Status> findAll();
 
-    Status getById(long id);
+    Status findById(long id);
 
-    boolean removeById(long id);
+    boolean deleteById(long id);
 
-    boolean update(Status status);
+    boolean updateById(Status status);
 }

@@ -6,13 +6,15 @@ import java.util.List;
 
 public interface GenreRepository {
 
-    boolean insert(Genre genre);
+    Genre save(Genre genre);
 
-    List<Genre> getAll();
+    List<Genre> findAll();
 
-    Genre getById(long id);
+    Genre findById(long id);
 
-    boolean removeById(long id);
+    boolean deleteById(long id);
 
-    boolean update(Genre genre);
+    boolean updateById(Genre genre);
+
+    List<Genre> loadGenresByIdString(String genreIds);
 }

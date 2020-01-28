@@ -6,13 +6,15 @@ import java.util.List;
 
 public interface AuthorRepository {
 
-    boolean insert(Author author);
+    Author save(Author author);
 
-    List<Author> getAll();
+    List<Author> findAll();
 
-    Author getById(long id);
+    Author findById(long id);
 
-    boolean removeById(long id);
+    boolean deleteById(long id);
 
-    boolean update(Author author);
+    boolean updateById(Author author);
+
+    List<Author> loadAuthorsByIdString(String authorIds);
 }

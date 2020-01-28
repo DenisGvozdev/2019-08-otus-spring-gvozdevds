@@ -1,19 +1,26 @@
 package ru.gds.spring.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "STATUSES")
 public class Status {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(name = "NAME", nullable = false, unique = true)
     private String name;
 
-    public Status() {
-    }
-
     public Status(String name) {
-        this.name = name;
-    }
-
-    public Status(long id, String name) {
-        this.id = id;
         this.name = name;
     }
 
@@ -31,9 +38,5 @@ public class Status {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String toString() {
-        return " id: " + getId() + " name: " + getName();
     }
 }

@@ -7,8 +7,8 @@
     <groupId>library-spring-gds</groupId>
     <artifactId>library-spring-gds</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>spring-framework-05</name>
-    <description>Home work 5</description>
+    <name>spring-framework-06</name>
+    <description>Home work 6</description>
     <packaging>jar</packaging>
 
     <parent>
@@ -33,6 +33,17 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+
+        <!-- SpringBootJpa -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <!-- Shell -->
@@ -67,7 +78,6 @@
             <version>5.2.0</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-launcher</artifactId>
@@ -75,13 +85,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- JDBC -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jdbc</artifactId>
-        </dependency>
-
-        <!-- in memory DataBase-->
+        <!-- H2 in memory DataBase-->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
@@ -89,6 +93,7 @@
             <version>1.4.197</version>
         </dependency>
 
+        <!-- Log4j logger-->
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>

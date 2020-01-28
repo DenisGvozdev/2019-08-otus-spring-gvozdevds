@@ -1,34 +1,40 @@
 package ru.gds.spring.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 import java.util.Date;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "AUTHORS")
 public class Author {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(name = "FIRSTNAME", nullable = false)
     private String firstName;
+
+    @Column(name = "SECONDNAME")
     private String secondName;
+
+    @Column(name = "THIRDNAME")
     private String thirdName;
+
+    @Column(name = "BIRTH_DATE")
     private Date birthDate;
-    private Status status;
 
-    public Author() {
-    }
-
-    public Author(String firstName, String secondName, String thirdName, Date birthDate, Status status) {
+    public Author(String firstName, String secondName, String thirdName, Date birthDate) {
         this.firstName = firstName;
         this.secondName = secondName;
         this.thirdName = thirdName;
         this.birthDate = birthDate;
-        this.status = status;
-    }
-
-    public Author(long id, String firstName, String secondName, String thirdName, Date birthDate, Status status) {
-        this.id = id;
-        this.firstName = firstName;
-        this.secondName = secondName;
-        this.thirdName = thirdName;
-        this.birthDate = birthDate;
-        this.status = status;
     }
 
     public long getId() {
@@ -69,25 +75,5 @@ public class Author {
 
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public String toString() {
-
-        String status = (getStatus() != null) ? getStatus().getName() : "";
-
-        return " id: " + getId() +
-                " firstName: " + getFirstName() +
-                " secondName: " + getSecondName() +
-                " thirdName: " + getThirdName() +
-                " birthDate: " + getBirthDate() +
-                " status: " + status;
     }
 }
