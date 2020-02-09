@@ -55,7 +55,7 @@ public class Commands {
                 status);
 
         book = bookRepository.save(book);
-        Long id = book.getId();
+        long id = book.getId();
         logger.debug((id > 0) ? "create book successful" : "create book error");
         return book;
     }
@@ -105,7 +105,7 @@ public class Commands {
     public Genre addGenre(String name) {
         Genre genre = new Genre(name);
         genre = genreRepository.save(genre);
-        Long id = genre.getId();
+        long id = genre.getId();
         logger.debug((id > 0) ? "status success inserted" : "status add error");
         return genre;
     }
@@ -150,7 +150,7 @@ public class Commands {
             Date date = DateUtils.getDateFromString(birthDate, ConstantFormatDate.FORMAT_1);
             Author author = new Author(firstName, secondName, thirdName, date);
             author = authorRepository.save(author);
-            Long id = author.getId();
+            long id = author.getId();
             logger.debug((id > 0) ? "author success inserted" : "author add error");
             return author;
         } catch (Exception e) {
@@ -194,7 +194,7 @@ public class Commands {
     public Status addStatus(String name) {
         Status status = new Status(name);
         status = statusRepository.save(status);
-        Long id = status.getId();
+        long id = status.getId();
         logger.debug((id > 0) ? "status success inserted" : "status add error");
         return status;
     }
@@ -234,7 +234,12 @@ public class Commands {
     // Пример: ac 1 "Тестовый комментарий к книге"
     @ShellMethod(value = "add-comment", key = "ac")
     public Comment addComment(long bookId, String text) {
-        Comment comment = new Comment(bookId, text, new Date());
+        Book book = bookRepository.findById(bookId);
+        if (book == null) {
+            logger.debug("comment update error because Book not found");
+            return null;
+        }
+        Comment comment = new Comment(book, text, new Date());
         comment = commentRepository.save(comment);
         long id = comment.getId();
         logger.debug((id > 0) ? "comment success inserted" : "comment add error");

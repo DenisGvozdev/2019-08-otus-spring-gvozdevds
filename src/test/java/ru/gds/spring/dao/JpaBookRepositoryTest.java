@@ -44,8 +44,7 @@ class JpaBookRepositoryTest {
     private static final Logger logger = Logger.getLogger(JpaBookRepositoryTest.class);
 
     @Test
-    void fullBookTest() {
-
+    void insertBookTest() {
         try {
             // Создание статуса
             Status status = new Status("archive");
@@ -75,7 +74,6 @@ class JpaBookRepositoryTest {
             List<Genre> genres = jpaGenreRepository.findAll();
             assumeTrue(result && genres.size() == 4);
 
-
             // Создание книги
             Set<Genre> genreSet = new HashSet<>();
             genreSet.add(genres.get(3));
@@ -93,7 +91,6 @@ class JpaBookRepositoryTest {
                     authorSet,
                     status);
             book = jpaBookRepository.save(book);
-            long id = book.getId();
             result = book.getId() > 0;
             logger.debug("Книга добавлена: " + result);
             assumeTrue(result);
@@ -102,48 +99,67 @@ class JpaBookRepositoryTest {
             List<Book> bookList = jpaBookRepository.findAll();
             logger.debug("Все книги: " + bookList);
 
+        } catch (Exception e) {
+            logger.error(Arrays.asList(e.getStackTrace()));
+            assumeTrue(false);
+        }
+    }
+
+    @Test
+    void updateBookTest() {
+        try {
+            List<Genre> genres = jpaGenreRepository.findAll();
+            List<Author> authors = jpaAuthorRepository.findAll();
+            Status status = jpaStatusRepository.findById(1);
+            long bookId = 1;
+
             // Поиск по ID и обновление
-            book = jpaBookRepository.findById(id);
+            Book book = jpaBookRepository.findById(bookId);
+            assumeTrue(book != null);
             book.setName("Кольцо тьмы обновление");
             book.setDescription("Сказки");
-            book.setGenres(new HashSet<Genre>(genres));
-            book.setAuthors(new HashSet<Author>(authors));
+            book.setGenres(new HashSet<>(genres));
+            book.setAuthors(new HashSet<>(authors));
             book.setStatus(status);
-            image = ResourceUtils.getFile("classpath:images/NPerumov_KoltsoTmy.jpg");
+            File image = ResourceUtils.getFile("classpath:images/NPerumov_KoltsoTmy.jpg");
             book.setImage(FileUtils.convertFileToByteArray(image));
-            result = jpaBookRepository.updateById(book);
+            boolean result = jpaBookRepository.updateById(book);
             logger.debug("Книга обновлена: " + result);
             assumeTrue(result);
 
-            book = jpaBookRepository.findById(id);
+            book = jpaBookRepository.findById(bookId);
             logger.debug("Новые данные: " + PrintUtils.printObject(null, book));
 
+        } catch (Exception e) {
+            logger.error(Arrays.asList(e.getStackTrace()));
+            assumeTrue(false);
+        }
+    }
+
+    @Test
+    void deleteBookTest() {
+        try {
             // Удаление книги
-            result = jpaBookRepository.deleteById(id);
+            boolean result = jpaBookRepository.deleteById(1);
             logger.debug("Книга удалена: " + result);
             assumeTrue(result);
 
-            bookList = jpaBookRepository.findAll();
+            List<Book> bookList = jpaBookRepository.findAll();
             logger.debug("Все книги: " + bookList);
-            assumeTrue(bookList.size() == 2);
+            assumeTrue(bookList.size() == 1);
 
             // Убеждаемся что не отработало каскадное удаление
-            authors = jpaAuthorRepository.findAll();
+            List<Author> authors = jpaAuthorRepository.findAll();
             logger.debug("Все авторы: " + authors);
-            assumeTrue(authors.size() == 4);
+            assumeTrue(authors.size() == 3);
 
-            genres = jpaGenreRepository.findAll();
+            List<Genre> genres = jpaGenreRepository.findAll();
             logger.debug("Все жанры: " + genres);
-            assumeTrue(genres.size() == 4);
+            assumeTrue(genres.size() == 3);
 
             List<Status> statuses = jpaStatusRepository.findAll();
             logger.debug("Все статусы: " + statuses);
-            assumeTrue(statuses.size() == 3);
-
-            // Удаляем созданные нами объекты для соблюдения атомарности теста
-            jpaAuthorRepository.deleteById(3);
-            jpaGenreRepository.deleteById(3);
-            jpaStatusRepository.deleteById(2);
+            assumeTrue(statuses.size() == 2);
 
             authors = jpaAuthorRepository.findAll();
             assumeTrue(authors.size() == 3);

@@ -9,7 +9,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
-import java.util.Optional;
 
 @Transactional
 @Repository
@@ -36,8 +35,7 @@ public class JpaStatusRepository implements StatusRepository {
 
     @Override
     public Status findById(long id) {
-        Optional<Status> val = Optional.ofNullable(em.find(Status.class, id));
-        return val.orElse(null);
+        return em.find(Status.class, id);
     }
 
     @Override

@@ -29,37 +29,47 @@ class JpaCommentRepositoryTest {
     private static final Logger logger = Logger.getLogger(JpaCommentRepositoryTest.class);
 
     @Test
-    void fullCommentTest() {
+    void insertCommentTest() {
 
-        // Создание
         List<Book> bookList = jpaBookRepository.findAll();
         assumeTrue(!bookList.isEmpty());
-
         Book book = bookList.get(0);
 
-        Comment comment = new Comment(book.getId(), "Тестовый комментарий", new Date());
+        Comment comment = new Comment(book, "Тестовый комментарий", new Date());
         comment = jpaCommentRepository.save(comment);
-        long id = comment.getId();
         boolean result = comment.getId() > 0;
         logger.debug("Комментарий добавлен: " + result);
         assumeTrue(result);
 
-        // Поиск комментариев к нужной книге
         List<Comment> commentList = jpaCommentRepository.findAll();
         logger.debug("Все комментарии: " + commentList);
         assumeTrue(commentList.size() == 3);
+    }
 
-        // Поиск комментариев к нужной книге
-        commentList = jpaCommentRepository.findByBookId(book.getId());
+    @Test
+    void findCommentByBokTest() {
+
+        List<Book> bookList = jpaBookRepository.findAll();
+        assumeTrue(!bookList.isEmpty());
+        Book book = bookList.get(0);
+
+        List<Comment> commentList = jpaCommentRepository.findByBookId(book.getId());
         logger.debug("Все комментарии к книге " + book.getName() + ": " + commentList);
+        assumeTrue(commentList.size() == 1);
+    }
+
+    @Test
+    void deleteCommentTest() {
+
+        List<Comment> commentList = jpaCommentRepository.findAll();
+        logger.debug("Все комментарии: " + commentList);
         assumeTrue(commentList.size() == 2);
 
-        // Удаление комментария
-        result = jpaCommentRepository.deleteById(id);
+        boolean result = jpaCommentRepository.deleteById(commentList.get(1).getId());
         logger.debug("Комментарий удален: " + result);
         assumeTrue(result);
 
         commentList = jpaCommentRepository.findAll();
-        assumeTrue(commentList.size() == 2);
+        assumeTrue(commentList.size() == 1);
     }
 }

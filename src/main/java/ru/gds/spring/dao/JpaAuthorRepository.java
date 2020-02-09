@@ -10,7 +10,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Transactional
 @Repository
@@ -31,21 +30,18 @@ public class JpaAuthorRepository implements AuthorRepository {
 
     @Override
     public List<Author> findAll() {
-        return em.createQuery("select s from Author s", Author.class)
+        return em.createQuery("select a from Author a", Author.class)
                 .getResultList();
     }
 
     @Override
     public Author findById(long id) {
-        Optional<Author> val = Optional.ofNullable(em.find(Author.class, id));
-        return val.orElse(null);
+        return em.find(Author.class, id);
     }
 
     @Override
     public boolean deleteById(long id) {
-        Query query = em.createQuery("delete" +
-                " from Author s" +
-                " where s.id = :id");
+        Query query = em.createQuery("delete from Author a where a.id = :id");
         query.setParameter("id", id);
         query.executeUpdate();
         return true;
@@ -53,12 +49,12 @@ public class JpaAuthorRepository implements AuthorRepository {
 
     @Override
     public boolean updateById(Author author) {
-        Query query = em.createQuery("update Author s" +
-                " set s.firstName = :firstName," +
-                " s.secondName = :secondName," +
-                " s.thirdName = :thirdName," +
-                " s.birthDate = :birthDate" +
-                " where s.id = :id");
+        Query query = em.createQuery("update Author a" +
+                " set a.firstName = :firstName," +
+                " a.secondName = :secondName," +
+                " a.thirdName = :thirdName," +
+                " a.birthDate = :birthDate" +
+                " where a.id = :id");
         query.setParameter("id", author.getId());
         query.setParameter("firstName", author.getFirstName());
         query.setParameter("secondName", author.getSecondName());

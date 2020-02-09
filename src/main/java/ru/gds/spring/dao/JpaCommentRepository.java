@@ -7,7 +7,6 @@ import ru.gds.spring.interfaces.CommentRepository;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Optional;
 
 @Transactional
 @Repository
@@ -28,19 +27,18 @@ public class JpaCommentRepository implements CommentRepository {
 
     @Override
     public List<Comment> findAll() {
-        return em.createQuery("select s from Comment s", Comment.class)
+        return em.createQuery("select c from Comment c", Comment.class)
                 .getResultList();
     }
 
     @Override
     public Comment findById(long id) {
-        Optional<Comment> val = Optional.ofNullable(em.find(Comment.class, id));
-        return val.orElse(null);
+        return em.find(Comment.class, id);
     }
 
     @Override
     public boolean deleteById(long id) {
-        Query query = em.createQuery("delete from Comment s where s.id = :id");
+        Query query = em.createQuery("delete from Comment c where c.id = :id");
         query.setParameter("id", id);
         query.executeUpdate();
         return true;
@@ -48,12 +46,12 @@ public class JpaCommentRepository implements CommentRepository {
 
     @Override
     public boolean updateById(Comment comment) {
-        Query query = em.createQuery("update Comment s" +
-                " set s.bookId = :bookId, " +
-                " s.comment = :comment, " +
-                " s.createDate = :createDate " +
-                " where s.id = :id");
-        query.setParameter("bookId", comment.getBookId());
+        Query query = em.createQuery("update Comment c" +
+                " set c.book = :book, " +
+                " c.comment = :comment, " +
+                " c.createDate = :createDate " +
+                " where c.id = :id");
+        query.setParameter("book", comment.getBook());
         query.setParameter("comment", comment.getComment());
         query.setParameter("createDate", comment.getCreateDate());
         query.setParameter("id", comment.getId());
@@ -63,7 +61,8 @@ public class JpaCommentRepository implements CommentRepository {
 
     @Override
     public List<Comment> findByBookId(long bookId) {
-        TypedQuery<Comment> query = em.createQuery("select c from Comment c where c.bookId = :bookId", Comment.class);
+        TypedQuery<Comment> query = em.createQuery("select c from Comment c "
+                + " join fetch c.book where c.book.id = :bookId", Comment.class);
         query.setParameter("bookId", bookId);
         return query.getResultList();
     }

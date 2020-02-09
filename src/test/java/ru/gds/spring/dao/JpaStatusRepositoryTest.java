@@ -23,9 +23,8 @@ class JpaStatusRepositoryTest {
     private static final Logger logger = Logger.getLogger(JpaStatusRepositoryTest.class);
 
     @Test
-    void fullStatusTest() {
+    void insertStatusTest() {
 
-        // Создание
         Status status = new Status("archive");
         status = jpaStatusRepository.save(status);
         long id = status.getId();
@@ -33,26 +32,40 @@ class JpaStatusRepositoryTest {
         logger.debug("Статус добавлен: " + result);
         assumeTrue(result);
 
-        // Поиск всех
         List<Status> statusList = jpaStatusRepository.findAll();
         logger.debug("Все статусы: " + statusList);
+        assumeTrue(statusList.size() == 3);
+    }
 
-        // Поиск по ID и обновление
-        status = jpaStatusRepository.findById(id);
+    @Test
+    void updateStatusTest() {
+
+        List<Status> statusList = jpaStatusRepository.findAll();
+        logger.debug("Все статусы: " + statusList);
+        assumeTrue(statusList.size() == 2);
+
+        Status status = statusList.get(1);
         status.setName("activeStatus");
-        result = jpaStatusRepository.updateById(status);
+        boolean result = jpaStatusRepository.updateById(status);
         logger.debug("Статус обновлен: " + result);
         assumeTrue(result);
 
-        status = jpaStatusRepository.findById(id);
+        status = jpaStatusRepository.findById(status.getId());
         logger.debug("Новые данные: " + PrintUtils.printObject(null, status));
+    }
 
-        // Удаление
-        result = jpaStatusRepository.deleteById(id);
+    @Test
+    void deleteStatusTest() {
+
+        Status status = new Status("archive");
+        status = jpaStatusRepository.save(status);
+        assumeTrue(status.getId() > 0);
+
+        boolean result = jpaStatusRepository.deleteById(status.getId());
         logger.debug("Статус удален: " + result);
         assumeTrue(result);
 
-        statusList = jpaStatusRepository.findAll();
+        List<Status> statusList = jpaStatusRepository.findAll();
         logger.debug("Все статусы: " + statusList);
         assumeTrue(statusList.size() == 2);
     }

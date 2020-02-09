@@ -23,36 +23,48 @@ class JpaGenreRepositoryTest {
     private static final Logger logger = Logger.getLogger(JpaGenreRepositoryTest.class);
 
     @Test
-    void fullGenreTest() {
-        // Создание
+    void insertGenreTest() {
+
         Genre genre = new Genre("Исторический");
         genre = jpaGenreRepository.save(genre);
-        long id = genre.getId();
         boolean result = genre.getId() > 0;
         logger.debug("Жанр добавлен: " + result);
         assumeTrue(result);
 
-        // Поиск всех
         List<Genre> genreList = jpaGenreRepository.findAll();
         logger.debug("Все жанры: " + genreList);
+        assumeTrue(genreList.size() == 4);
+    }
 
-        // Поиск по ID и обновление
-        genre = jpaGenreRepository.findById(id);
-        genre.setName("Фэнтези+");
-        result = jpaGenreRepository.updateById(genre);
+    @Test
+    void updateGenreTest() {
+
+        List<Genre> genreList = jpaGenreRepository.findAll();
+        assumeTrue(genreList.size() == 3);
+        Genre genre = genreList.get(1);
+
+        genre.setName("Обновленный жанр");
+        boolean result = jpaGenreRepository.updateById(genre);
         logger.debug("Жанр обновлен: " + result);
         assumeTrue(result);
 
-        genre = jpaGenreRepository.findById(id);
+        genre = jpaGenreRepository.findById(genre.getId());
         logger.debug("Новые данные: " + PrintUtils.printObject(null, genre));
+    }
 
-        // Удаление
-        result = jpaGenreRepository.deleteById(id);
+    @Test
+    void deleteGenreTest() {
+
+        List<Genre> genreList = jpaGenreRepository.findAll();
+        assumeTrue(genreList.size() == 3);
+        Genre genre = genreList.get(1);
+
+        boolean result = jpaGenreRepository.deleteById(genre.getId());
         logger.debug("Жанр удален: " + result);
         assumeTrue(result);
 
         genreList = jpaGenreRepository.findAll();
         logger.debug("Все жанры: " + genreList);
-        assumeTrue(genreList.size() == 3);
+        assumeTrue(genreList.size() == 2);
     }
 }

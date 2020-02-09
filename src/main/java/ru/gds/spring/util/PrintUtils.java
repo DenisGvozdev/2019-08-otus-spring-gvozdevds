@@ -84,13 +84,24 @@ public class PrintUtils {
         Set<Genre> genreSet = new HashSet<>();
         genreSet.add(genre1);
 
-        Author author1 = new Author("Фамилия", "Имя", "Отчество", new Date());
+        Author author1 = new Author(
+                "Фамилия",
+                "Имя",
+                "Отчество",
+                new Date());
         Set<Author> authorSet = new HashSet<>();
         authorSet.add(author1);
 
         Status status = new Status("Статус 1");
 
-        Book book = new Book("книга", new Date(), "Описание", null, genreSet, authorSet, status);
+        Book book = new Book(
+                "книга",
+                new Date(),
+                "Описание",
+                null,
+                genreSet,
+                authorSet,
+                status);
         logger.debug(printObject(null, book));
     }
 }

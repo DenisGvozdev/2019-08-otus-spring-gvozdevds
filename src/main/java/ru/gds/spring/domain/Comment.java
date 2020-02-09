@@ -18,8 +18,9 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "BOOK_ID", nullable = false)
-    private long bookId;
+    @JoinColumn(name = "BOOK_ID", referencedColumnName = "ID", nullable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Book book;
 
     @Column(name = "COMMENT")
     private String comment;
@@ -27,8 +28,8 @@ public class Comment {
     @Column(name = "CREATE_DATE")
     private Date createDate;
 
-    public Comment(long bookId, String comment, Date createDate) {
-        this.bookId = bookId;
+    public Comment(Book book, String comment, Date createDate) {
+        this.book = book;
         this.comment = comment;
         this.createDate = createDate;
     }
@@ -41,12 +42,12 @@ public class Comment {
         this.id = id;
     }
 
-    public long getBookId() {
-        return bookId;
+    public Book getBook() {
+        return book;
     }
 
-    public void setBookId(long bookId) {
-        this.bookId = bookId;
+    public void setBook(Book book) {
+        this.book = book;
     }
 
     public String getComment() {

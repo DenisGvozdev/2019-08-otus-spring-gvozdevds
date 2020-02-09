@@ -10,7 +10,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Transactional
 @Repository
@@ -31,21 +30,18 @@ public class JpaGenreRepository implements GenreRepository {
 
     @Override
     public List<Genre> findAll() {
-        return em.createQuery("select s from Genre s", Genre.class)
+        return em.createQuery("select g from Genre g", Genre.class)
                 .getResultList();
     }
 
     @Override
     public Genre findById(long id) {
-        Optional<Genre> val = Optional.ofNullable(em.find(Genre.class, id));
-        return val.orElse(null);
+        return em.find(Genre.class, id);
     }
 
     @Override
     public boolean deleteById(long id) {
-        Query query = em.createQuery("delete" +
-                " from Genre s" +
-                " where s.id = :id");
+        Query query = em.createQuery("delete from Genre g where g.id = :id");
         query.setParameter("id", id);
         query.executeUpdate();
         return true;
@@ -53,9 +49,9 @@ public class JpaGenreRepository implements GenreRepository {
 
     @Override
     public boolean updateById(Genre genre) {
-        Query query = em.createQuery("update Genre s" +
-                " set s.name = :name" +
-                " where s.id = :id");
+        Query query = em.createQuery("update Genre g" +
+                " set g.name = :name" +
+                " where g.id = :id");
         query.setParameter("name", genre.getName());
         query.setParameter("id", genre.getId());
         query.executeUpdate();

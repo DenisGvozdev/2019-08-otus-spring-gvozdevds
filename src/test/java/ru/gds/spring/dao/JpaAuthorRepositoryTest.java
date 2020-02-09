@@ -24,9 +24,8 @@ class JpaAuthorRepositoryTest {
     private static final Logger logger = Logger.getLogger(JpaAuthorRepositoryTest.class);
 
     @Test
-    void fullAuthorTest() {
+    void insertAuthorTest() {
 
-        // Создание
         Author author = new Author(
                 "Михаил",
                 "Александрович",
@@ -38,30 +37,35 @@ class JpaAuthorRepositoryTest {
         logger.debug("Автор добавлен: " + result);
         assumeTrue(result);
 
-        // Поиск всех
         List<Author> authorList = jpaAuthorRepository.findAll();
         logger.debug("Все авторы: " + authorList);
+    }
 
-        // Поиск по ID и обновление
-        author = jpaAuthorRepository.findById(id);
+    @Test
+    void updateAuthorTest() {
+
+        Author author = jpaAuthorRepository.findById(3);
         author.setFirstName("Николай");
         author.setSecondName("Даниилович");
         author.setThirdName("Перумов");
         author.setBirthDate(new Date());
-        result = jpaAuthorRepository.updateById(author);
+        boolean result = jpaAuthorRepository.updateById(author);
         logger.debug("Автор обновлен: " + result);
         assumeTrue(result);
 
-        author = jpaAuthorRepository.findById(id);
+        author = jpaAuthorRepository.findById(3);
         logger.debug("Новые данные: " + PrintUtils.printObject(null, author));
+    }
 
-        // Удаление
-        result = jpaAuthorRepository.deleteById(id);
+    @Test
+    void deleteAuthorTest() {
+
+        boolean result = jpaAuthorRepository.deleteById(3);
         logger.debug("Автор удален: " + result);
         assumeTrue(result);
 
-        authorList = jpaAuthorRepository.findAll();
+        List<Author> authorList = jpaAuthorRepository.findAll();
         logger.debug("Все авторы: " + authorList);
-        assumeTrue(authorList.size() == 3);
+        assumeTrue(authorList.size() == 2);
     }
 }

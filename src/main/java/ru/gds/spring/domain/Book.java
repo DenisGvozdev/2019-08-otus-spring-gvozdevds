@@ -3,8 +3,6 @@ package ru.gds.spring.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.*;
@@ -35,18 +33,20 @@ public class Book {
     @Column(name = "IMAGE", length = 100000)
     private byte[] image;
 
-    @OneToOne(targetEntity = Status.class, cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
-    @JoinColumn(name = "STATUS")
+    @JoinColumn(name = "STATUS", referencedColumnName = "ID", nullable = false, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Status status;
 
-    @Column(name = "GENRE")
-    @OneToMany(targetEntity = Genre.class, mappedBy = "id", cascade = CascadeType.MERGE)
-    @Fetch(value = FetchMode.SUBSELECT)
+    @ManyToMany(targetEntity = Genre.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "BOOK_GENRE",
+            joinColumns = @JoinColumn(name = "BOOK_ID"),
+            inverseJoinColumns = @JoinColumn(name = "GENRE_ID"))
     private Set<Genre> genres;
 
-    @Column(name = "AUTHOR")
-    @OneToMany(targetEntity = Author.class, mappedBy = "id", cascade = CascadeType.MERGE)
-    @Fetch(value = FetchMode.SUBSELECT)
+    @ManyToMany(targetEntity = Author.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "BOOK_AUTHOR",
+            joinColumns = @JoinColumn(name = "BOOK_ID"),
+            inverseJoinColumns = @JoinColumn(name = "AUTHOR_ID"))
     private Set<Author> authors;
 
     public Book(String name, Date createDate,
