@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 import ru.gds.spring.domain.Book;
 import ru.gds.spring.domain.Comment;
 import ru.gds.spring.interfaces.BookRepository;
@@ -16,7 +15,6 @@ import java.util.List;
 import static org.junit.Assume.assumeTrue;
 
 @DataJpaTest
-@Import({BookRepositoryImpl.class})
 class CommentRepositoryTest {
 
     @Autowired
@@ -46,7 +44,7 @@ class CommentRepositoryTest {
     }
 
     @Test
-    void findCommentByBokTest() {
+    void findCommentByBookTest() {
 
         List<Book> bookList = jpaBookRepository.findAll();
         assumeTrue(!bookList.isEmpty());

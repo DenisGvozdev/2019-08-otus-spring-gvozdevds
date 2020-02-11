@@ -19,7 +19,7 @@ public class Comment {
     private long id;
 
     @JoinColumn(name = "BOOK_ID", referencedColumnName = "ID", nullable = false, updatable = false)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Book book;
 
     @Column(name = "COMMENT")
