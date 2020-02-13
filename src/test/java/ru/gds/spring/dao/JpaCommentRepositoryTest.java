@@ -4,10 +4,10 @@ import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import ru.gds.spring.domain.Book;
 import ru.gds.spring.domain.Comment;
-import ru.gds.spring.interfaces.BookRepository;
 import ru.gds.spring.interfaces.CommentRepository;
 
 import java.util.Date;
@@ -16,22 +16,21 @@ import java.util.List;
 import static org.junit.Assume.assumeTrue;
 
 @DataJpaTest
-@Import({JpaBookRepository.class,
-        JpaCommentRepository.class})
+@Import(JpaCommentRepository.class)
 class JpaCommentRepositoryTest {
 
     @Autowired
-    BookRepository jpaBookRepository;
+    CommentRepository jpaCommentRepository;
 
     @Autowired
-    CommentRepository jpaCommentRepository;
+    private TestEntityManager entityManager;
 
     private static final Logger logger = Logger.getLogger(JpaCommentRepositoryTest.class);
 
     @Test
     void insertCommentTest() {
 
-        List<Book> bookList = jpaBookRepository.findAll();
+        List<Book> bookList = getBookList();
         assumeTrue(!bookList.isEmpty());
         Book book = bookList.get(0);
 
@@ -47,9 +46,9 @@ class JpaCommentRepositoryTest {
     }
 
     @Test
-    void findCommentByBokTest() {
+    void findCommentByBookTest() {
 
-        List<Book> bookList = jpaBookRepository.findAll();
+        List<Book> bookList = getBookList();
         assumeTrue(!bookList.isEmpty());
         Book book = bookList.get(0);
 
@@ -71,5 +70,11 @@ class JpaCommentRepositoryTest {
 
         commentList = jpaCommentRepository.findAll();
         assumeTrue(commentList.size() == 1);
+    }
+
+    private List<Book> getBookList() {
+        return entityManager.getEntityManager()
+                .createQuery("select b from Book b", Book.class)
+                .getResultList();
     }
 }

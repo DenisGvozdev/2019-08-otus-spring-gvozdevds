@@ -45,6 +45,7 @@ class JpaStatusRepositoryTest {
         assumeTrue(statusList.size() == 2);
 
         Status status = statusList.get(1);
+        String name = "activeStatus";
         status.setName("activeStatus");
         boolean result = jpaStatusRepository.updateById(status);
         logger.debug("Статус обновлен: " + result);
@@ -52,6 +53,7 @@ class JpaStatusRepositoryTest {
 
         status = jpaStatusRepository.findById(status.getId());
         logger.debug("Новые данные: " + PrintUtils.printObject(null, status));
+        assumeTrue(name.equals(status.getName()));
     }
 
     @Test

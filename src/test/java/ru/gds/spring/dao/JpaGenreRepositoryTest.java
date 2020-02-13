@@ -43,13 +43,15 @@ class JpaGenreRepositoryTest {
         assumeTrue(genreList.size() == 3);
         Genre genre = genreList.get(1);
 
-        genre.setName("Обновленный жанр");
+        String name = "Обновленный жанр";
+        genre.setName(name);
         boolean result = jpaGenreRepository.updateById(genre);
         logger.debug("Жанр обновлен: " + result);
         assumeTrue(result);
 
         genre = jpaGenreRepository.findById(genre.getId());
         logger.debug("Новые данные: " + PrintUtils.printObject(null, genre));
+        assumeTrue(name.equals(genre.getName()));
     }
 
     @Test

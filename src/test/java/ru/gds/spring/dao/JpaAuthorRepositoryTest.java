@@ -45,7 +45,8 @@ class JpaAuthorRepositoryTest {
     void updateAuthorTest() {
 
         Author author = jpaAuthorRepository.findById(3);
-        author.setFirstName("Николай");
+        String firstName = "Николай";
+        author.setFirstName(firstName);
         author.setSecondName("Даниилович");
         author.setThirdName("Перумов");
         author.setBirthDate(new Date());
@@ -55,6 +56,7 @@ class JpaAuthorRepositoryTest {
 
         author = jpaAuthorRepository.findById(3);
         logger.debug("Новые данные: " + PrintUtils.printObject(null, author));
+        assumeTrue(firstName.equals(author.getFirstName()));
     }
 
     @Test
