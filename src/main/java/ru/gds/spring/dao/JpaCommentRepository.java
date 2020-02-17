@@ -5,7 +5,10 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.gds.spring.domain.Comment;
 import ru.gds.spring.interfaces.CommentRepository;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Transactional
