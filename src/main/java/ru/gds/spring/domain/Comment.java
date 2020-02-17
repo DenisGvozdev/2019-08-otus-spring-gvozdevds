@@ -1,31 +1,20 @@
 package ru.gds.spring.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
 import java.util.Date;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Entity
-@Table(name = "COMMENTS")
+@Document(collection = "comments")
 public class Comment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private String id;
 
-    @JoinColumn(name = "BOOK_ID", referencedColumnName = "ID", nullable = false, updatable = false)
-    @ManyToOne(fetch = FetchType.EAGER)
     private Book book;
 
-    @Column(name = "COMMENT")
     private String comment;
 
-    @Column(name = "CREATE_DATE")
     private Date createDate;
 
     public Comment(Book book, String comment, Date createDate) {
@@ -34,11 +23,11 @@ public class Comment {
         this.createDate = createDate;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

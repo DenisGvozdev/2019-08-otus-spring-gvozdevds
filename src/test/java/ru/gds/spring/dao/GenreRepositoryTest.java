@@ -3,7 +3,8 @@ package ru.gds.spring.dao;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.context.annotation.ComponentScan;
 import ru.gds.spring.domain.Genre;
 import ru.gds.spring.interfaces.GenreRepository;
 import ru.gds.spring.util.PrintUtils;
@@ -12,57 +13,61 @@ import java.util.List;
 
 import static org.junit.Assume.assumeTrue;
 
-@DataJpaTest
+@DataMongoTest
+@ComponentScan({"ru.gds.spring.mongo"})
 class GenreRepositoryTest {
 
     @Autowired
-    GenreRepository jpaGenreRepository;
+    GenreRepository genreRepository;
 
     private static final Logger logger = Logger.getLogger(GenreRepositoryTest.class);
 
     @Test
     void insertGenreTest() {
-
         Genre genre = new Genre("Исторический");
-        genre = jpaGenreRepository.save(genre);
-        boolean result = genre.getId() > 0;
-        logger.debug("Жанр добавлен: " + result);
-        assumeTrue(result);
+        genreRepository.save(genre);
+        logger.debug("Жанр добавлен");
 
-        List<Genre> genreList = jpaGenreRepository.findAll();
+        List<Genre> genreList = getGenreList();
         logger.debug("Все жанры: " + genreList);
         assumeTrue(genreList.size() == 4);
     }
 
     @Test
     void updateGenreTest() {
-
-        List<Genre> genreList = jpaGenreRepository.findAll();
-        assumeTrue(genreList.size() == 3);
-        Genre genre = genreList.get(1);
+        Genre genre = getFirstGenre();
 
         String genreName = "Обновленный жанр";
         genre.setName(genreName);
-        genre = jpaGenreRepository.save(genre);
+        genre = genreRepository.save(genre);
         logger.debug("Жанр обновлен");
         assumeTrue(genreName.equals(genre.getName()));
 
-        genre = jpaGenreRepository.findById(genre.getId());
+        genre = getGenreById(genre.getId());
         logger.debug("Новые данные: " + PrintUtils.printObject(null, genre));
     }
 
     @Test
     void deleteGenreTest() {
-
-        List<Genre> genreList = jpaGenreRepository.findAll();
-        assumeTrue(genreList.size() == 3);
-        Genre genre = genreList.get(1);
-
-        jpaGenreRepository.deleteById(genre.getId());
+        Genre genre = getFirstGenre();
+        genreRepository.deleteById(genre.getId());
         logger.debug("Жанр удален");
 
-        genreList = jpaGenreRepository.findAll();
+        List<Genre> genreList = getGenreList();
         logger.debug("Все жанры: " + genreList);
         assumeTrue(genreList.size() == 2);
+    }
+
+    private Genre getGenreById(String id) {
+        return genreRepository.findById(id).get();
+    }
+
+    private Genre getFirstGenre() {
+        List<Genre> genreList = getGenreList();
+        return genreList.get(0);
+    }
+
+    private List<Genre> getGenreList() {
+        return genreRepository.findAll();
     }
 }

@@ -3,7 +3,9 @@ package ru.gds.spring.dao;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.util.ResourceUtils;
 import ru.gds.spring.domain.Author;
 import ru.gds.spring.domain.Book;
@@ -18,78 +20,36 @@ import java.util.*;
 
 import static org.junit.Assume.assumeTrue;
 
-@DataJpaTest
+@DataMongoTest
+@ComponentScan({"ru.gds.spring.mongo"})
 class BookRepositoryTest {
 
     @Autowired
     BookRepository bookRepository;
 
     @Autowired
-    AuthorRepository authorRepository;
-
-    @Autowired
-    GenreRepository genreRepository;
-
-    @Autowired
-    StatusRepository statusRepository;
+    MongoTemplate mongoTemplate;
 
     private static final Logger logger = Logger.getLogger(BookRepositoryTest.class);
 
     @Test
     void insertBookTest() {
         try {
-            // Создание статуса
-            Status status = new Status("archive");
-            status = statusRepository.save(status);
-            boolean result = status.getId() > 0;
-            logger.debug("Статус добавлен: " + result);
-            status = statusRepository.findById(1);
-            assumeTrue(result && status != null);
-
-            // Создание автора
-            Author author = new Author(
-                    "Михаил",
-                    "Александрович",
-                    "Шолохов",
-                    new Date());
-            author = authorRepository.save(author);
-            result = author.getId() > 0;
-            logger.debug("Автор добавлен: " + result);
-            List<Author> authors = authorRepository.findAll();
-            assumeTrue(result && authors.size() == 4);
-
-            // Создание жанра
-            Genre genre = new Genre("Исторический");
-            genre = genreRepository.save(genre);
-            result = genre.getId() > 0;
-            logger.debug("Жанр добавлен: " + result);
-            List<Genre> genres = genreRepository.findAll();
-            assumeTrue(result && genres.size() == 4);
-
-            // Создание книги
-            Set<Genre> genreSet = new HashSet<>();
-            genreSet.add(genres.get(3));
-
-            Set<Author> authorSet = new HashSet<>();
-            authorSet.add(authors.get(3));
-
             File image = ResourceUtils.getFile("classpath:images/MBulgakov_MasterIMargarita.jpg");
             Book book = new Book(
                     "Мастер и Маргарита",
                     new Date(),
                     "Классика",
                     FileUtils.convertFileToByteArray(image),
-                    genreSet,
-                    authorSet,
-                    status);
-            book = bookRepository.save(book);
-            result = book.getId() > 0;
-            logger.debug("Книга добавлена: " + result);
-            assumeTrue(result);
+                    getGenreList(),
+                    getAuthorList(),
+                    getFirstStatus());
+            bookRepository.save(book);
+            logger.debug("Книга добавлена");
 
-            // Поиск всех
-            List<Book> bookList = bookRepository.findAll();
+            List<Book> bookList = getBookList();
             logger.debug("Все книги: " + bookList);
+            assumeTrue(bookList.size() == 3);
 
         } catch (Exception e) {
             logger.error(Arrays.asList(e.getStackTrace()));
@@ -100,27 +60,23 @@ class BookRepositoryTest {
     @Test
     void updateBookTest() {
         try {
-            List<Genre> genres = genreRepository.findAll();
-            List<Author> authors = authorRepository.findAll();
-            Status status = statusRepository.findById(1);
-            long bookId = 1;
-
-            // Поиск по ID и обновление
-            String bookName = "Кольцо тьмы обновление";
-            Book book = bookRepository.findById(bookId);
+            Book book = getFirstBook();
             assumeTrue(book != null);
+
+            String bookId = book.getId();
+            String bookName = "Кольцо тьмы обновление";
             book.setName(bookName);
             book.setDescription("Сказки");
-            book.setGenres(new HashSet<>(genres));
-            book.setAuthors(new HashSet<>(authors));
-            book.setStatus(status);
+            book.setGenres(getGenreList());
+            book.setAuthors(getAuthorList());
+            book.setStatus(getFirstStatus());
             File image = ResourceUtils.getFile("classpath:images/NPerumov_KoltsoTmy.jpg");
             book.setImage(FileUtils.convertFileToByteArray(image));
             book = bookRepository.save(book);
             logger.debug("Книга обновлена");
             assumeTrue(bookName.equals(book.getName()));
 
-            book = bookRepository.findById(bookId);
+            book = getBookById(bookId);
             logger.debug("Новые данные: " + PrintUtils.printObject(null, book));
 
         } catch (Exception e) {
@@ -132,39 +88,55 @@ class BookRepositoryTest {
     @Test
     void deleteBookTest() {
         try {
-            // Удаление книги
-            bookRepository.deleteById(1L);
+            Book book = getFirstBook();
+            assumeTrue(book != null);
+
+            String bookId = book.getId();
+            bookRepository.deleteById(bookId);
             logger.debug("Книга удалена");
 
-            List<Book> bookList = bookRepository.findAll();
+            List<Book> bookList = getBookList();
             logger.debug("Все книги: " + bookList);
             assumeTrue(bookList.size() == 1);
 
             // Убеждаемся что не отработало каскадное удаление
-            List<Author> authors = authorRepository.findAll();
-            logger.debug("Все авторы: " + authors);
-            assumeTrue(authors.size() == 3);
-
-            List<Genre> genres = genreRepository.findAll();
-            logger.debug("Все жанры: " + genres);
-            assumeTrue(genres.size() == 3);
-
-            List<Status> statuses = statusRepository.findAll();
-            logger.debug("Все статусы: " + statuses);
-            assumeTrue(statuses.size() == 2);
-
-            authors = authorRepository.findAll();
-            assumeTrue(authors.size() == 3);
-
-            genres = genreRepository.findAll();
-            assumeTrue(genres.size() == 3);
-
-            statuses = statusRepository.findAll();
-            assumeTrue(statuses.size() == 2);
+            assumeTrue(getAuthorList().size() == 3);
+            assumeTrue(getGenreList().size() == 3);
+            assumeTrue(getStatusList().size() == 2);
 
         } catch (Exception e) {
             logger.error(Arrays.asList(e.getStackTrace()));
             assumeTrue(false);
         }
+    }
+
+    private Book getBookById(String id) {
+        return bookRepository.findById(id).get();
+    }
+
+    private Book getFirstBook() {
+        List<Book> bookList = bookRepository.findAll();
+        return bookList.get(0);
+    }
+
+    private List<Book> getBookList() {
+        return bookRepository.findAll();
+    }
+
+    private List<Author> getAuthorList() {
+        return mongoTemplate.findAll(Author.class, "authors");
+    }
+
+    private List<Genre> getGenreList() {
+        return mongoTemplate.findAll(Genre.class, "genres");
+    }
+
+    private Status getFirstStatus() {
+        List<Status> list = mongoTemplate.findAll(Status.class, "statuses");
+        return (list.isEmpty()) ? null : list.get(0);
+    }
+
+    private List<Status> getStatusList() {
+        return mongoTemplate.findAll(Status.class, "statuses");
     }
 }

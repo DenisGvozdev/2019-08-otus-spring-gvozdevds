@@ -1,73 +1,47 @@
 package ru.gds.spring.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Entity
-@Table(name = "BOOKS")
-@NamedEntityGraph(name = "books-entity-graph", attributeNodes = {
-        @NamedAttributeNode("authors"),
-        @NamedAttributeNode("genres")})
+@Document(collection = "books")
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private String id;
 
-    @Column(name = "NAME", nullable = false)
     private String name;
 
-    @Column(name = "CREATE_DATE")
     private Date createDate;
 
-    @Column(name = "DESCRIPTION")
     private String description;
 
-    @Column(name = "IMAGE", length = 100000)
     private byte[] image;
 
-    @JoinColumn(name = "STATUS", referencedColumnName = "ID", nullable = false, updatable = false)
-    @ManyToOne(fetch = FetchType.EAGER)
     private Status status;
 
-    @ManyToMany(targetEntity = Genre.class, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinTable(name = "BOOK_GENRE",
-            joinColumns = @JoinColumn(name = "BOOK_ID"),
-            inverseJoinColumns = @JoinColumn(name = "GENRE_ID"))
-    private Set<Genre> genres;
+    private List<Genre> genres;
 
-    @ManyToMany(targetEntity = Author.class, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinTable(name = "BOOK_AUTHOR",
-            joinColumns = @JoinColumn(name = "BOOK_ID"),
-            inverseJoinColumns = @JoinColumn(name = "AUTHOR_ID"))
-    private Set<Author> authors;
+    private List<Author> authors;
 
     public Book(String name, Date createDate,
                 String description, byte[] image,
-                Set<Genre> genres, Set<Author> authors, Status status) {
+                List<Genre> genres, List<Author> authors, Status status) {
         this.name = name;
         this.createDate = createDate;
         this.description = description;
         this.image = (image != null) ? image : new byte[]{};
-        this.genres = (genres == null) ? new HashSet<Genre>() : genres;
+        this.genres = (genres == null) ? new ArrayList<Genre>() : genres;
         this.status = status;
-        this.authors = (authors == null) ? new HashSet<Author>() : authors;
+        this.authors = (authors == null) ? new ArrayList<Author>() : authors;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -96,7 +70,7 @@ public class Book {
     }
 
     public byte[] getImage() {
-        return (image != null) ? image : new byte[]{};
+        return image;
     }
 
     public void setImage(byte[] image) {
@@ -111,19 +85,19 @@ public class Book {
         this.status = status;
     }
 
-    public Set<Genre> getGenres() {
+    public List<Genre> getGenres() {
         return genres;
     }
 
-    public void setGenres(Set<Genre> genres) {
+    public void setGenres(List<Genre> genres) {
         this.genres = genres;
     }
 
-    public Set<Author> getAuthors() {
+    public List<Author> getAuthors() {
         return authors;
     }
 
-    public void setAuthors(Set<Author> authors) {
+    public void setAuthors(List<Author> authors) {
         this.authors = authors;
     }
 }

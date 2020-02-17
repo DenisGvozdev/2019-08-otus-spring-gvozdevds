@@ -3,23 +3,24 @@ package ru.gds.spring.dao;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.context.annotation.ComponentScan;
 import ru.gds.spring.domain.Author;
 import ru.gds.spring.interfaces.AuthorRepository;
 import ru.gds.spring.util.PrintUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assume.assumeTrue;
 
-@DataJpaTest
+@DataMongoTest
+@ComponentScan({"ru.gds.spring.mongo"})
 class AuthorRepositoryTest {
 
     @Autowired
-    AuthorRepository jpaAuthorRepository;
+    AuthorRepository authorRepository;
 
     private static final Logger logger = Logger.getLogger(AuthorRepositoryTest.class);
 
@@ -31,48 +32,67 @@ class AuthorRepositoryTest {
                 "Александрович",
                 "Шолохов",
                 new Date());
-        author = jpaAuthorRepository.save(author);
-        long id = author.getId();
-        boolean result = author.getId() > 0;
-        logger.debug("Автор добавлен: " + result);
-        assumeTrue(result);
+        authorRepository.save(author);
+        logger.debug("Автор добавлен");
 
-        List<Author> authorList = jpaAuthorRepository.findAll();
+        List<Author> authorList = getAuthorList();
         logger.debug("Все авторы: " + authorList);
     }
 
     @Test
     void updateAuthorTest() {
-        long id = 3;
-        String firstName = "Николай";
+        Author author = getFirstAuthor();
+        String id = author.getId();
 
-        Author author = jpaAuthorRepository.findById(id);
-        author.setFirstName("Николай");
+        String firstName = "Николай";
+        author.setFirstName(firstName);
         author.setSecondName("Даниилович");
         author.setThirdName("Перумов");
         author.setBirthDate(new Date());
-        author = jpaAuthorRepository.save(author);
+        author = authorRepository.save(author);
         logger.debug("Автор обновлен");
         assumeTrue(firstName.equals(author.getFirstName()));
 
-        author = jpaAuthorRepository.findById(id);
+        author = getAuthorById(id);
         logger.debug("Новые данные: " + PrintUtils.printObject(null, author));
     }
 
     @Test
-    void findAuthorListTest() {
-        List<Author> authorList = jpaAuthorRepository.findAllById(new ArrayList<Long>(Arrays.asList(1L, 2L)));
-        assumeTrue(authorList.size() == 2);
+    void findAuthorListByIdTest() {
+        List<Author> authorList = authorRepository.findAllById(getAllIdList(), null);
+        assumeTrue(authorList.size() == 3);
         logger.debug("Авторы: " + PrintUtils.printObject(null, authorList));
     }
 
     @Test
     void deleteAuthorTest() {
-        jpaAuthorRepository.deleteById(3L);
+        authorRepository.deleteById(getFirstAuthor().getId());
         logger.debug("Автор удален");
 
-        List<Author> authorList = jpaAuthorRepository.findAll();
+        List<Author> authorList = getAuthorList();
         logger.debug("Все авторы: " + authorList);
         assumeTrue(authorList.size() == 2);
+    }
+
+    private Author getAuthorById(String id) {
+        return authorRepository.findById(id).get();
+    }
+
+    private Author getFirstAuthor() {
+        List<Author> authorList = authorRepository.findAll();
+        return authorList.get(0);
+    }
+
+    private List<Author> getAuthorList() {
+        return authorRepository.findAll();
+    }
+
+    private List<String> getAllIdList() {
+        List<String> idList = new ArrayList<>();
+        List<Author> authorList = authorRepository.findAll();
+        for (Author author : authorList) {
+            idList.add(author.getId());
+        }
+        return idList;
     }
 }

@@ -1,11 +1,13 @@
 package ru.gds.spring.interfaces;
 
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.repository.Query;
 import ru.gds.spring.domain.Status;
+
+import java.util.List;
 
 public interface StatusRepositoryCustom {
 
-    @Query("select s from Status s where s.id = :id")
-    Status findById(@Param("id") long id);
+    @Query("{name: ?0 }")
+    List<Status> findAllByName(String name, Sort sort);
 }

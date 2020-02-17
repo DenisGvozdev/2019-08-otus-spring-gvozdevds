@@ -1,11 +1,12 @@
 package ru.gds.spring.interfaces;
 
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import ru.gds.spring.domain.Book;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.repository.Query;
 
-public interface BookRepositoryCustom {
+import java.util.List;
 
-    @Query("select b from Book b where b.id = :id")
-    Book findById(@Param("id") long id);
+public interface BookRepositoryCustom<Book, String> {
+
+    @Query("{_id: { $in: ?0 } })")
+    List<Book> findAllById(List<String> ids, Sort sort);
 }

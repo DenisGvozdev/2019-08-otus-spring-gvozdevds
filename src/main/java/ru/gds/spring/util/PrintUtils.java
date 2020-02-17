@@ -44,6 +44,15 @@ public class PrintUtils {
                     }
                     sb.append("]\n");
 
+                } else if (value instanceof Object[]) {
+                    sb.append(name).append(" = ").append("\n[");
+                    Object[] array = (Object[]) value;
+                    for (Object o : array) {
+                        if (o != null)
+                            printObject(sb, o);
+                    }
+                    sb.append("]\n");
+
                 } else if (value instanceof String || value instanceof Number
                         || value instanceof Date || value instanceof Boolean || value instanceof byte[]) {
                     sb.append(name).append(" = ").append(value).append(";");
@@ -81,7 +90,7 @@ public class PrintUtils {
 
     public static void main(String[] args) {
         Genre genre1 = new Genre("Жанр 1");
-        Set<Genre> genreSet = new HashSet<>();
+        List<Genre> genreSet = new ArrayList<>();
         genreSet.add(genre1);
 
         Author author1 = new Author(
@@ -89,7 +98,7 @@ public class PrintUtils {
                 "Имя",
                 "Отчество",
                 new Date());
-        Set<Author> authorSet = new HashSet<>();
+        List<Author> authorSet = new ArrayList<>();
         authorSet.add(author1);
 
         Status status = new Status("Статус 1");

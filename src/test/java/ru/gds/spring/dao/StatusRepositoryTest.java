@@ -3,7 +3,8 @@ package ru.gds.spring.dao;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.context.annotation.ComponentScan;
 import ru.gds.spring.domain.Status;
 import ru.gds.spring.interfaces.StatusRepository;
 import ru.gds.spring.util.PrintUtils;
@@ -12,60 +13,60 @@ import java.util.List;
 
 import static org.junit.Assume.assumeTrue;
 
-@DataJpaTest
+@DataMongoTest
+@ComponentScan({"ru.gds.spring.mongo"})
 class StatusRepositoryTest {
 
     @Autowired
-    StatusRepository jpaStatusRepository;
+    StatusRepository statusRepository;
 
     private static final Logger logger = Logger.getLogger(StatusRepositoryTest.class);
 
     @Test
     void insertStatusTest() {
-
         Status status = new Status("archive");
-        status = jpaStatusRepository.save(status);
-        long id = status.getId();
-        boolean result = id > 0;
-        logger.debug("Статус добавлен: " + result);
-        assumeTrue(result);
+        statusRepository.save(status);
+        logger.debug("Статус добавлен");
 
-        List<Status> statusList = jpaStatusRepository.findAll();
+        List<Status> statusList = getStatusList();
         logger.debug("Все статусы: " + statusList);
         assumeTrue(statusList.size() == 3);
     }
 
     @Test
     void updateStatusTest() {
-
         String statusName = "activeStatus";
-
-        List<Status> statusList = jpaStatusRepository.findAll();
-        logger.debug("Все статусы: " + statusList);
-        assumeTrue(statusList.size() == 2);
-
-        Status status = statusList.get(1);
+        Status status = getFirstStatus();
         status.setName(statusName);
-        status = jpaStatusRepository.save(status);
+        status = statusRepository.save(status);
         logger.debug("Статус обновлен");
         assumeTrue(statusName.equals(status.getName()));
 
-        status = jpaStatusRepository.findById(status.getId());
+        status = getStatusById(status.getId());
         logger.debug("Новые данные: " + PrintUtils.printObject(null, status));
     }
 
     @Test
     void deleteStatusTest() {
-
-        Status status = new Status("archive");
-        status = jpaStatusRepository.save(status);
-        assumeTrue(status.getId() > 0);
-
-        jpaStatusRepository.deleteById(status.getId());
+        Status status = getFirstStatus();
+        statusRepository.deleteById(status.getId());
         logger.debug("Статус удален");
 
-        List<Status> statusList = jpaStatusRepository.findAll();
+        List<Status> statusList = getStatusList();
         logger.debug("Все статусы: " + statusList);
-        assumeTrue(statusList.size() == 2);
+        assumeTrue(statusList.size() == 1);
+    }
+
+    private Status getStatusById(String id) {
+        return statusRepository.findById(id).get();
+    }
+
+    private Status getFirstStatus() {
+        List<Status> statusList = getStatusList();
+        return statusList.get(0);
+    }
+
+    private List<Status> getStatusList() {
+        return statusRepository.findAll();
     }
 }

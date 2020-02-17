@@ -1,11 +1,15 @@
 package ru.gds.spring.interfaces;
 
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import ru.gds.spring.domain.Author;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.repository.Query;
 
-public interface AuthorRepositoryCustom {
+import java.util.List;
 
-    @Query("select a from Author a where a.id = :id")
-    Author findById(@Param("id") long id);
+public interface AuthorRepositoryCustom<Author, String> {
+
+    @Query("{_id: { $in: ?0 } })")
+    List<Author> findAllById(List<String> ids, Sort sort);
+
+    @Query("{thirdName: { $in: ?0 } })")
+    List<Author> findAllByName(List<String> names, Sort sort);
 }
