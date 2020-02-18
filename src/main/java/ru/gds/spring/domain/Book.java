@@ -3,6 +3,8 @@ package ru.gds.spring.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.*;
@@ -12,9 +14,7 @@ import java.util.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "BOOKS")
-@NamedEntityGraph(name = "books-entity-graph", attributeNodes = {
-        @NamedAttributeNode("authors"),
-        @NamedAttributeNode("genres")})
+@NamedEntityGraph(name = "books-entity-graph", attributeNodes = {@NamedAttributeNode("status")})
 public class Book {
 
     @Id
@@ -37,12 +37,15 @@ public class Book {
     @ManyToOne(fetch = FetchType.EAGER)
     private Status status;
 
+
+    @Fetch(FetchMode.SUBSELECT)
     @ManyToMany(targetEntity = Genre.class, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(name = "BOOK_GENRE",
             joinColumns = @JoinColumn(name = "BOOK_ID"),
             inverseJoinColumns = @JoinColumn(name = "GENRE_ID"))
     private Set<Genre> genres;
 
+    @Fetch(FetchMode.SUBSELECT)
     @ManyToMany(targetEntity = Author.class, fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(name = "BOOK_AUTHOR",
             joinColumns = @JoinColumn(name = "BOOK_ID"),

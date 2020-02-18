@@ -16,53 +16,54 @@ import static org.junit.Assume.assumeTrue;
 class GenreRepositoryTest {
 
     @Autowired
-    GenreRepository jpaGenreRepository;
+    GenreRepository genreRepository;
 
     private static final Logger logger = Logger.getLogger(GenreRepositoryTest.class);
 
     @Test
     void insertGenreTest() {
-
         Genre genre = new Genre("Исторический");
-        genre = jpaGenreRepository.save(genre);
+        genre = genreRepository.save(genre);
         boolean result = genre.getId() > 0;
         logger.debug("Жанр добавлен: " + result);
         assumeTrue(result);
 
-        List<Genre> genreList = jpaGenreRepository.findAll();
+        List<Genre> genreList = getGenreList();
         logger.debug("Все жанры: " + genreList);
         assumeTrue(genreList.size() == 4);
     }
 
     @Test
     void updateGenreTest() {
-
-        List<Genre> genreList = jpaGenreRepository.findAll();
+        List<Genre> genreList = getGenreList();
         assumeTrue(genreList.size() == 3);
         Genre genre = genreList.get(1);
 
         String genreName = "Обновленный жанр";
         genre.setName(genreName);
-        genre = jpaGenreRepository.save(genre);
+        genre = genreRepository.save(genre);
         logger.debug("Жанр обновлен");
-        assumeTrue(genreName.equals(genre.getName()));
 
-        genre = jpaGenreRepository.findById(genre.getId());
+        genre = genreRepository.findById(genre.getId());
         logger.debug("Новые данные: " + PrintUtils.printObject(null, genre));
+        assumeTrue(genreName.equals(genre.getName()));
     }
 
     @Test
     void deleteGenreTest() {
-
-        List<Genre> genreList = jpaGenreRepository.findAll();
+        List<Genre> genreList = getGenreList();
         assumeTrue(genreList.size() == 3);
         Genre genre = genreList.get(1);
 
-        jpaGenreRepository.deleteById(genre.getId());
+        genreRepository.deleteById(genre.getId());
         logger.debug("Жанр удален");
 
-        genreList = jpaGenreRepository.findAll();
+        genreList = getGenreList();
         logger.debug("Все жанры: " + genreList);
         assumeTrue(genreList.size() == 2);
+    }
+
+    private List<Genre> getGenreList() {
+        return genreRepository.findAll();
     }
 }

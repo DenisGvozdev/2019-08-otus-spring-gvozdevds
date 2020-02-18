@@ -19,59 +19,57 @@ import static org.junit.Assume.assumeTrue;
 class AuthorRepositoryTest {
 
     @Autowired
-    AuthorRepository jpaAuthorRepository;
+    AuthorRepository authorRepository;
 
     private static final Logger logger = Logger.getLogger(AuthorRepositoryTest.class);
 
     @Test
     void insertAuthorTest() {
-
         Author author = new Author(
                 "Михаил",
                 "Александрович",
                 "Шолохов",
                 new Date());
-        author = jpaAuthorRepository.save(author);
-        long id = author.getId();
+        author = authorRepository.save(author);
         boolean result = author.getId() > 0;
         logger.debug("Автор добавлен: " + result);
         assumeTrue(result);
 
-        List<Author> authorList = jpaAuthorRepository.findAll();
+        List<Author> authorList = authorRepository.findAll();
         logger.debug("Все авторы: " + authorList);
+        assumeTrue(authorList.size() == 4);
     }
 
     @Test
     void updateAuthorTest() {
         long id = 3;
+        Author author = authorRepository.findById(id);
         String firstName = "Николай";
-
-        Author author = jpaAuthorRepository.findById(id);
-        author.setFirstName("Николай");
+        author.setFirstName(firstName);
         author.setSecondName("Даниилович");
         author.setThirdName("Перумов");
         author.setBirthDate(new Date());
-        author = jpaAuthorRepository.save(author);
+        authorRepository.save(author);
         logger.debug("Автор обновлен");
-        assumeTrue(firstName.equals(author.getFirstName()));
 
-        author = jpaAuthorRepository.findById(id);
+        author = authorRepository.findById(id);
         logger.debug("Новые данные: " + PrintUtils.printObject(null, author));
+        assumeTrue(firstName.equals(author.getFirstName()));
     }
 
     @Test
     void findAuthorListTest() {
-        List<Author> authorList = jpaAuthorRepository.findAllById(new ArrayList<Long>(Arrays.asList(1L, 2L)));
-        assumeTrue(authorList.size() == 2);
+        List<Author> authorList = authorRepository.findAllById(new ArrayList<Long>(Arrays.asList(1L, 2L)));
         logger.debug("Авторы: " + PrintUtils.printObject(null, authorList));
+        assumeTrue(authorList.size() == 2);
     }
 
     @Test
     void deleteAuthorTest() {
-        jpaAuthorRepository.deleteById(3L);
+        authorRepository.deleteById(3L);
         logger.debug("Автор удален");
 
-        List<Author> authorList = jpaAuthorRepository.findAll();
+        List<Author> authorList = authorRepository.findAll();
         logger.debug("Все авторы: " + authorList);
         assumeTrue(authorList.size() == 2);
     }
