@@ -44,7 +44,7 @@ class GenreRepositoryTest {
         genre = genreRepository.save(genre);
         logger.debug("Жанр обновлен");
 
-        genre = genreRepository.findById(genre.getId());
+        genre = genreRepository.findById(genre.getId()).get();
         logger.debug("Новые данные: " + PrintUtils.printObject(null, genre));
         assumeTrue(genreName.equals(genre.getName()));
     }

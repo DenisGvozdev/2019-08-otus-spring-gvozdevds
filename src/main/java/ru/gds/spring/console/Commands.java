@@ -43,7 +43,7 @@ public class Commands {
     public Book addBook(String name, String description, String imagePath,
                         long statusId, String genreIds, String authorIds) {
 
-        Status status = statusRepository.findById(statusId);
+        Status status = statusRepository.findById(statusId).get();
         List<Genre> genres = genreRepository.findAllById(CommonUtils.convertStringToArrayList(genreIds));
         List<Author> authors = authorRepository.findAllById(CommonUtils.convertStringToArrayList(authorIds));
         File image = FileUtils.getFile(imagePath);
@@ -70,7 +70,7 @@ public class Commands {
 
     @ShellMethod(value = "get-book-by-id", key = "gbbid")
     public Book getBookById(long id) {
-        return bookRepository.findById(id);
+        return bookRepository.findById(id).get();
     }
 
     @ShellMethod(value = "remove-book-by-id", key = "rbbid")
@@ -86,10 +86,10 @@ public class Commands {
 
         List<Genre> genres = genreRepository.findAllById(CommonUtils.convertStringToArrayList(genreIds));
         List<Author> authors = authorRepository.findAllById(CommonUtils.convertStringToArrayList(authorIds));
-        Status status = statusRepository.findById(statusId);
+        Status status = statusRepository.findById(statusId).get();
         File image = FileUtils.getFile(imagePath);
 
-        Book book = bookRepository.findById(id);
+        Book book = bookRepository.findById(id).get();
         book.setName(name);
         book.setDescription(description);
         book.setGenres(new HashSet<>(genres));
@@ -120,7 +120,7 @@ public class Commands {
 
     @ShellMethod(value = "get-genre-by-id", key = "ggbid")
     public Genre getGenreById(long id) {
-        return genreRepository.findById(id);
+        return genreRepository.findById(id).get();
     }
 
     @ShellMethod(value = "remove-genre-by-id", key = "rgbid")
@@ -132,12 +132,7 @@ public class Commands {
 
     @ShellMethod(value = "update-genre", key = "ug")
     public boolean updateGenre(long id, String name) {
-        Genre genre = genreRepository.findById(id);
-        if (genre == null) {
-            logger.debug("genre not found by id");
-            return false;
-        }
-
+        Genre genre = genreRepository.findById(id).get();
         genre.setName(name);
         genre = genreRepository.save(genre);
         logger.debug("genre successful updated");
@@ -169,7 +164,7 @@ public class Commands {
 
     @ShellMethod(value = "get-author-by-id", key = "gabid")
     public Author getAuthorById(long id) {
-        return authorRepository.findById(id);
+        return authorRepository.findById(id).get();
     }
 
     @ShellMethod(value = "remove-author-by-id", key = "rabid")
@@ -181,7 +176,7 @@ public class Commands {
 
     @ShellMethod(value = "update-author", key = "ua")
     public boolean updateAuthor(long id, String firstName, String secondName, String thirdName, Date birthDate) {
-        Author author = authorRepository.findById(id);
+        Author author = authorRepository.findById(id).get();
         author.setFirstName(firstName);
         author.setSecondName(secondName);
         author.setThirdName(thirdName);
@@ -209,7 +204,7 @@ public class Commands {
 
     @ShellMethod(value = "get-status-by-id", key = "gsbid")
     public Status getStatusById(long id) {
-        return statusRepository.findById(id);
+        return statusRepository.findById(id).get();
     }
 
     @ShellMethod(value = "remove-status-by-id", key = "rsbid")
@@ -221,12 +216,7 @@ public class Commands {
 
     @ShellMethod(value = "update-status", key = "us")
     public boolean updateStatus(long id, String name) {
-        Status status = statusRepository.findById(id);
-        if (status == null) {
-            logger.debug("status not found by id = " + id);
-            return false;
-        }
-
+        Status status = statusRepository.findById(id).get();
         status.setName(name);
         status = statusRepository.save(status);
         logger.debug("status successful updated");
@@ -237,11 +227,7 @@ public class Commands {
     // Пример: ac 1 "Тестовый комментарий к книге"
     @ShellMethod(value = "add-comment", key = "ac")
     public Comment addComment(long bookId, String text) {
-        Book book = bookRepository.findById(bookId);
-        if (book == null) {
-            logger.debug("comment update error because Book not found");
-            return null;
-        }
+        Book book = bookRepository.findById(bookId).get();
         Comment comment = new Comment(book, text, new Date());
         comment = commentRepository.save(comment);
         long id = comment.getId();
@@ -268,11 +254,7 @@ public class Commands {
 
     @ShellMethod(value = "update-comment", key = "uc")
     public boolean updateComment(long id, String text) {
-        Comment comment = commentRepository.findById(id);
-        if (comment == null) {
-            logger.debug("comment not found by id = " + id);
-            return false;
-        }
+        Comment comment = commentRepository.findById(id).get();
         comment.setComment(text);
         comment.setCreateDate(new Date());
         comment = commentRepository.save(comment);

@@ -49,7 +49,7 @@ class BookRepositoryTest {
 
             // Поиск всех
             List<Book> bookList = bookRepository.findAll();
-            logger.debug("Все книги: " + bookList);
+            assumeTrue(bookList.size() == 3);
 
         } catch (Exception e) {
             logger.error(Arrays.asList(e.getStackTrace()));
@@ -61,7 +61,7 @@ class BookRepositoryTest {
     void updateBookTest() {
         try {
             long bookId = 1;
-            Book book = bookRepository.findById(bookId);
+            Book book = bookRepository.findById(bookId).get();
             assumeTrue(book != null);
 
             // Поиск по ID и обновление
@@ -77,7 +77,9 @@ class BookRepositoryTest {
             logger.debug("Книга обновлена");
             assumeTrue(bookName.equals(book.getName()));
 
-            book = bookRepository.findById(bookId);
+            book = bookRepository.findById(bookId).get();
+            assumeTrue(book != null);
+
             logger.debug("Новые данные: " + PrintUtils.printObject(null, book));
             assumeTrue(bookName.equals(book.getName()));
 

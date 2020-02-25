@@ -43,7 +43,7 @@ class AuthorRepositoryTest {
     @Test
     void updateAuthorTest() {
         long id = 3;
-        Author author = authorRepository.findById(id);
+        Author author = authorRepository.findById(id).get();
         String firstName = "Николай";
         author.setFirstName(firstName);
         author.setSecondName("Даниилович");
@@ -52,7 +52,7 @@ class AuthorRepositoryTest {
         authorRepository.save(author);
         logger.debug("Автор обновлен");
 
-        author = authorRepository.findById(id);
+        author = authorRepository.findById(id).get();
         logger.debug("Новые данные: " + PrintUtils.printObject(null, author));
         assumeTrue(firstName.equals(author.getFirstName()));
     }

@@ -48,7 +48,7 @@ class StatusRepositoryTest {
         logger.debug("Статус обновлен");
         assumeTrue(statusName.equals(status.getName()));
 
-        status = statusRepository.findById(status.getId());
+        status = statusRepository.findById(status.getId()).get();
         logger.debug("Новые данные: " + PrintUtils.printObject(null, status));
     }
 

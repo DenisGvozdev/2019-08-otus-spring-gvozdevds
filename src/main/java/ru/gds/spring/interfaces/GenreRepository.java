@@ -5,6 +5,5 @@ import org.springframework.stereotype.Repository;
 import ru.gds.spring.domain.Genre;
 
 @Repository
-public interface GenreRepository extends JpaRepository<Genre, Long>, GenreRepositoryCustom {
-
+public interface GenreRepository extends JpaRepository<Genre, Long> {
 }

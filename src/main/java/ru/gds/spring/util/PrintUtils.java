@@ -17,10 +17,7 @@ public class PrintUtils {
         if (sb == null)
             sb = new StringBuilder();
 
-        String cls = obj.getClass().getName();
-        int indx = cls.lastIndexOf(".");
-        String className = (indx > 0) ? cls.substring(indx + 1, cls.length()) : "";
-        sb.append(className).append(" = {");
+        sb.append(getClassName(obj)).append(" = {");
 
         for (Field field : getFields(obj.getClass())) {
             field.setAccessible(true);
@@ -28,32 +25,37 @@ public class PrintUtils {
             Object value;
             try {
                 value = field.get(obj);
-                if (value instanceof Set) {
-                    sb.append("\n").append(name).append(" = [");
-                    Set<Object> set = (Set<Object>) value;
-                    for (Object o : set) {
-                        printObject(sb, o);
-                    }
-                    sb.append("]\n");
+                if (value instanceof Collection) {
+                    readCollection(value, name, sb);
 
-                } else if (value instanceof List) {
-                    sb.append(name).append(" = ").append("\n[");
-                    List<Object> list = (List<Object>) value;
-                    for (Object o : list) {
-                        printObject(sb, o);
-                    }
-                    sb.append("]\n");
-
-                } else if (value instanceof String || value instanceof Number
-                        || value instanceof Date || value instanceof Boolean || value instanceof byte[]) {
+                } else if (isPrimitive(value)) {
                     sb.append(name).append(" = ").append(value).append(";");
                 }
             } catch (IllegalArgumentException | IllegalAccessException e) {
                 e.printStackTrace();
             }
-
         }
         return sb.append("}").toString();
+    }
+
+    private static boolean isPrimitive(Object value) {
+        return (value instanceof String || value instanceof Number
+                || value instanceof Date || value instanceof Boolean || value instanceof byte[]);
+    }
+
+    private static void readCollection(Object value, String name, StringBuilder sb) {
+        sb.append(name).append(" = ").append("\n[");
+        Collection<Object> collection = (Collection<Object>) value;
+        collection.forEach(o -> {
+            printObject(sb, o);
+        });
+        sb.append("]\n");
+    }
+
+    private static String getClassName(Object obj) {
+        String cls = obj.getClass().getName();
+        int indx = cls.lastIndexOf(".");
+        return (indx > 0) ? cls.substring(indx + 1, cls.length()) : "";
     }
 
     private static Collection<Field> getFields(Class<?> type) {

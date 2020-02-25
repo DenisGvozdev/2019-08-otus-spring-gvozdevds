@@ -5,7 +5,5 @@ import org.springframework.stereotype.Repository;
 import ru.gds.spring.domain.Status;
 
 @Repository
-public interface StatusRepository extends JpaRepository<Status, Long>, StatusRepositoryCustom {
-
-    Status findById(long id);
+public interface StatusRepository extends JpaRepository<Status, Long> {
 }
