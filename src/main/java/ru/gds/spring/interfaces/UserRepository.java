@@ -1,8 +1,11 @@
 package ru.gds.spring.interfaces;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import ru.gds.spring.domain.User;
 
-public interface UserRepository extends CrudRepository<User, String>, UserRepositoryCustom {
+public interface UserRepository extends MongoRepository<User, String> {
 
+    User findByLogin(String login);
+
+    void deleteByLogin(String login);
 }

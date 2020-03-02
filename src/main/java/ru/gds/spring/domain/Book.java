@@ -1,5 +1,6 @@
 package ru.gds.spring.domain;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
@@ -21,8 +22,10 @@ public class Book {
 
     private Status status;
 
+    @DBRef
     private List<Genre> genres;
 
+    @DBRef
     private List<Author> authors;
 
     public Book(String name, Date createDate,

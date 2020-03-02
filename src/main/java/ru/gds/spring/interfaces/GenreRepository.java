@@ -1,11 +1,18 @@
 package ru.gds.spring.interfaces;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.gds.spring.domain.Genre;
 
-@Repository
-public interface GenreRepository extends MongoRepository<Genre, String>, GenreRepositoryCustom<Genre, String> {
+import java.util.List;
 
+@Repository
+public interface GenreRepository extends MongoRepository<Genre, String> {
+
+    List<Genre> findAllById(List<String> ids);
+
+    @Query("{name: { $in: ?0 } })")
+    List<Genre> findAllByName(List<String> names, Sort sort);
 }

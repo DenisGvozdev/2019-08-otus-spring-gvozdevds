@@ -60,6 +60,7 @@ class AuthorRepositoryTest {
     @Test
     void findAuthorListByIdTest() {
         List<Author> authorList = authorRepository.findAllById(getAllIdList(), null);
+        logger.debug("Авторы: " + PrintUtils.printObject(null, authorList));
         assumeTrue(authorList.size() == 3);
         logger.debug("Авторы: " + PrintUtils.printObject(null, authorList));
     }
