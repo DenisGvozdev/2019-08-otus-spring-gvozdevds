@@ -1,12 +1,4 @@
 spring:
-  data:
-    mongodb:
-      database: mydb
-      #username: MongoDB
-      #password: root
-      #port: 27017
-      #host: localhost
-      #authentication-database: admin
   profiles:
     active: development
     #active: test
