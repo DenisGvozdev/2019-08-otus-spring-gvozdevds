@@ -21,7 +21,7 @@ import java.util.*;
 import static org.junit.Assume.assumeTrue;
 
 @DataMongoTest
-@ComponentScan({"ru.gds.spring.mongo"})
+@ComponentScan({"ru.gds.spring"})
 class BookRepositoryTest {
 
     @Autowired
@@ -97,7 +97,7 @@ class BookRepositoryTest {
 
             List<Book> bookList = getBookList();
             logger.debug("Все книги: " + bookList);
-            assumeTrue(bookList.size() == 1);
+            assumeTrue(bookList.size() == 2);
 
             // Убеждаемся что не отработало каскадное удаление
             assumeTrue(getAuthorList().size() == 3);

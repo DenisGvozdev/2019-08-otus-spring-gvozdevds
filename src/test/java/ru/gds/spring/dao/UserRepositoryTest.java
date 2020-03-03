@@ -11,7 +11,7 @@ import java.util.List;
 import static org.junit.Assume.assumeTrue;
 
 @DataMongoTest
-@ComponentScan({"ru.gds.spring.mongo"})
+@ComponentScan({"ru.gds.spring"})
 class UserRepositoryTest {
 
     @Autowired

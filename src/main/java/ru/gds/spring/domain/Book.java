@@ -1,11 +1,13 @@
 package ru.gds.spring.domain;
 
+import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
 import java.util.*;
 
+@Data
 @Document(collection = "books")
 public class Book {
 
@@ -20,6 +22,7 @@ public class Book {
 
     private byte[] image;
 
+    @DBRef
     private Status status;
 
     @DBRef

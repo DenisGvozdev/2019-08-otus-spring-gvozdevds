@@ -16,7 +16,7 @@ import java.util.List;
 import static org.junit.Assume.assumeTrue;
 
 @DataMongoTest
-@ComponentScan({"ru.gds.spring.mongo"})
+@ComponentScan({"ru.gds.spring"})
 class CommentRepositoryTest {
 
     @Autowired
@@ -36,7 +36,7 @@ class CommentRepositoryTest {
 
         List<Comment> commentList = getCommentList();
         logger.debug("Все комментарии: " + commentList);
-        assumeTrue(commentList.size() == 3);
+        assumeTrue(commentList.size() == 2);
     }
 
     @Test
@@ -46,7 +46,7 @@ class CommentRepositoryTest {
 
         List<Comment> commentList = commentRepository.findByBookId(comment.getBook().getId(), null);
         logger.debug("Все комментарии к книге " + comment.getBook().getName() + ": " + commentList);
-        assumeTrue(commentList.size() == 2);
+        assumeTrue(commentList.size() == 1);
     }
 
     @Test

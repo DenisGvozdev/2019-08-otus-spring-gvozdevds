@@ -16,7 +16,7 @@ import java.util.List;
 import static org.junit.Assume.assumeTrue;
 
 @DataMongoTest
-@ComponentScan({"ru.gds.spring.mongo"})
+@ComponentScan({"ru.gds.spring"})
 class AuthorRepositoryTest {
 
     @Autowired
@@ -61,18 +61,21 @@ class AuthorRepositoryTest {
     void findAuthorListByIdTest() {
         List<Author> authorList = authorRepository.findAllById(getAllIdList(), null);
         logger.debug("Авторы: " + PrintUtils.printObject(null, authorList));
-        assumeTrue(authorList.size() == 3);
+        assumeTrue(authorList.size() == 4);
         logger.debug("Авторы: " + PrintUtils.printObject(null, authorList));
     }
 
     @Test
     void deleteAuthorTest() {
-        authorRepository.deleteById(getFirstAuthor().getId());
+        Author author = new Author("Автор", "Для", "Удаления", new Date());
+        author = authorRepository.save(author);
+
+        authorRepository.deleteById(author.getId());
         logger.debug("Автор удален");
 
         List<Author> authorList = getAuthorList();
         logger.debug("Все авторы: " + authorList);
-        assumeTrue(authorList.size() == 2);
+        assumeTrue(authorList.size() == 4);
     }
 
     private Author getAuthorById(String id) {

@@ -14,7 +14,7 @@ import java.util.List;
 import static org.junit.Assume.assumeTrue;
 
 @DataMongoTest
-@ComponentScan({"ru.gds.spring.mongo"})
+@ComponentScan({"ru.gds.spring"})
 class StatusRepositoryTest {
 
     @Autowired
@@ -48,13 +48,15 @@ class StatusRepositoryTest {
 
     @Test
     void deleteStatusTest() {
-        Status status = getFirstStatus();
+        Status status = new Status("Статус для удаления");
+        status = statusRepository.save(status);
+
         statusRepository.deleteById(status.getId());
         logger.debug("Статус удален");
 
         List<Status> statusList = getStatusList();
         logger.debug("Все статусы: " + statusList);
-        assumeTrue(statusList.size() == 1);
+        assumeTrue(statusList.size() == 2);
     }
 
     private Status getStatusById(String id) {

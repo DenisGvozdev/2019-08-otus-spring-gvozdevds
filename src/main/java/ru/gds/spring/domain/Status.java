@@ -1,9 +1,11 @@
 package ru.gds.spring.domain;
 
+import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
 
+@Data
 @Document(collection = "statuses")
 public class Status {
 

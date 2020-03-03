@@ -1,10 +1,12 @@
 package ru.gds.spring.domain;
 
+import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
 import java.util.Date;
 
+@Data
 @Document(collection = "comments")
 public class Comment {
 

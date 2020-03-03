@@ -14,7 +14,7 @@ import java.util.List;
 import static org.junit.Assume.assumeTrue;
 
 @DataMongoTest
-@ComponentScan({"ru.gds.spring.mongo"})
+@ComponentScan({"ru.gds.spring"})
 class GenreRepositoryTest {
 
     @Autowired
@@ -49,13 +49,15 @@ class GenreRepositoryTest {
 
     @Test
     void deleteGenreTest() {
-        Genre genre = getFirstGenre();
+        Genre genre = new Genre("Исторический");
+        genre = genreRepository.save(genre);
+
         genreRepository.deleteById(genre.getId());
         logger.debug("Жанр удален");
 
         List<Genre> genreList = getGenreList();
         logger.debug("Все жанры: " + genreList);
-        assumeTrue(genreList.size() == 2);
+        assumeTrue(genreList.size() == 4);
     }
 
     private Genre getGenreById(String id) {
