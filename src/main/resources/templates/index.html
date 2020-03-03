@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Thymeleaf Fragments: home</title>
+    <meta charset="UTF-8">
+    <link href="index.css" type="text/css" rel="stylesheet">
+</head>
+<body style="width: 100%">
+
+<span>Панель управления</span>
+
+<form action="/book/all" method="get" class="one">
+    <input type="submit" value="показать все книги">
+</form>
+
+<form action="/book/one" method="get" class="one">
+    <label for="bookId">ID книги:</label>
+    <input type="text" id="bookId" name="bookId">
+    <input type="submit" value="найти книгу по ID">
+</form>
+
+
+    <form action="/book/add" method="get" class="addBook">
+
+        <label for="name">Название</label>
+        <input type="text" id="name" name="name"><br>
+
+        <label for="authorIds">Авторы</label>
+        <input type="text" id="authorIds" name="authorIds"><br>
+
+        <label for="genreIds">Жанры</label>
+        <input type="text" id="genreIds" name="genreIds"><br>
+
+        <label for="description">Описание</label>
+        <input type="text" id="description" name="description"><br>
+
+        <label for="imagePath">Обложка</label>
+        <input type="text" id="imagePath" name="imagePath"><br>
+
+        <label for="statusId">Статус</label>
+        <input type="text" id="statusId" name="statusId"><br>
+
+        <input type="submit" value="добавить книгу">
+    </form>
+
+
+
+<table class="books">
+    <caption>Книги</caption>
+    <thead>
+    <tr>
+        <th id="thBookID">ID</th>
+        <th id="thBookName">Название</th>
+        <th id="thBookAuthors">Авторы</th>
+        <th id="thBookGenres">Жанры</th>
+        <th id="thBookDescription">Описание</th>
+    </tr>
+    </thead>
+    <tbody th:each="book : ${books}">
+    <tr>
+        <td><span th:text="${book.id}"></span></td>
+        <td><span th:text="${book.name}"></span></td>
+        <td>
+            <div th:each="author : ${book.authors}">
+                <div th:text="${author.firstName + ' ' + author.secondName + ' ' + author.thirdName}"></div>
+            </div>
+        </td>
+        <td>
+            <div th:each="genre : ${book.genres}">
+                <div th:text="${genre.name}"></div>
+            </div>
+        </td>
+        <td><span th:text="${book.description}"></span></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

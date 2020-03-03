@@ -1,0 +1,20 @@
+body {
+    background-color: #f6f6ff;
+    font-family: Calibri, Myriad;
+}
+table.books {
+    border: 1px solid black;
+}
+form.one {
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+form.addBook{
+    border: 1px solid black;
+    width: 100%;
+}
+.ddd{
+    border: 1px solid black;
+    width: 100%;
+}
+
