@@ -1,20 +1,61 @@
 body {
     background-color: #f6f6ff;
     font-family: Calibri, Myriad;
+    font-size: 10pt;
 }
-table.books {
+
+div.main {
+    width: 70%;
+}
+
+div.books {
     border: 1px solid black;
+    width: 100%;
 }
+
+table.books {
+    text-align: justify;
+    width: 100%;
+}
+
 form.one {
     padding-top: 3px;
     padding-bottom: 3px;
+    vertical-align: top;
 }
-form.addBook{
-    border: 1px solid black;
+
+div.addUpdateBook {
+    border: 1px solid green;
+    width: 545px;
+}
+
+div.addBook {
+    border: 1px solid green;
+    width: 270px;
+    float: left;
+}
+
+form.addBook {
     width: 100%;
 }
-.ddd{
-    border: 1px solid black;
+
+div.updateBook {
+    border: 1px solid green;
+    width: 270px;
+    float: right;
+}
+
+form.updateBook {
     width: 100%;
+}
+
+.inputText {
+    float: right;
+}
+
+div.findBooks {
+    border: 1px solid green;
+    width: 270px;
+    float: right;
 }
 
