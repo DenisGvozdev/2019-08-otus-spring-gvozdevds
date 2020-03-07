@@ -1,27 +1,19 @@
 package ru.gds.spring.mongo;
 
-import com.github.mongobee.Mongobee;
+import com.github.cloudyrock.mongock.Mongock;
+import com.github.cloudyrock.mongock.SpringMongockBuilder;
 import com.mongodb.MongoClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
-import ru.gds.spring.mongo.changelog.DatabaseChangelog;
 
 @Configuration
 public class MongoConfig {
 
-    private MongoClient mongo;
-
-    MongoConfig(MongoClient mongo){
-        this.mongo = mongo;
-    }
+    private static final String CHANGELOGS_PACKAGE = "ru.gds.spring.mongo.changelog";
 
     @Bean
-    public Mongobee mongobee(Environment environment) {
-        Mongobee runner = new Mongobee(mongo);
-        runner.setDbName("mydb");
-        runner.setChangeLogsScanPackage(DatabaseChangelog.class.getPackage().getName());
-        runner.setSpringEnvironment(environment);
-        return runner;
+    public Mongock mongock(MongoProps mongoProps, MongoClient mongoClient) {
+        return new SpringMongockBuilder(mongoClient, mongoProps.getDatabase(), CHANGELOGS_PACKAGE)
+                .build();
     }
 }

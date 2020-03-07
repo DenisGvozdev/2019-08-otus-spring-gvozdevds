@@ -10,7 +10,6 @@ import ru.gds.spring.interfaces.BookRepository;
 import ru.gds.spring.mongo.exceptions.ForeignKeyException;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class GenreMongoEventListener extends AbstractMongoEventListener<Genre> {
@@ -29,16 +28,10 @@ public class GenreMongoEventListener extends AbstractMongoEventListener<Genre> {
         event.getDocument();
         String id = event.getSource().get("_id").toString();
 
-        List<Book> books = bookRepository.findAll();
-        for (Book book : books) {
-            List<Genre> genres = book.getGenres().stream()
-                    .filter(g -> id.equals(g.getId()))
-                    .collect(Collectors.toList());
-
-            if (!genres.isEmpty())
-                throw new ForeignKeyException("Error delete Genre because Book: "
-                        + book.getName() + " related to Genre: " + genres.get(0));
-        }
+        List<Book> books = bookRepository.findAllByGenresId(id);
+        if (!books.isEmpty())
+            throw new ForeignKeyException("Error delete Genre because Book: "
+                    + books.get(0).getName() + " related to Genre: " + books.get(0).getGenres());
         logger.debug("GenreMongoEventListener delete");
     }
 }

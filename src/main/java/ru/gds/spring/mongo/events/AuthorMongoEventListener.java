@@ -10,8 +10,6 @@ import ru.gds.spring.interfaces.BookRepository;
 import ru.gds.spring.mongo.exceptions.ForeignKeyException;
 
 import java.util.List;
-import java.util.stream.Collectors;
-
 
 @Component
 public class AuthorMongoEventListener extends AbstractMongoEventListener<Author> {
@@ -30,17 +28,11 @@ public class AuthorMongoEventListener extends AbstractMongoEventListener<Author>
         event.getDocument();
         String id = event.getSource().get("_id").toString();
 
-        List<Book> booksTest = bookRepository.findAllByAuthorsId(id);
-        List<Book> books = bookRepository.findAll();
-        for (Book book : books) {
-            List<Author> authors = book.getAuthors().stream()
-                    .filter(a -> id.equals(a.getId()))
-                    .collect(Collectors.toList());
+        List<Book> books = bookRepository.findAllByAuthorsId(id);
+        if (!books.isEmpty())
+            throw new ForeignKeyException("Error delete Author because Book: "
+                    + books.get(0).getName() + " related to Author: " + books.get(0).getAuthors());
 
-            if (!authors.isEmpty())
-                throw new ForeignKeyException("Error delete Author because Book: "
-                        + book.getName() + " related to Author: " + authors.get(0));
-        }
         logger.debug("AuthorMongoEventListener delete");
     }
 }

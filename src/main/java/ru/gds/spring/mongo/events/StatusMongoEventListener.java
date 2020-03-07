@@ -28,13 +28,10 @@ public class StatusMongoEventListener extends AbstractMongoEventListener<Status>
         event.getDocument();
         String id = event.getSource().get("_id").toString();
 
-        List<Book> books = bookRepository.findAll();
-        for (Book book : books) {
-            Status status = book.getStatus();
-            if (status != null && status.getId().equals(id))
-                throw new ForeignKeyException("Error delete Status because Book: "
-                        + books.get(0).getName() + " related to Status: " + event.getSource().get("name"));
-        }
+        List<Book> books = bookRepository.findAllByStatusId(id);
+        if (!books.isEmpty())
+            throw new ForeignKeyException("Error delete Status because Book: "
+                    + books.get(0).getName() + " related to Status: " + books.get(0).getStatus().getName());
         logger.debug("StatusMongoEventListener delete");
     }
 }
