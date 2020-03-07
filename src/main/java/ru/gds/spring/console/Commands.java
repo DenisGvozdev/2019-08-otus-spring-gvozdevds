@@ -27,18 +27,18 @@ public class Commands {
     private final UserRepository userRepository;
 
     Commands(
-            BookRepository br,
-            GenreRepository gr,
-            AuthorRepository ar,
-            StatusRepository sr,
-            CommentRepository cr,
-            UserRepository ur) {
-        bookRepository = br;
-        genreRepository = gr;
-        authorRepository = ar;
-        statusRepository = sr;
-        commentRepository = cr;
-        userRepository = ur;
+            BookRepository bookRepository,
+            GenreRepository genreRepository,
+            AuthorRepository authorRepository,
+            StatusRepository statusRepository,
+            CommentRepository commentRepository,
+            UserRepository userRepository) {
+        this.bookRepository = bookRepository;
+        this.genreRepository = genreRepository;
+        this.authorRepository = authorRepository;
+        this.statusRepository = statusRepository;
+        this.commentRepository = commentRepository;
+        this.userRepository = userRepository;
     }
 
     // --------- Работаем с книгами --------------
