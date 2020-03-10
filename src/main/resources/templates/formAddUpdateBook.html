@@ -1,0 +1,81 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <TITLE>Моя библиотека</TITLE>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-select.css"/>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="js/bootstrap-select.min.js"></script>
+    <link rel="stylesheet" href="css/formAddUpdateBook.css">
+</head>
+<body>
+<div class="main">
+    <div class="addBook">
+        <form action="/add" method="post" class="addBook">
+            <table class="addBook">
+                <tr>
+                    <td colspan="2">Редактирование книги</td>
+                </tr>
+                <tr>
+                    <td>Название</td>
+                    <td><input type="text" name="name" class="inputText"></td>
+                </tr>
+                <tr>
+                    <td>Авторы</td>
+                    <td>
+                        <select class="selectFields" multiple data-live-search="true" name="authorIds">
+                            <option th:each="author : ${authors}"
+                                    th:value="${author.id}"
+                                    th:text="${author.firstName + ' ' + author.secondName + ' ' + author.thirdName}">
+                            </option>
+                        </select>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>Жанры</td>
+                    <td>
+                        <select class="selectFields" multiple data-live-search="true" name="genreIds">
+                            <option th:each="genre : ${genres}"
+                                    th:value="${genre.id}"
+                                    th:text="${genre.name}">
+                            </option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Описание</td>
+                    <td><input type="text" name="description" class="inputText"></td>
+                </tr>
+                <tr>
+                    <td>Обложка</td>
+                    <td><input type="text" name="imagePath" class="inputText"></td>
+                </tr>
+                <tr>
+                    <td>Статус</td>
+                    <td>
+                        <select class="selectFields" data-live-search="true" name="statusId">
+                            <option th:each="status : ${statuses}"
+                                    th:value="${status.id}"
+                                    th:text="${status.name}">
+                            </option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="submit" value="Сохранить" class="inputButton">
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+<script>
+    $('select').selectpicker();
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+body {
+    background-color: #f6f6ff;
+    font-family: Calibri, Myriad;
+    font-size: 12pt;
+    height: 100%;
+    width: 100%;
+}
+
+div.main {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+div.addBook {
+    /*border: 1px solid green;*/
+    width: 300px;
+}
+
+form.addBook {
+    width: 100%;
+}
+
+.inputText {
+    float: right;
+    width: 96%;
+}
+.inputButton {
+    float: right;
+    width: 96%;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+table.addBook {
+    text-align: center;
+    width: 100%;
+}
+
+select.selectFields {
+    font-size: 10pt;
+}
+
+form.selectField {
+    text-align: center;
+    font-size: 10pt;
+}

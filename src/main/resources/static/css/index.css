@@ -2,20 +2,39 @@ body {
     background-color: #f6f6ff;
     font-family: Calibri, Myriad;
     font-size: 10pt;
+    height: 100%;
+}
+
+div.container{
+    width: 70%;
+}
+
+div.row{
+    width: 100%;
 }
 
 div.main {
-    width: 70%;
+    width: 99%;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
 }
 
 div.books {
     border: 1px solid black;
-    width: 100%;
+    width: 98%;
+    margin-left: 10px;
+    margin-right: 10px;
+    flex: 1 0 auto;
 }
 
 table.books {
-    text-align: justify;
+    text-align: center;
     width: 100%;
+}
+
+tr.clicked {
+    background-color: #abc;
 }
 
 form.one {
@@ -59,3 +78,24 @@ div.findBooks {
     float: right;
 }
 
+#contextMenu {
+    position: absolute;
+    display: none;
+}
+
+.wrap{
+    width:90%;
+    display:block;
+    margin:0 auto;
+}
+
+/*tr:nth-child(even) {background: #F5F5F5}*/
+
+tr{
+    position:relative;
+}
+
+tr:hover{
+    background:#c9e8f7;
+    position:relative;
+}

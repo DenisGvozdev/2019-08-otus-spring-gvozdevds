@@ -26,7 +26,7 @@
                     </form>
                 </li>
                 <li>
-                    <form action="/info" method="get" class="one">
+                    <form action="/all" method="get" class="one">
                         <input type="submit" class="refButton" value="Добавить">
                     </form>
                 </li>
@@ -42,9 +42,8 @@
                 </li>
                 <li>
                     <div class="search">
-                        <form action="/one" method="get" class="form-inline my-2 my-lg-0">
-                            <input name="bookId" class="form-control mr-sm-2" type="search" placeholder="Поиск"
-                                   aria-label="Поиск">
+                        <form action="/one"  method="get" class="form-inline my-2 my-lg-0">
+                            <input name="bookId" class="form-control mr-sm-2" type="search" placeholder="Поиск" aria-label="Поиск">
                             <button class="search" id="buttonSearch" type="submit">Найти</button>
                         </form>
                     </div>
@@ -55,7 +54,7 @@
     </div>
 
     <div class="books">
-        <table class="books" id="tableBooks">
+        <table class="books">
             <caption>Книги</caption>
             <thead>
             <tr>
@@ -66,8 +65,8 @@
                 <th id="thBookDescription">Описание</th>
             </tr>
             </thead>
-            <tbody>
-            <tr th:each="book : ${books}" onclick="selectUnselectRowBookCheckBox(this)">
+            <tbody th:each="book : ${books}">
+            <tr>
                 <td><span th:text="${book.id}"></span></td>
                 <td><span th:text="${book.name}"></span></td>
                 <td>
@@ -81,84 +80,16 @@
                     </div>
                 </td>
                 <td><span th:text="${book.description}"></span></td>
-                <td>
-                    <input type="checkbox" name="bookId" th:value="${book.id}"
-                           onchange="selectUnselectRowBook(this)" disabled>
-                </td>
             </tr>
             </tbody>
         </table>
     </div>
 
     <div class="footer">
-        Copyright © 2020 Моя библиотека Все права защищены.<br>
+        Copyright © 2020 Моя библиотека Все права защищены.
+        <br>
         При использовании материалов сайта гиперссылка на <a href="/">Моя библиотека</a> обязательна.
     </div>
 </div>
-
-<div id="contextMenu" class="dropdown clearfix">
-    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu"
-        style="display:block; position:static; margin-bottom:5px;">
-        <li><a tabindex="-1" href="#">Редактировать</a></li>
-        <li><a tabindex="-1" href="#">Удалить</a></li>
-    </ul>
-</div>
-
-<script>
-    $(document).ready(function () {
-        $('.books tr').click(function () {
-            $(this).toggleClass("clicked");
-        });
-    });
-
-    function selectUnselectRowBook(element) {
-        let tableBooks = document.getElementById("tableBooks").getElementsByTagName('tbody')[0];
-        for (var i = 0; i < tableBooks.rows.length; i++) {
-            if (element.value === tableBooks.rows[i].cells[0].innerText) {
-                tableBooks.rows[i].toggleAttribute('selected');
-            }
-        }
-    }
-
-    function selectUnselectRowBookCheckBox(element) {
-        for (var i = 0; i < element.cells.length; i++) {
-            var itm = element.cells[i];
-            if (itm != null && itm.children[0] != null && itm.children[0].type === "checkbox") {
-                itm.children[0].checked = !itm.children[0].checked;
-            }
-        }
-    }
-
-    $(function () {
-        var $contextMenu = $("#contextMenu");
-
-        $("body").on("contextmenu", "table tr", function (e) {
-            $contextMenu.css({
-                display: "block",
-                left: e.pageX,
-                top: e.pageY,
-                background: "#FFFFFF"
-            });
-
-            var element = $(this)[0];
-            //element.click();
-            var bookId = null;
-
-            for (var i = 0; i < element.cells.length; i++) {
-                var itm = element.cells[i];
-                if (itm != null && itm.children[0] != null && itm.children[0].type === "checkbox") {
-                    bookId = itm.children[0].value;
-                }
-            }
-            $contextMenu.bookId = bookId;
-            return false;
-        });
-
-        $('html').click(function () {
-            $contextMenu.hide();
-        });
-    });
-</script>
-
 </body>
 </html>

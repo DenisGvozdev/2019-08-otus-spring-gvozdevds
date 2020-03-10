@@ -48,7 +48,7 @@ public class BookController {
         return "helloPage";
     }
 
-    @GetMapping("/all")
+    @GetMapping("/")
     public String findAllBooks(Model model) {
         List<Book> bookList = bookRepository.findAll();
         model.addAttribute("books", bookList);
@@ -68,7 +68,7 @@ public class BookController {
         } finally {
             model.addAttribute("books", bookList);
         }
-        return "index";
+        return "findResult";
     }
 
     @PostMapping("/add")
@@ -146,5 +146,26 @@ public class BookController {
             model.addAttribute("books", bookList);
         }
         return "index";
+    }
+
+    @GetMapping("/info")
+    public String getInfo(Model model) {
+        List<Author> authors = new ArrayList<>();
+        List<Genre> genres = new ArrayList<>();
+        List<Status> statuses = new ArrayList<>();
+        try {
+            authors = authorRepository.findAll();
+            genres = genreRepository.findAll();
+            statuses = statusRepository.findAll();
+
+        } catch (Exception e) {
+            logger.debug("Error get info ");
+
+        } finally {
+            model.addAttribute("authors", authors);
+            model.addAttribute("genres", genres);
+            model.addAttribute("statuses", statuses);
+        }
+        return "formAddUpdateBook";
     }
 }
