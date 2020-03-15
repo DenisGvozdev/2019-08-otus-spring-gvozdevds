@@ -27,23 +27,14 @@
                 </li>
                 <li>
                     <form action="/info" method="get" class="one">
+                        <input type="hidden" value="add"/>
                         <input type="submit" class="refButton" value="Добавить">
                     </form>
                 </li>
                 <li>
-                    <form action="/all" method="get" class="one">
-                        <input type="submit" class="refButton" value="Обновить">
-                    </form>
-                </li>
-                <li>
-                    <form action="/all" method="get" class="one">
-                        <input type="submit" class="refButton" value="Удалить">
-                    </form>
-                </li>
-                <li>
                     <div class="search">
-                        <form action="/one" method="get" class="form-inline my-2 my-lg-0">
-                            <input name="bookId" class="form-control mr-sm-2" type="search" placeholder="Поиск"
+                        <form action="/find" method="get" class="form-inline my-2 my-lg-0">
+                            <input name="name" class="form-control mr-sm-2" type="search" placeholder="Название книги"
                                    aria-label="Поиск">
                             <button class="search" id="buttonSearch" type="submit">Найти</button>
                         </form>
@@ -112,7 +103,7 @@
     });
 
     function selectUnselectRowBook(element) {
-        let tableBooks = document.getElementById("tableBooks").getElementsByTagName('tbody')[0];
+        var tableBooks = document.getElementById("tableBooks").getElementsByTagName('tbody')[0];
         for (var i = 0; i < tableBooks.rows.length; i++) {
             if (element.value === tableBooks.rows[i].cells[0].innerText) {
                 tableBooks.rows[i].toggleAttribute('selected');
@@ -137,20 +128,28 @@
                 display: "block",
                 left: e.pageX,
                 top: e.pageY,
-                background: "#FFFFFF"
+                background: "#FFFFFF",
+                margin: "0 0 0 0"
             });
 
             var element = $(this)[0];
-            //element.click();
             var bookId = null;
-
             for (var i = 0; i < element.cells.length; i++) {
                 var itm = element.cells[i];
                 if (itm != null && itm.children[0] != null && itm.children[0].type === "checkbox") {
                     bookId = itm.children[0].value;
                 }
             }
-            $contextMenu.bookId = bookId;
+            $contextMenu.ready(function () {
+                for (var i = 0; i < $contextMenu[0].children[0].children.length; i++) {
+                    var li = $contextMenu[0].children[0].children[i];
+                    if (li.firstChild.text === "Редактировать") {
+                        li.firstChild.attributes[1].textContent = "/infoBook?bookId=" + bookId;
+                    } else if (li.firstChild.text === "Удалить") {
+                        li.firstChild.attributes[1].textContent = "/remove?bookId=" + bookId;
+                    }
+                }
+            });
             return false;
         });
 
