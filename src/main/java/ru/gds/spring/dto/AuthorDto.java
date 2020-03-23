@@ -9,9 +9,9 @@ public class AuthorDto {
     private String secondName;
     private String thirdName;
     private Date birthDate;
-    private long selected;
+    private boolean selected;
 
-    public AuthorDto(long id, String firstName, String secondName, String thirdName, Date birthDate, long selected){
+    public AuthorDto(long id, String firstName, String secondName, String thirdName, Date birthDate, boolean selected){
         this.id = id;
         this.firstName = firstName;
         this.secondName = secondName;
@@ -60,11 +60,11 @@ public class AuthorDto {
         this.birthDate = birthDate;
     }
 
-    public long getSelected() {
+    public boolean isSelected() {
         return selected;
     }
 
-    public void setSelected(long selected) {
+    public void setSelected(boolean selected) {
         this.selected = selected;
     }
 }

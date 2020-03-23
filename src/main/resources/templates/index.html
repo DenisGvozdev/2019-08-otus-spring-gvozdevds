@@ -90,6 +90,7 @@
 <div id="contextMenu" class="dropdown clearfix">
     <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu"
         style="display:block; position:static; margin-bottom:5px;">
+        <li><a tabindex="-1" href="#">Просмотр</a></li>
         <li><a tabindex="-1" href="#">Редактировать</a></li>
         <li><a tabindex="-1" href="#">Удалить</a></li>
     </ul>
@@ -143,8 +144,10 @@
             $contextMenu.ready(function () {
                 for (var i = 0; i < $contextMenu[0].children[0].children.length; i++) {
                     var li = $contextMenu[0].children[0].children[i];
-                    if (li.firstChild.text === "Редактировать") {
-                        li.firstChild.attributes[1].textContent = "/infoBook?bookId=" + bookId;
+                    if (li.firstChild.text === "Просмотр") {
+                        li.firstChild.attributes[1].textContent = "/infoBook?bookId=" + bookId + "&mode=show";
+                    } else if (li.firstChild.text === "Редактировать") {
+                        li.firstChild.attributes[1].textContent = "/infoBook?bookId=" + bookId + "&mode=edit";
                     } else if (li.firstChild.text === "Удалить") {
                         li.firstChild.attributes[1].textContent = "/remove?bookId=" + bookId;
                     }

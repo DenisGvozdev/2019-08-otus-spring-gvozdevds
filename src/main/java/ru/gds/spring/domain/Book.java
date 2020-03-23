@@ -35,7 +35,7 @@ public class Book {
     @Column(name = "IMAGE", length = 100000)
     private byte[] image;
 
-    @JoinColumn(name = "STATUS", referencedColumnName = "ID", nullable = false, updatable = false)
+    @JoinColumn(name = "STATUS", referencedColumnName = "ID", nullable = false)
     @ManyToOne(fetch = FetchType.EAGER)
     private Status status;
 

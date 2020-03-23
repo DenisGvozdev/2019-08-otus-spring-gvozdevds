@@ -4,9 +4,9 @@ public class StatusDto {
 
     private long id;
     private String name;
-    private long selected;
+    private boolean selected;
 
-    public StatusDto(long id, String name, long selected){
+    public StatusDto(long id, String name, boolean selected){
         this.id = id;
         this.name = name;
         this.selected = selected;
@@ -28,11 +28,11 @@ public class StatusDto {
         this.id = id;
     }
 
-    public long getSelected() {
+    public boolean isSelected() {
         return selected;
     }
 
-    public void setSelected(long selected) {
+    public void setSelected(boolean selected) {
         this.selected = selected;
     }
 }

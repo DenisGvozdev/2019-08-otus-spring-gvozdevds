@@ -5,6 +5,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.gds.spring.domain.Author;
@@ -43,11 +44,6 @@ public class BookController {
         this.statusRepository = statusRepository;
     }
 
-    @GetMapping("/hello")
-    public String listPage(Model model) {
-        return "helloPage";
-    }
-
     @GetMapping("/")
     public String findAllBooks(Model model) {
         List<Book> bookList = bookRepository.findAll();
@@ -65,7 +61,7 @@ public class BookController {
             bookList = bookRepository.findByNameContainingIgnoreCase(name);
 
         } catch (Exception e) {
-            logger.debug("Book not found by name like %" + name + "%");
+            logger.error("Book not found by name like %" + name + "%");
 
         } finally {
             model.addAttribute("books", bookList);
@@ -84,11 +80,15 @@ public class BookController {
             ModelMap model) {
         try {
 
-            Status status = statusRepository.findById(statusId).get();
+            if (StringUtils.isEmpty(name))
+                throw new Exception("Book name is empty");
+
+            Status status = statusRepository.findById(statusId).orElse(null);
             List<Genre> genres = genreRepository.findAllById(CommonUtils.convertStringToArrayList(genreIds));
             List<Author> authors = authorRepository.findAllById(CommonUtils.convertStringToArrayList(authorIds));
-            //file instanceof StandardMultipartHttpServletRequest.StandardMultipartFile
             byte[] image = file.getBytes();
+
+            checkStatusGenresAuthors(status, genres, authors);
 
             Book book = new Book(
                     name,
@@ -98,17 +98,15 @@ public class BookController {
                     new HashSet<>(genres),
                     new HashSet<>(authors),
                     status);
-
-            book = bookRepository.save(book);
-            long id = book.getId();
-            logger.debug((id > 0) ? "create book successful" : "create book error");
+            bookRepository.save(book);
+            logger.debug("book successful saved");
 
         } catch (Exception e) {
-            logger.debug("Error add book: " + e.getMessage());
+            logger.error("Error add book: " + e.getMessage());
 
         } finally {
             List<Book> bookList = bookRepository.findAll();
-            model.addAttribute("books", bookList);
+            model.addAttribute("books", (bookList == null) ? new ArrayList<Book>() : bookList);
         }
         return "redirect:/";
     }
@@ -124,12 +122,21 @@ public class BookController {
             @RequestParam String authorIds,
             Model model) {
         try {
+
+            if (StringUtils.isEmpty(name))
+                throw new Exception("Book name is empty");
+
             List<Genre> genres = genreRepository.findAllById(CommonUtils.convertStringToArrayList(genreIds));
             List<Author> authors = authorRepository.findAllById(CommonUtils.convertStringToArrayList(authorIds));
-            Status status = statusRepository.findById(statusId).get();
+            Status status = statusRepository.findById(statusId).orElse(null);
             byte[] image = file.getBytes();
 
-            Book book = bookRepository.findById(bookId).get();
+            checkStatusGenresAuthors(status, genres, authors);
+
+            Book book = bookRepository.findById(bookId).orElse(null);
+            if (book == null)
+                throw new Exception("Book not found");
+
             book.setName(name);
             book.setDescription(description);
             book.setGenres(new HashSet<>(genres));
@@ -141,7 +148,7 @@ public class BookController {
             logger.debug("book successful updated");
 
         } catch (Exception e) {
-            logger.debug("Error update book with id = " + bookId + " : " + e.getMessage());
+            logger.error("Error update book with id = " + bookId + " : " + e.getMessage());
 
         } finally {
             List<Book> books = bookRepository.findAll();
@@ -154,12 +161,13 @@ public class BookController {
     public String removeBookById(
             @RequestParam Long bookId,
             Model model) {
-
         try {
             bookRepository.deleteById(bookId);
             logger.debug("book successful deleted");
+
         } catch (Exception e) {
-            logger.debug("Book not found by id = " + bookId);
+            logger.error("Book not found by id = " + bookId);
+
         } finally {
             List<Book> bookList = bookRepository.findAll();
             model.addAttribute("books", bookList);
@@ -186,9 +194,10 @@ public class BookController {
             bookDto.setStatuses(statusDtoList);
 
         } catch (Exception e) {
-            logger.debug("Error get info ");
+            logger.error("Error get info ");
 
         } finally {
+            model.addAttribute("show", false);
             model.addAttribute("operation", "add");
             model.addAttribute("book", bookDto);
         }
@@ -198,6 +207,7 @@ public class BookController {
     @GetMapping("/infoBook")
     public String getInfoBook(
             @RequestParam Long bookId,
+            @RequestParam String mode,
             Model model) {
 
         BookDto bookDto = new BookDto();
@@ -205,9 +215,10 @@ public class BookController {
             bookDto = prepareBookDto(bookId);
 
         } catch (Exception e) {
-            logger.debug("Error get book info by id = " + bookId);
+            logger.error("Error get book info by id = " + bookId);
 
         } finally {
+            model.addAttribute("show", "show".equalsIgnoreCase(mode));
             model.addAttribute("operation", "createUpdate");
             model.addAttribute("book", bookDto);
         }
@@ -229,7 +240,7 @@ public class BookController {
                     author.getSecondName(),
                     author.getThirdName(),
                     author.getBirthDate(),
-                    0
+                    false
             );
             authorDtoList.add(authorDto);
         }
@@ -238,7 +249,7 @@ public class BookController {
             GenreDto genreDto = new GenreDto(
                     genre.getId(),
                     genre.getName(),
-                    0
+                    false
             );
             genreDtoList.add(genreDto);
         }
@@ -247,7 +258,7 @@ public class BookController {
             StatusDto statusDto = new StatusDto(
                     status.getId(),
                     status.getName(),
-                    0
+                    false
             );
             statusDtoList.add(statusDto);
         }
@@ -274,7 +285,7 @@ public class BookController {
                     author.getSecondName(),
                     author.getThirdName(),
                     author.getBirthDate(),
-                    authorIds.contains(author.getId()) ? author.getId() : 0
+                    authorIds.contains(author.getId())
             );
             authorDtoList.add(authorDto);
         }
@@ -286,7 +297,7 @@ public class BookController {
             GenreDto genreDto = new GenreDto(
                     genre.getId(),
                     genre.getName(),
-                    genreIds.contains(genre.getId()) ? genre.getId() : 0
+                    genreIds.contains(genre.getId())
             );
             genreDtoList.add(genreDto);
         }
@@ -298,7 +309,7 @@ public class BookController {
             StatusDto statusDto = new StatusDto(
                     status.getId(),
                     status.getName(),
-                    statusIds.contains(status.getId()) ? status.getId() : 0
+                    statusIds.contains(status.getId())
             );
             statusDtoList.add(statusDto);
         }
@@ -325,5 +336,16 @@ public class BookController {
         bookDto.setImageString(extension + encodedImage);
 
         return bookDto;
+    }
+
+    private void checkStatusGenresAuthors(Status status, List<Genre> genres, List<Author> authors) throws Exception {
+        if (status == null)
+            throw new Exception("Status not found");
+
+        if (genres == null || genres.isEmpty())
+            throw new Exception("Genre not found");
+
+        if (authors == null || authors.isEmpty())
+            throw new Exception("Author not found");
     }
 }

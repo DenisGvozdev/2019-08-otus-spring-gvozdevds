@@ -66,22 +66,26 @@
 
                 <div class="form-group">
                     <label for="name" class="labelInput">Название</label>
-                    <input id="name" name="name" class="inputText" type="text" th:value="${book.name}"/>
+                    <input id="name" name="name" class="inputText" type="text" th:value="${book.name}"
+                           th:disabled="${show}"/>
                 </div>
 
                 <div class="form-group">
                     <label for="description" class="labelInput">Описание</label>
-                    <textarea id="description" name="description" rows="2" cols="80" th:field = "${book.description}"></textarea>
+                    <textarea id="description" name="description" rows="2" cols="80"
+                              th:field = "${book.description}" th:disabled="${show}"></textarea>
                 </div>
 
                 <div class="form-group">
                     <label for="file" class="labelInput">Обложка</label>
-                    <input id="file" name="file" type="file" onchange="readURL(this)" th:value="${book.image}"/>
+                    <input id="file" name="file" type="file" onchange="readURL(this)"
+                           th:value="${book.image}" th:disabled="${show}"/>
                 </div>
 
                 <div class="form-group">
                     <label for="authorIds" class="labelInput">Авторы</label>
-                    <select id="authorIds" name="authorIds" class="selectFields" multiple data-live-search="true">
+                    <select id="authorIds" name="authorIds" class="selectFields"
+                            multiple data-live-search="true" th:disabled="${show}">
                         <option th:each="author : ${book.authors}"
                                 th:value="${author.id}"
                                 th:selected="${author.selected}"
@@ -92,7 +96,8 @@
 
                 <div class="form-group">
                     <label for="genreIds" class="labelInput">Жанры</label>
-                    <select id="genreIds" name="genreIds" class="selectFields" multiple data-live-search="true">
+                    <select id="genreIds" name="genreIds" class="selectFields"
+                            multiple data-live-search="true" th:disabled="${show}">
                         <option th:each="genre : ${book.genres}"
                                 th:value="${genre.id}"
                                 th:selected="${genre.selected}"
@@ -103,7 +108,8 @@
 
                 <div class="form-group">
                     <label for="statusId" class="labelInput">Статус</label>
-                    <select id="statusId" name="statusId" class="selectFields" data-live-search="true">
+                    <select id="statusId" name="statusId" class="selectFields"
+                             th:disabled="${show}">
                         <option th:each="status : ${book.statuses}"
                                 th:value="${status.id}"
                                 th:selected="${status.selected}"
@@ -113,8 +119,8 @@
                 </div>
 
                 <div class="form-group">
-                    <input type="submit" value="Сохранить" class="inputButtonSave">
-                    <input type="button" value="Отмена" onclick="window.history.back()" class="inputButtonCancel">
+                    <input type="submit" value="Сохранить" class="inputButtonSave" th:hidden="${show}">
+                    <input type="button" value="Закрыть" onclick="window.history.back()" class="inputButtonCancel">
                 </div>
 
             </form>

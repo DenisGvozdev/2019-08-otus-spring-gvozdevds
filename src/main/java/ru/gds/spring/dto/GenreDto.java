@@ -4,9 +4,9 @@ public class GenreDto {
 
     private long id;
     private String name;
-    private long selected;
+    private boolean selected;
 
-    public GenreDto(long id, String name, long selected){
+    public GenreDto(long id, String name, boolean selected){
         this.id = id;
         this.name = name;
         this.selected = selected;
@@ -28,11 +28,11 @@ public class GenreDto {
         this.name = name;
     }
 
-    public long getSelected() {
+    public boolean isSelected() {
         return selected;
     }
 
-    public void setSelected(long selected) {
+    public void setSelected(boolean selected) {
         this.selected = selected;
     }
 }
