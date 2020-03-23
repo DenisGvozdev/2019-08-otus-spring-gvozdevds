@@ -1,0 +1,166 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <TITLE>Моя библиотека</TITLE>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/swfobject.js"></script>
+
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap-responsive.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/index.css">
+
+</head>
+<body>
+<div class="main">
+
+    <div class="navbar navbar-inverse">
+        <div class="navbar-inner">
+            <a class="brand" href="/">Моя библиотека</a>
+            <ul class="nav nav-pills">
+                <li>
+                    <form action="/" method="get" class="one">
+                        <input type="submit" class="refButton" value="Все книги">
+                    </form>
+                </li>
+                <li>
+                    <form action="/info" method="get" class="one">
+                        <input type="hidden" value="add"/>
+                        <input type="submit" class="refButton" value="Добавить">
+                    </form>
+                </li>
+                <li>
+                    <div class="search">
+                        <form action="/find" method="get" class="form-inline my-2 my-lg-0">
+                            <input name="name" class="form-control mr-sm-2" type="search" placeholder="Название книги"
+                                   aria-label="Поиск">
+                            <button class="search" id="buttonSearch" type="submit">Найти</button>
+                        </form>
+                    </div>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+
+    <div class="books">
+        <table class="books" id="tableBooks">
+            <caption>Книги</caption>
+            <thead>
+            <tr>
+                <th id="thBookID">ID</th>
+                <th id="thBookName">Название</th>
+                <th id="thBookAuthors">Авторы</th>
+                <th id="thBookGenres">Жанры</th>
+                <th id="thBookDescription">Описание</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="book : ${books}" onclick="selectUnselectRowBookCheckBox(this)">
+                <td><span th:text="${book.id}"></span></td>
+                <td><span th:text="${book.name}"></span></td>
+                <td>
+                    <div th:each="author : ${book.authors}">
+                        <div th:text="${author.firstName + ' ' + author.secondName + ' ' + author.thirdName}"></div>
+                    </div>
+                </td>
+                <td>
+                    <div th:each="genre : ${book.genres}">
+                        <div th:text="${genre.name}"></div>
+                    </div>
+                </td>
+                <td><span th:text="${book.description}"></span></td>
+                <td>
+                    <input type="checkbox" name="bookId" th:value="${book.id}"
+                           onchange="selectUnselectRowBook(this)" disabled>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="footer">
+        Copyright © 2020 Моя библиотека Все права защищены.<br>
+        При использовании материалов сайта гиперссылка на <a href="/">Моя библиотека</a> обязательна.
+    </div>
+</div>
+
+<div id="contextMenu" class="dropdown clearfix">
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu"
+        style="display:block; position:static; margin-bottom:5px;">
+        <li><a tabindex="-1" href="#">Просмотр</a></li>
+        <li><a tabindex="-1" href="#">Редактировать</a></li>
+        <li><a tabindex="-1" href="#">Удалить</a></li>
+    </ul>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.books tr').click(function () {
+            $(this).toggleClass("clicked");
+        });
+    });
+
+    function selectUnselectRowBook(element) {
+        var tableBooks = document.getElementById("tableBooks").getElementsByTagName('tbody')[0];
+        for (var i = 0; i < tableBooks.rows.length; i++) {
+            if (element.value === tableBooks.rows[i].cells[0].innerText) {
+                tableBooks.rows[i].toggleAttribute('selected');
+            }
+        }
+    }
+
+    function selectUnselectRowBookCheckBox(element) {
+        for (var i = 0; i < element.cells.length; i++) {
+            var itm = element.cells[i];
+            if (itm != null && itm.children[0] != null && itm.children[0].type === "checkbox") {
+                itm.children[0].checked = !itm.children[0].checked;
+            }
+        }
+    }
+
+    $(function () {
+        var $contextMenu = $("#contextMenu");
+
+        $("body").on("contextmenu", "table tr", function (e) {
+            $contextMenu.css({
+                display: "block",
+                left: e.pageX,
+                top: e.pageY,
+                background: "#FFFFFF",
+                margin: "0 0 0 0"
+            });
+
+            var element = $(this)[0];
+            var bookId = null;
+            for (var i = 0; i < element.cells.length; i++) {
+                var itm = element.cells[i];
+                if (itm != null && itm.children[0] != null && itm.children[0].type === "checkbox") {
+                    bookId = itm.children[0].value;
+                }
+            }
+            $contextMenu.ready(function () {
+                for (var i = 0; i < $contextMenu[0].children[0].children.length; i++) {
+                    var li = $contextMenu[0].children[0].children[i];
+                    if (li.firstChild.text === "Просмотр") {
+                        li.firstChild.attributes[1].textContent = "/infoBook?bookId=" + bookId + "&mode=show";
+                    } else if (li.firstChild.text === "Редактировать") {
+                        li.firstChild.attributes[1].textContent = "/infoBook?bookId=" + bookId + "&mode=edit";
+                    } else if (li.firstChild.text === "Удалить") {
+                        li.firstChild.attributes[1].textContent = "/remove?bookId=" + bookId;
+                    }
+                }
+            });
+            return false;
+        });
+
+        $('html').click(function () {
+            $contextMenu.hide();
+        });
+    });
+</script>
+
+</body>
+</html>
