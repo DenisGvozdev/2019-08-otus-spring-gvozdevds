@@ -1,11 +1,9 @@
 package ru.gds.spring.dto;
 
 import ru.gds.spring.domain.Book;
+import ru.gds.spring.util.CommonUtils;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -103,7 +101,31 @@ public class BookDto {
         this.authors = authors;
     }
 
+    public static List<BookDto> toListDto(Book book) {
+        List<BookDto> list = new ArrayList<BookDto>();
+        list.add(toDtoLight(book));
+        return list;
+    }
+
+    public static BookDto toDtoLight(Book book) {
+        BookDto bookDto = new BookDto();
+        bookDto.setId(book.getId());
+        bookDto.setName(book.getName());
+        bookDto.setCreateDate(book.getCreateDate());
+        bookDto.setDescription(book.getDescription());
+        return bookDto;
+    }
+
+    public static List<BookDto> toListDtoWithImage(Book book) {
+        List<BookDto> list = new ArrayList<BookDto>();
+        list.add(toDtoWithImage(book));
+        return list;
+    }
+
     public static BookDto toDto(Book book) {
+        if(book == null)
+            return null;
+
         BookDto bookDto = new BookDto();
         bookDto.setId(book.getId());
         bookDto.setName(book.getName());
@@ -121,18 +143,20 @@ public class BookDto {
         List<StatusDto> statusDtoList = new ArrayList<StatusDto>();
         statusDtoList.add(StatusDto.toDto(book.getStatus()));
         bookDto.setStatuses(statusDtoList);
-
-        String encodedImage = null;
-        try {
-            String base64SignatureImage = Base64.getEncoder().encodeToString(book.getImage());
-            encodedImage = URLEncoder.encode(base64SignatureImage, "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        String extension = "data:image/jpg;base64,";
         bookDto.setImage(book.getImage());
-        bookDto.setImageExtension(extension);
-        bookDto.setImageString(extension + encodedImage);
+        bookDto.setImageExtension("data:image/jpg;base64,");
+        bookDto.setImageString(CommonUtils.bytesToString(book.getImage()));
+
+        return bookDto;
+    }
+
+    private static BookDto toDtoWithImage(Book book) {
+        BookDto bookDto = new BookDto();
+        bookDto.setId(book.getId());
+        bookDto.setName(book.getName());
+        bookDto.setCreateDate(book.getCreateDate());
+        bookDto.setDescription(book.getDescription());
+        bookDto.setImageString(CommonUtils.bytesToString(book.getImage()));
         return bookDto;
     }
 }

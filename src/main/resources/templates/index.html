@@ -4,20 +4,19 @@
     <meta charset="utf-8">
     <TITLE>Моя библиотека</TITLE>
 
-    <script type="text/javascript" src="/js/jquery.js"></script>
-    <script type="text/javascript" src="/js/bootstrap.js"></script>
-    <script type="text/javascript" src="/js/swfobject.js"></script>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/swfobject.js"></script>
 
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/bootstrap-responsive.css">
 
-    <script src="/js/bootstrap-select.min.js"></script>
+    <script src="js/bootstrap-select.min.js"></script>
     <link rel="stylesheet" href="css/bootstrap-select.css"/>
     <link rel="stylesheet" href="css/bootstrap-select.min.css">
 
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/index.css">
-
 
 </head>
 <body>
@@ -32,7 +31,7 @@
 
 <div class="modal fade" id="myModal" role="dialog" hidden>
     <div class="modal-dialog">
-        <form id="formCreateUpdateBook" enctype="multipart/form-data" action="" method="post">
+        <form id="formCreateUpdateBook" enctype="multipart/form-data" action="" mode="" method="">
             <div class="modal-content">
 
                 <div class="modal-header">
@@ -47,7 +46,7 @@
 
                     <div class="bookForm">
 
-                        <input id="bookId" name="bookId" type="hidden" value=""/>
+                        <input id="bookId" name="id" type="hidden" value=""/>
 
                         <div class="form-group">
                             <label for="name" class="labelInput">Название</label>
@@ -82,7 +81,8 @@
 
                         <div class="form-group">
                             <label for="statusId" class="labelInput">Статус</label>
-                            <select id="statusId" name="statusId" class="selectFields" data-live-search="true">
+                            <select id="statusId" name="statusId" class="selectFields"
+                                    data-live-search="true">
                             </select>
                         </div>
 
@@ -135,11 +135,8 @@
         <table class="books" id="tableBooks">
             <thead>
             <tr>
-                <th id="thBookID">ID</th>
                 <th id="thBookName">Название</th>
                 <th id="thBookDescription">Описание</th>
-                <th id="thBookAuthors">Авторы</th>
-                <th id="thBookGenres">Жанры</th>
             </tr>
             </thead>
             <tbody>
@@ -156,7 +153,36 @@
 <script>
 
     $(function () {
+        // По-умолчанию показываем все книги
         findAllBooks();
+
+        // Вешаем событие на открытие модального окна Добавление/Редактирование/Просмотр книги
+        $("#myModal").on('shown', function () {
+
+            var formCreateUpdateBook = $("#formCreateUpdateBook")[0];
+            var bookIdOnForm = $("#bookId")[0];
+            var mode = formCreateUpdateBook.mode;
+            var bookId = bookIdOnForm.value;
+
+            var isShowForm = ("show" === mode);
+            var isEditForm = ("edit" === mode);
+            var isAddForm = ("add" === mode);
+
+            if (isShowForm || isEditForm) {
+                setButtonClickEvents("formCreateUpdateBook", isEditForm, isAddForm);
+                fillMainFields(bookId, isEditForm, isAddForm, isShowForm);
+                fillAuthors(bookId);
+                fillGenres(bookId);
+                fillStatuses(bookId);
+                setDisableFields(isShowForm);
+            } else {
+                setButtonClickEvents("formCreateUpdateBook", isEditForm, isAddForm);
+                fillMainFields(null, isEditForm, isAddForm, isShowForm);
+                fillAuthors(null);
+                fillGenres(null);
+                fillStatuses(null);
+            }
+        });
     });
 
     $(function () {
@@ -201,157 +227,124 @@
         $(this).toggleClass("clicked");
     });
 
-    function findAllBooks() {
-        $.get('/api/books').done(function (persons) {
-            persons.forEach(function (books) {
-                $('tbody').append(`
-                    <tr>
-                        <td>${books.id}</td>
-                        <td>${books.name}</td>
-                        <td>${books.description}</td>
-                        <td>${authorListToString(books.authors)}</td>
-                        <td>${genreListToString(books.genres)}</td>
-                        <td>
-                            <input type="checkbox" name="bookId" value="${books.id}" disabled>
-                        </td>
-                    </tr>
-                `)
-            });
-        });
-    }
-
-    function findBookByName(formId) {
-        $.get('/api/book', jQuery("#" + formId).serialize())
-            .done(function (data) {
-                $('#tableBooks tbody > tr').remove();
-
-                if (data == null || data.length === 0) {
-                    alert("Не удалось найти книги");
-
-                } else {
-                    data.forEach(function (book) {
-                        $('tbody').append(`
-                                    <tr>
-                                        <td>${book.id}</td>
-                                        <td>${book.name}</td>
-                                        <td>${book.description}</td>
-                                        <td>${authorListToString(book.authors)}</td>
-                                        <td>${genreListToString(book.genres)}</td>
-                                        <td>
-                                            <input type="checkbox" name="bookId" value="${book.id}" disabled>
-                                        </td>
-                                    </tr>
-                                `)
-                    });
-                }
-            })
-            .fail(function (e) {
-                alert("При поиске книги возникла ошибка: " + e.toString());
-            })
-    }
-
     function showBookForm(element, operation) {
-        var isShowForm = ("show" === operation);
-        var isEditForm = ("edit" === operation);
-        var isAddForm = ("add" === operation);
-        loadData(element.bookId, isAddForm, isEditForm, isShowForm);
+
+        // Передаем на форму идентификатор книги
+        var bookIdOnForm = $("#bookId")[0];
+        bookIdOnForm.value = element.bookId;
+
+        // Задаем режим открытия формы
+        var formCreateUpdateBook = $("#formCreateUpdateBook")[0];
+        formCreateUpdateBook.mode = operation;
+
+        // Показываем форму
+        $("#myModal").modal();
     }
 
-    function loadData(id, isAddForm, isEditForm, isShowForm) {
-        if (isEditForm || isShowForm) {
-            $.get('/api/book/id', {"bookId": id})
-                .done(function (response) {
-                    openBookFormAndFillData(response, isAddForm, isEditForm, isShowForm);
+    function setButtonClickEvents(idForm, isEditForm, isAddForm) {
+        var buttonSaveBook = $("#buttonSaveBook");
+        if (isEditForm) {
+            buttonSaveBook.click(function () {
+                updateBook(idForm);
+            });
+        } else if (isAddForm) {
+            buttonSaveBook.click(function () {
+                addBook(idForm);
+            });
+        }
+    }
+
+    function fillMainFields(bookId, isEditForm, isAddForm, isShowForm) {
+        if (bookId != null) {
+            $.get('books/{param}', {"bookId": bookId, "name": null})
+                .done(function (data) {
+                    var titleBookForm = $("#titleBookForm")[0];
+                    var bookId = $("#bookId")[0];
+                    var name = $("#name")[0];
+                    var imagePreview = $("#imagePreview")[0];
+
+                    var titleForm = "";
+                    if (isEditForm) {
+                        titleForm = "Редактирование книги ";
+                    } else if (isAddForm) {
+                        titleForm = "Добавление книги ";
+                    } else if (isShowForm) {
+                        titleForm = "Книга ";
+                    }
+
+                    titleBookForm.innerText = titleForm + data[0].name;
+
+                    bookId.value = data[0].id;
+                    name.value = data[0].name;
+                    imagePreview.src = data[0].imageString;
+                    description.value = data[0].description;
                 })
                 .fail(function (e) {
                     alert("При поиске книги возникла ошибка: " + e.toString());
                 });
-
         } else if (isAddForm) {
-            $.get('/lists/info')
-                .done(function (response) {
-                    openBookFormAndFillData(response, isAddForm, isEditForm, isShowForm);
-                })
-                .fail(function (e) {
-                    alert("При загрузке данных возникла ошибка: " + e.toString());
-                });
+            var titleBookForm = $("#titleBookForm")[0];
+            titleBookForm.innerText = "Добавление книги ";
         }
-        return null;
     }
 
-    function openBookFormAndFillData(data, isAddForm, isEditForm, isShowForm) {
-        if (data != null) {
+    function fillAuthors(bookId) {
+        var url = '/authors';
+        if (bookId != null)
+            url = '/authors/{bookId}';
 
-            var idForm = "formCreateUpdateBook";
-            var titleBookForm = $("#titleBookForm")[0];
-            var bookId = $("#bookId")[0];
-            var name = $("#name")[0];
-            var imagePreview = $("#imagePreview")[0];
-            var description = $("#description")[0];
-            var buttonLoadFile = $("#file")[0];
-            var selectFieldStatus = $("#statusId");
-            var selectFieldGenres = $("#genreIds");
-            var selectFieldAuthors = $("#authorIds");
-            var buttonSaveBook = $("#buttonSaveBook");
-
-            setDisableFields(isShowForm);
-
-            var titleForm = "";
-            if (isEditForm) {
-                titleForm = "Редактирование книги ";
-                buttonSaveBook.click(function () {
-                    updateBook(idForm);
+        $.get(url, {"bookId": bookId})
+            .done(function (authors) {
+                var selectFieldAuthors = $("#authorIds");
+                selectFieldAuthors.empty();
+                var authorOptions = selectFieldAuthors[0].options;
+                authors.forEach(function (author) {
+                    authorOptions[authorOptions.length] = new Option(author.fio, author.id, true, author.selected > 0);
                 });
+            })
+            .fail(function (e) {
+                alert("Ошибка загрузки авторов: " + e.toString());
+            });
+    }
 
-            } else if (isAddForm) {
-                titleForm = "Добавление книги ";
-                buttonSaveBook.click(function () {
-                    addBook(idForm);
+    function fillGenres(bookId) {
+        var url = '/genres';
+        if (bookId != null)
+            url = '/genres/{bookId}';
+
+        $.get(url, {"bookId": bookId})
+            .done(function (genres) {
+                var selectFieldGenres = $("#genreIds");
+                selectFieldGenres.empty();
+                var genreOptions = selectFieldGenres[0].options;
+                genres.forEach(function (genre) {
+                    option = new Option(genre.name, genre.id, true, genre.selected > 0);
+                    genreOptions[genreOptions.length] = option;
                 });
-
-            } else if (isShowForm) {
-                titleForm = "Книга ";
-            }
-
-            titleBookForm.innerText = titleForm + data.name;
-
-            bookId.value = data.id;
-            name.value = data.name;
-            imagePreview.src = data.imageString;
-            description.value = data.description;
-
-            var option = null;
-
-            selectFieldAuthors.empty();
-            var authors = data.authors;
-            var authorOptions = selectFieldAuthors[0].options;
-            authors.forEach(function (author) {
-                var fio = author.firstName + ' ' + author.secondName + ' ' + author.thirdName;
-                option = new Option(fio, author.id, true, author.selected > 0);
-                authorOptions[authorOptions.length] = option;
+            })
+            .fail(function (e) {
+                alert("Ошибка загрузки жанров: " + e.toString());
             });
+    }
 
-            selectFieldGenres.empty();
-            var genres = data.genres;
-            var genreOptions = selectFieldGenres[0].options;
-            genres.forEach(function (genre) {
-                option = new Option(genre.name, genre.id, true, genre.selected > 0);
-                genreOptions[genreOptions.length] = option;
+    function fillStatuses(bookId) {
+        var url = '/statuses';
+        if (bookId != null)
+            url = '/statuses/{bookId}';
+
+        $.get(url, {"bookId": bookId})
+            .done(function (statuses) {
+                var selectFieldStatus = $("#statusId");
+                selectFieldStatus.empty();
+                var statusOptions = selectFieldStatus[0].options;
+                statuses.forEach(function (status) {
+                    option = new Option(status.name, status.id, true, status.selected > 0);
+                    statusOptions[statusOptions.length] = option;
+                });
+            })
+            .fail(function (e) {
+                alert("Ошибка загрузки статусов: " + e.toString());
             });
-
-            selectFieldStatus.empty();
-            var statuses = data.statuses;
-            var statusOptions = selectFieldStatus[0].options;
-            statuses.forEach(function (status) {
-                option = new Option(status.name, status.id, true, status.selected > 0);
-                statusOptions[statusOptions.length] = option;
-            });
-
-            $("#myModal").modal();
-
-        } else {
-            alert("Данные для заполнения формы не найдены")
-        }
     }
 
     function setDisableFields(isShowForm) {
@@ -383,12 +376,58 @@
         }
     }
 
+    function findAllBooks() {
+        $('#tableBooks tbody').empty();
+
+        $.get('/books').done(function (persons) {
+            persons.forEach(function (books) {
+                $('tbody').append(`
+                    <tr>
+                        <td>${books.name}</td>
+                        <td>${books.description}</td>
+                        <td>
+                            <input type="checkbox" name="bookId" value="${books.id}" disabled>
+                        </td>
+                    </tr>
+                `)
+            });
+        });
+    }
+
+    function findBookByName(formId) {
+        var userReqString = jQuery("#" + formId)[0].elements[0].value;
+        $.get('books/{param}', {"bookId": null, "name": userReqString})
+            .done(function (data) {
+                $('#tableBooks tbody > tr').remove();
+
+                if (data == null || data.length === 0) {
+                    alert("Не удалось найти книги");
+
+                } else {
+                    data.forEach(function (book) {
+                        $('tbody').append(`
+                                    <tr>
+                                        <td>${book.name}</td>
+                                        <td>${book.description}</td>
+                                        <td>
+                                            <input type="checkbox" name="bookId" value="${book.id}" disabled>
+                                        </td>
+                                    </tr>
+                                `)
+                    });
+                }
+            })
+            .fail(function (e) {
+                alert("При поиске книги возникла ошибка: " + e.toString());
+            })
+    }
+
     function addBook(formId) {
-        var form = $("#" + formId)[0];
+        var form = $("#formCreateUpdateBook")[0];
         var data = new FormData(form);
 
         $.ajax({
-            url: "/book/add",
+            url: "books",
             type: "POST",
             data: data,
             enctype: 'multipart/form-data',
@@ -399,6 +438,7 @@
                 if (book != null) {
                     $("#myModal").modal('hide');
                     alert("Книга успешно добавлена");
+                    findAllBooks();
                 } else {
                     alert("Ошибка создания книги");
                 }
@@ -413,8 +453,8 @@
         var form = $("#" + formId)[0];
         var data = new FormData(form);
         $.ajax({
-            url: "/book/update",
-            type: "POST",
+            url: "books/{id}",
+            type: "PUT",
             data: data,
             enctype: 'multipart/form-data',
             processData: false,
@@ -424,6 +464,7 @@
                 if (book != null) {
                     $("#myModal").modal('hide');
                     alert("Книга успешно обновлена");
+                    findAllBooks();
                 } else {
                     alert("Ошибка обновления книги");
                 }
@@ -437,12 +478,11 @@
     function deleteBook(element) {
         $.ajax({
             type: "DELETE",
-            url: '/book/remove',
-            data: {"bookId": element.bookId},
+            url: 'books/' + element.bookId,
             success: function (result) {
                 $('#tableBooks tbody > tr').remove();
+                alert("Книга успешно удалена");
                 findAllBooks();
-                alert(result);
             },
             error: function (e) {
                 alert("Ошибка удаления книги: " + e.toString());
@@ -459,22 +499,6 @@
             };
             reader.readAsDataURL(input.files[0]);
         }
-    }
-
-    function authorListToString(authorList) {
-        var authors = "";
-        authorList.forEach(function (author) {
-            authors += author.firstName + ' ' + author.secondName + ' ' + author.thirdName + "\n";
-        });
-        return authors;
-    }
-
-    function genreListToString(genreList) {
-        var genres = "";
-        genreList.forEach(function (genre) {
-            genres += genre.name + "\n";
-        });
-        return genres;
     }
 
     function selectUnselectRowBookCheckBox(element) {

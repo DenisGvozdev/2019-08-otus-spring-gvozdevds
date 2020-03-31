@@ -1,4 +1,4 @@
-package ru.gds.spring;
+package ru.gds.spring.repositories;
 
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.Test;
