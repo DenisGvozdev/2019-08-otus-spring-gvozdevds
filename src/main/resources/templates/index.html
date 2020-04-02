@@ -438,13 +438,14 @@
                 if (book != null) {
                     $("#myModal").modal('hide');
                     alert("Книга успешно добавлена");
-                    findAllBooks();
                 } else {
                     alert("Ошибка создания книги");
                 }
+                findAllBooks();
             },
             error: function (e) {
                 alert("Ошибка создания книги: " + e.toString());
+                findAllBooks();
             }
         });
     }
@@ -464,13 +465,14 @@
                 if (book != null) {
                     $("#myModal").modal('hide');
                     alert("Книга успешно обновлена");
-                    findAllBooks();
                 } else {
                     alert("Ошибка обновления книги");
                 }
+                findAllBooks();
             },
             error: function (e) {
                 alert("Ошибка обновления книги: " + e.toString());
+                findAllBooks();
             }
         });
     }

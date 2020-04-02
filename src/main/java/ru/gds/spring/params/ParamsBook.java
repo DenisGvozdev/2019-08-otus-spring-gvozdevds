@@ -6,9 +6,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.http.codec.multipart.FilePart;
 
-@Document
 @Data
-@AllArgsConstructor
+//@AllArgsConstructor
 @NoArgsConstructor
 public class ParamsBook {
 
@@ -19,6 +18,17 @@ public class ParamsBook {
     private String statusId;
     private String genreIds;
     private String authorIds;
+
+    public ParamsBook(String id, String name, String description, FilePart file,
+                      String genreIds, String authorIds, String statusId) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.file = file;
+        this.statusId = statusId;
+        this.genreIds = genreIds;
+        this.authorIds = authorIds;
+    }
 
     public String getId() {
         return id;

@@ -31,6 +31,23 @@ public class GenreService {
         this.bookRepository = bookRepository;
     }
 
+    public Mono<Genre> save(Genre genre) {
+        return genreReactiveRepository.save(genre);
+    }
+
+    public Mono<Genre> findById(String id) {
+        return genreReactiveRepository.findById(id);
+    }
+
+    public Mono<Void> delete(Genre status) {
+        return genreReactiveRepository.delete(status);
+    }
+
+    public Mono<Genre> deleteById(String id) {
+        return findById(id)
+                .flatMap(genre -> delete(genre).then(Mono.just(genre)));
+    }
+
     public Mono<List<GenreDto>> findAllLight() {
         return genreReactiveRepository
                 .findAll()

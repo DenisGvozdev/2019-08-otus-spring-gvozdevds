@@ -1,5 +1,6 @@
 package ru.gds.spring.dto;
 
+import org.reactivestreams.Publisher;
 import ru.gds.spring.domain.Book;
 
 import java.io.UnsupportedEncodingException;
@@ -104,6 +105,9 @@ public class BookDto {
     }
 
     public static BookDto toDtoLight(Book book) {
+        if(book==null)
+            return new BookDto();
+
         BookDto bookDto = new BookDto();
         bookDto.setId(book.getId());
         bookDto.setName(book.getName());

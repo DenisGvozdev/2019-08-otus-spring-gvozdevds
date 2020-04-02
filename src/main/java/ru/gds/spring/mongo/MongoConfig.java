@@ -11,9 +11,9 @@ public class MongoConfig {
 
     private static final String CHANGELOGS_PACKAGE = "ru.gds.spring.mongo.changelog";
 
-//    @Bean
-//    public Mongock mongock(MongoProps mongoProps, MongoClient mongoClient) {
-//        return new SpringMongockBuilder(mongoClient, mongoProps.getDatabase(), CHANGELOGS_PACKAGE)
-//                .build();
-//    }
+    @Bean
+    public Mongock mongock(MongoProps mongoProps, MongoClient mongoClient) {
+        return new SpringMongockBuilder(mongoClient, mongoProps.getDatabase(), CHANGELOGS_PACKAGE)
+                .build();
+    }
 }

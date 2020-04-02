@@ -31,6 +31,24 @@ public class StatusService {
         this.bookRepository = bookRepository;
     }
 
+    public Mono<Status> save(Status status) {
+        return statusReactiveRepository.save(status);
+    }
+
+    public Mono<Status> findById(String id) {
+        return statusReactiveRepository.findById(id);
+    }
+
+    public Mono<Void> delete(Status status) {
+        return statusReactiveRepository
+                .delete(status);
+    }
+
+    public Mono<Status> deleteById(String id) {
+        return findById(id)
+                .flatMap(status -> delete(status).then(Mono.just(status)));
+    }
+
     public Mono<List<StatusDto>> findAllLight() {
         return statusReactiveRepository
                 .findAll()
@@ -51,9 +69,5 @@ public class StatusService {
                 .findAll()
                 .map(status -> StatusDto.toDtoWithSelect(status, statusSelected.getId()))
                 .collect(Collectors.toList());
-    }
-
-    public Optional<Status> getById(String id) {
-        return statusRepository.findById(id);
     }
 }

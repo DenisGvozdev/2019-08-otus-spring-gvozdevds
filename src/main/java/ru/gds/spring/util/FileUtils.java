@@ -2,6 +2,7 @@ package ru.gds.spring.util;
 
 import org.apache.log4j.Logger;
 import org.springframework.http.codec.multipart.FilePart;
+import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -63,6 +64,9 @@ public class FileUtils {
 
     public static byte[] convertFilePartToByteArray(FilePart filePart) {
         try {
+            if (filePart == null || StringUtils.isEmpty(filePart.filename()))
+                return null;
+
             String file = filePart.filename();
             String fileName = file.substring(0, file.indexOf("."));
             String fileExtension = file.substring(file.indexOf(".") + 1, file.length());
