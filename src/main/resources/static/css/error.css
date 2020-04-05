@@ -1,0 +1,9 @@
+body {
+    background-color: #f6f6ff;
+    font-family: Calibri, Myriad;
+    font-size: 10pt;
+}
+
+div.errorText {
+    color: brown;
+}
