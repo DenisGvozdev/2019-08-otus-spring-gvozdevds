@@ -1,6 +1,5 @@
 package ru.gds.spring.dto;
 
-import org.reactivestreams.Publisher;
 import ru.gds.spring.domain.Book;
 
 import java.io.UnsupportedEncodingException;
@@ -109,10 +108,17 @@ public class BookDto {
             return new BookDto();
 
         BookDto bookDto = new BookDto();
-        bookDto.setId(book.getId());
-        bookDto.setName(book.getName());
-        bookDto.setCreateDate(book.getCreateDate());
-        bookDto.setDescription(book.getDescription());
+        setMainFields(book, bookDto);
+        return bookDto;
+    }
+
+    public static BookDto toDtoWithImage(Book book) {
+        if(book==null)
+            return new BookDto();
+
+        BookDto bookDto = new BookDto();
+        setMainFields(book, bookDto);
+        setImage(book, bookDto);
         return bookDto;
     }
 
@@ -140,7 +146,19 @@ public class BookDto {
         List<StatusDto> statusDtoList = new ArrayList<StatusDto>();
         statusDtoList.add(StatusDto.toDto(book.getStatus()));
         bookDto.setStatuses(statusDtoList);
+        setImage(book, bookDto);
 
+        return bookDto;
+    }
+
+    private static void setMainFields(Book book, BookDto bookDto) {
+        bookDto.setId(book.getId());
+        bookDto.setName(book.getName());
+        bookDto.setCreateDate(book.getCreateDate());
+        bookDto.setDescription(book.getDescription());
+    }
+
+    private static void setImage(Book book, BookDto bookDto) {
         String encodedImage = null;
         try {
             String base64SignatureImage = Base64.getEncoder().encodeToString(book.getImage());
@@ -152,7 +170,5 @@ public class BookDto {
         bookDto.setImage(book.getImage());
         bookDto.setImageExtension(extension);
         bookDto.setImageString(extension + encodedImage);
-
-        return bookDto;
     }
 }

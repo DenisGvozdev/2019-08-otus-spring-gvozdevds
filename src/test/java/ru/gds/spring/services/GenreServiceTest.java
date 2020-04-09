@@ -9,10 +9,6 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 import ru.gds.spring.domain.Genre;
 import ru.gds.spring.interfaces.GenreReactiveRepository;
-import ru.gds.spring.interfaces.GenreRepository;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -27,9 +23,6 @@ class GenreServiceTest {
 
     @Mock
     GenreReactiveRepository genreReactiveRepository;
-
-    @Autowired
-    GenreRepository genreRepository;
 
     @Test
     void insertGenreTest() {
@@ -58,17 +51,13 @@ class GenreServiceTest {
         Genre genre = getGenreByName("temporary");
         when(genreReactiveRepository.findById(genre.getId())).thenReturn(Mono.just(genre));
         when(genreReactiveRepository.delete(genre)).thenReturn(Mono.empty());
-        Mono<Genre> actual = genreService.deleteById(genre.getId());
+        Mono<Void> actual = genreService.deleteById(genre.getId());
         StepVerifier
                 .create(actual)
-                .expectNext(genre)
                 .verifyComplete();
     }
 
     private Genre getGenreByName(String name) {
-        List<String> nameList = new ArrayList<>();
-        nameList.add(name);
-        List<Genre> genreList = genreRepository.findAllByName(nameList, null);
-        return genreList.get(0);
+        return genreService.findAllByName(name).blockFirst();
     }
 }

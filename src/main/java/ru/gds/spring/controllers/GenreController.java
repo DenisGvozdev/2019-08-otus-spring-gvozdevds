@@ -1,19 +1,14 @@
 package ru.gds.spring.controllers;
 
-import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
 import ru.gds.spring.dto.GenreDto;
 import ru.gds.spring.services.GenreService;
 
-import java.util.List;
-
 @RestController
 public class GenreController {
-
-    private static final Logger logger = Logger.getLogger(GenreController.class);
 
     private final GenreService genreService;
 
@@ -22,12 +17,12 @@ public class GenreController {
     }
 
     @GetMapping("/genres")
-    public Mono<List<GenreDto>> findAuthorDtoListLight() {
+    public Flux<GenreDto> findAuthorDtoListLight() {
         return genreService.findAllLight();
     }
 
     @GetMapping("/genres/{bookId}")
-    public Mono<List<GenreDto>> findAuthorDtoListLight(@RequestParam String bookId) {
+    public Flux<GenreDto> findAuthorDtoListLight(@RequestParam String bookId) {
         return genreService.findAllByBookId(bookId);
     }
 }

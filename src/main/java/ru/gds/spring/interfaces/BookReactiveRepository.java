@@ -9,4 +9,9 @@ public interface BookReactiveRepository extends ReactiveMongoRepository<Book, St
 
     Flux<Book> findByNameContainingIgnoreCase(@Param("name") String name);
 
+    Flux<Book> findAllByGenresId(@Param("id") String id);
+
+    Flux<Book> findAllByAuthorsId(@Param("id") String id);
+
+    Flux<Book> findAllByStatusId(@Param("id") String id);
 }

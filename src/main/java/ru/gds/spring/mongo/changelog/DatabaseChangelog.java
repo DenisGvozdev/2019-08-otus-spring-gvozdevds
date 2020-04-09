@@ -3,8 +3,6 @@ package ru.gds.spring.mongo.changelog;
 import com.github.cloudyrock.mongock.ChangeLog;
 import com.github.cloudyrock.mongock.ChangeSet;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import ru.gds.spring.domain.*;
 
 import java.util.Date;
@@ -47,6 +45,7 @@ public class DatabaseChangelog {
         Status statusActive = template.findOne(query(where("name").is("active")), Status.class);
 
         template.save(new Book(
+                "1",
                 "Кольцо тьмы",
                 new Date(),
                 "Магия, миры, приключения...",
@@ -55,6 +54,7 @@ public class DatabaseChangelog {
                 authors,
                 statusActive));
         template.save(new Book(
+                "2",
                 "Робинзон Крузо",
                 new Date(),
                 "Как выжить на необитаемом острове",

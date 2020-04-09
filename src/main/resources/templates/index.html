@@ -90,7 +90,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <input id="buttonSaveBook" type="button" value="Сохранить" class="inputButtonSave" onclick="">
+                <input id="buttonSaveBook" type="button" value="Сохранить" class="inputButtonSave" onclick="addBook()">
+                <input id="buttonUpdateBook" type="button" value="Обновить" class="inputButtonUpdate" onclick="updateBook()">
                 <input type="button" value="Закрыть" class="btn btn-default" data-dismiss="modal">
             </div>
         </form>
@@ -169,14 +170,14 @@
             var isAddForm = ("add" === mode);
 
             if (isShowForm || isEditForm) {
-                setButtonClickEvents("formCreateUpdateBook", isEditForm, isAddForm);
+                setButtonClickEvents("formCreateUpdateBook", isEditForm, isShowForm, isAddForm);
                 fillMainFields(bookId, isEditForm, isAddForm, isShowForm);
                 fillAuthors(bookId);
                 fillGenres(bookId);
                 fillStatuses(bookId);
                 setDisableFields(isShowForm);
             } else {
-                setButtonClickEvents("formCreateUpdateBook", isEditForm, isAddForm);
+                setButtonClickEvents("formCreateUpdateBook", isEditForm, isShowForm, isAddForm);
                 fillMainFields(null, isEditForm, isAddForm, isShowForm);
                 fillAuthors(null);
                 fillGenres(null);
@@ -241,22 +242,24 @@
         $("#myModal").modal();
     }
 
-    function setButtonClickEvents(idForm, isEditForm, isAddForm) {
-        var buttonSaveBook = $("#buttonSaveBook");
+    function setButtonClickEvents(idForm, isEditForm, isShowForm, isAddForm) {
+        var buttonSaveBook = document.getElementById('buttonSaveBook');
+        var buttonUpdateBook = document.getElementById('buttonUpdateBook');
         if (isEditForm) {
-            buttonSaveBook.click(function () {
-                updateBook(idForm);
-            });
+            buttonSaveBook.setAttribute('class', 'hidden');
+            buttonUpdateBook.setAttribute('class', 'visible');
         } else if (isAddForm) {
-            buttonSaveBook.click(function () {
-                addBook(idForm);
-            });
+            buttonSaveBook.setAttribute('class', 'visible');
+            buttonUpdateBook.setAttribute('class', 'hidden');
+        } else if (isShowForm) {
+            buttonSaveBook.setAttribute('class', 'hidden');
+            buttonUpdateBook.setAttribute('class', 'hidden');
         }
     }
 
     function fillMainFields(bookId, isEditForm, isAddForm, isShowForm) {
         if (bookId != null) {
-            $.get('books/{param}', {"bookId": bookId, "name": null})
+            $.get('books/{param}', {"id": bookId, "name": null})
                 .done(function (data) {
                     var titleBookForm = $("#titleBookForm")[0];
                     var bookId = $("#bookId")[0];
@@ -396,7 +399,7 @@
 
     function findBookByName(formId) {
         var userReqString = jQuery("#" + formId)[0].elements[0].value;
-        $.get('books/{param}', {"bookId": null, "name": userReqString})
+        $.get('books/{params}', {"id": null, "name": userReqString})
             .done(function (data) {
                 $('#tableBooks tbody > tr').remove();
 
@@ -422,7 +425,7 @@
             })
     }
 
-    function addBook(formId) {
+    function addBook() {
         var form = $("#formCreateUpdateBook")[0];
         var data = new FormData(form);
 
@@ -435,23 +438,24 @@
             contentType: false,
             cache: false,
             success: function (book) {
+                $("#myModal").modal('hide');
                 if (book != null) {
-                    $("#myModal").modal('hide');
-                    alert("Книга успешно добавлена");
+                   alert("Книга успешно добавлена");
                 } else {
                     alert("Ошибка создания книги");
                 }
                 findAllBooks();
             },
             error: function (e) {
+                $("#myModal").modal('hide');
                 alert("Ошибка создания книги: " + e.toString());
                 findAllBooks();
             }
         });
     }
 
-    function updateBook(formId) {
-        var form = $("#" + formId)[0];
+    function updateBook() {
+        var form = $("#formCreateUpdateBook")[0];
         var data = new FormData(form);
         $.ajax({
             url: "books/{id}",
@@ -462,8 +466,8 @@
             contentType: false,
             cache: false,
             success: function (book) {
+                $("#myModal").modal('hide');
                 if (book != null) {
-                    $("#myModal").modal('hide');
                     alert("Книга успешно обновлена");
                 } else {
                     alert("Ошибка обновления книги");
@@ -471,6 +475,7 @@
                 findAllBooks();
             },
             error: function (e) {
+                $("#myModal").modal('hide');
                 alert("Ошибка обновления книги: " + e.toString());
                 findAllBooks();
             }

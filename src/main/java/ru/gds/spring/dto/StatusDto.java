@@ -8,8 +8,7 @@ public class StatusDto {
     private String name;
     private boolean selected;
 
-    private StatusDto() {
-    }
+    private StatusDto() {}
 
     private StatusDto(String id, String name, boolean selected) {
         this.id = id;
@@ -43,7 +42,7 @@ public class StatusDto {
 
     public static StatusDto toDtoLight(Status status) {
         if (status == null)
-            return null;
+            return new StatusDto();
 
         StatusDto statusDto = new StatusDto();
         statusDto.setId(status.getId());
@@ -53,7 +52,7 @@ public class StatusDto {
 
     public static StatusDto toDtoWithSelect(Status status, String statusId) {
         if (status == null || statusId == null)
-            return null;
+            return new StatusDto();
 
         StatusDto statusDto = new StatusDto();
         statusDto.setId(status.getId());
@@ -64,7 +63,7 @@ public class StatusDto {
 
     public static StatusDto toDto(Status status) {
         if (status == null)
-            return null;
+            return new StatusDto();
 
         return new StatusDto(
                 status.getId(),

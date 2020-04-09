@@ -13,7 +13,14 @@ public class Status {
 
     private String name;
 
+    public Status() {}
+
     public Status(String name) {
+        this.name = name;
+    }
+
+    public Status(String id, String name){
+        this.id = id;
         this.name = name;
     }
 

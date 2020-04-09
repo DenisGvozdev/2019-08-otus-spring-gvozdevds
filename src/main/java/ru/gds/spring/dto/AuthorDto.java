@@ -2,6 +2,7 @@ package ru.gds.spring.dto;
 
 import ru.gds.spring.domain.Author;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -85,7 +86,7 @@ public class AuthorDto {
 
     public static AuthorDto toDtoLight(Author author) {
         if (author == null)
-            return null;
+            return new AuthorDto();
 
         AuthorDto authorDto = new AuthorDto();
         authorDto.setId(author.getId());
@@ -93,9 +94,12 @@ public class AuthorDto {
         return authorDto;
     }
 
-    public static AuthorDto toDtoWithSelect(Author author, List<String> authorIds) {
-        if (author == null || authorIds == null)
-            return null;
+    public static AuthorDto toDtoWithSelect(Author author, List<Author> authorList) {
+        if (author == null || authorList == null)
+            return new AuthorDto();
+
+        List<String> authorIds = new ArrayList<>();
+        authorList.forEach((e) -> authorIds.add(e.getId()));
 
         AuthorDto authorDto = new AuthorDto();
         authorDto.setId(author.getId());
@@ -106,7 +110,7 @@ public class AuthorDto {
 
     static AuthorDto toDto(Author author) {
         if (author == null)
-            return null;
+            return new AuthorDto();
 
         return new AuthorDto(
                 author.getId(),

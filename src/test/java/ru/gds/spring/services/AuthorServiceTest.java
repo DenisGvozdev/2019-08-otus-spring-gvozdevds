@@ -9,11 +9,8 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 import ru.gds.spring.domain.Author;
 import ru.gds.spring.interfaces.AuthorReactiveRepository;
-import ru.gds.spring.interfaces.AuthorRepository;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -28,9 +25,6 @@ class AuthorServiceTest {
 
     @Mock
     AuthorReactiveRepository authorReactiveRepository;
-
-    @Autowired
-    AuthorRepository authorRepository;
 
     @Test
     void insertAuthorTest() {
@@ -59,17 +53,13 @@ class AuthorServiceTest {
         Author author = getAuthorByName("Временный");
         when(authorReactiveRepository.findById(author.getId())).thenReturn(Mono.just(author));
         when(authorReactiveRepository.delete(author)).thenReturn(Mono.empty());
-        Mono<Author> actual = authorService.deleteById(author.getId());
+        Mono<Void> actual = authorService.deleteById(author.getId());
         StepVerifier
                 .create(actual)
-                .expectNext(author)
                 .verifyComplete();
     }
 
     private Author getAuthorByName(String name) {
-        List<String> nameList = new ArrayList<>();
-        nameList.add(name);
-        List<Author> authorList = authorService.findAllByName(nameList, null);
-        return authorList.get(0);
+        return authorService.findAllByThirdName(name).blockFirst();
     }
 }

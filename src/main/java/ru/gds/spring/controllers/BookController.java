@@ -25,29 +25,27 @@ public class BookController {
         return bookService.findAllLight();
     }
 
-    @GetMapping("books/{param}")
-    public Flux<BookDto> getBookByName(
-            @RequestParam(value = "bookId") String bookId,
-            @RequestParam(value = "name") String name) {
-        return bookService.findByParam(bookId, name);
+    @GetMapping("books/{params}")
+    public Flux<BookDto> getBookByName(ParamsBook params) {
+        return bookService.findByParam(params);
     }
 
     @PostMapping(value = "/books",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<BookDto> addBook(ParamsBook params) {
+    public Mono<Book> addBook(ParamsBook params) {
         return bookService.save(params);
     }
 
     @PutMapping(value = "books/{id}",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<BookDto> updateBook(ParamsBook params) {
+    public Mono<Book> updateBook(ParamsBook params) {
         return bookService.save(params);
     }
 
     @DeleteMapping("books/{bookId}")
-    public Mono<Book> removeBookById(@PathVariable(value = "bookId") String bookId) {
+    public Mono<Void> removeBookById(@PathVariable(value = "bookId") String bookId) {
         return bookService.deleteById(bookId);
     }
 }

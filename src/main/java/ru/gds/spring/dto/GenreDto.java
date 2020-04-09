@@ -2,6 +2,7 @@ package ru.gds.spring.dto;
 
 import ru.gds.spring.domain.Genre;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GenreDto {
@@ -10,8 +11,7 @@ public class GenreDto {
     private String name;
     private boolean selected;
 
-    private GenreDto() {
-    }
+    private GenreDto() {}
 
     private GenreDto(String id, String name, boolean selected) {
         this.id = id;
@@ -45,7 +45,7 @@ public class GenreDto {
 
     public static GenreDto toDtoLight(Genre genre) {
         if (genre == null)
-            return null;
+            return new GenreDto();
 
         GenreDto genreDto = new GenreDto();
         genreDto.setId(genre.getId());
@@ -53,9 +53,12 @@ public class GenreDto {
         return genreDto;
     }
 
-    public static GenreDto toDtoWithSelect(Genre genre, List<String> genreIds) {
-        if (genre == null || genreIds == null)
-            return null;
+    public static GenreDto toDtoWithSelect(Genre genre, List<Genre> genreList) {
+        if (genre == null || genreList == null)
+            return new GenreDto();
+
+        List<String> genreIds = new ArrayList<>();
+        genreList.forEach((e) -> genreIds.add(e.getId()));
 
         GenreDto genreDto = new GenreDto();
         genreDto.setId(genre.getId());
@@ -66,7 +69,7 @@ public class GenreDto {
 
     static GenreDto toDto(Genre genre) {
         if (genre == null)
-            return null;
+            return new GenreDto();
 
         return new GenreDto(
                 genre.getId(),

@@ -36,18 +36,6 @@ class BookControllerTest {
     @MockBean
     StatusReactiveRepository statusReactiveRepository;
     @MockBean
-    BookRepository bookRepository;
-    @MockBean
-    GenreRepository genreRepository;
-    @MockBean
-    AuthorRepository authorRepository;
-    @MockBean
-    StatusRepository statusRepository;
-    @MockBean
-    UserRepository userRepository;
-    @MockBean
-    CommentRepository commentRepository;
-    @MockBean
     Mongock Mongock;
 
     @Test
@@ -108,11 +96,12 @@ class BookControllerTest {
 
     private BodyInserters.MultipartInserter getRequestBody() {
         MultipartBodyBuilder body = new MultipartBodyBuilder();
+        body.part("id", "");
         body.part("name", "Новая книга");
         body.part("description", "Описание книги");
         body.part("statusId", "1");
-        body.part("genreIds", "1,2");
-        body.part("authorIds", "1,2");
+        body.part("genreIds", "1");
+        body.part("authorIds", "1");
         return BodyInserters.fromMultipartData(body.build());
     }
 }

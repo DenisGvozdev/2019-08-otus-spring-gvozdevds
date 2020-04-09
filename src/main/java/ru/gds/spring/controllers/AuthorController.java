@@ -4,11 +4,9 @@ import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
 import ru.gds.spring.dto.AuthorDto;
 import ru.gds.spring.services.AuthorService;
-
-import java.util.List;
 
 @RestController
 public class AuthorController {
@@ -22,12 +20,12 @@ public class AuthorController {
     }
 
     @GetMapping("/authors")
-    public Mono<List<AuthorDto>> findAuthorDtoListLight() {
+    public Flux<AuthorDto> findAuthorDtoListLight() {
         return authorService.findAllLight();
     }
 
     @GetMapping("/authors/{bookId}")
-    public Mono<List<AuthorDto>> findAuthorDtoListLight(@RequestParam String bookId) {
+    public Flux<AuthorDto> findAuthorDtoListLight(@RequestParam String bookId) {
         return authorService.findAllByBookId(bookId);
     }
 }

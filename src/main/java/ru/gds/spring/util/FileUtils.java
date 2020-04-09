@@ -65,7 +65,7 @@ public class FileUtils {
     public static byte[] convertFilePartToByteArray(FilePart filePart) {
         try {
             if (filePart == null || StringUtils.isEmpty(filePart.filename()))
-                return null;
+                return "".getBytes();
 
             String file = filePart.filename();
             String fileName = file.substring(0, file.indexOf("."));
@@ -75,7 +75,7 @@ public class FileUtils {
             return convertFileToByteArray(tempFile);
         } catch (IOException e) {
             logger.error("error create temporary file: " + Arrays.asList(e.getStackTrace()));
-            return null;
+            return "".getBytes();
         }
     }
 }

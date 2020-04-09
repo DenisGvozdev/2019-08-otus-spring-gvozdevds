@@ -33,9 +33,12 @@ public class Book {
     @DBRef
     private List<Author> authors;
 
-    public Book(String name, Date createDate,
+    public Book(){}
+
+    public Book(String id, String name, Date createDate,
                 String description, byte[] image,
                 List<Genre> genres, List<Author> authors, Status status) {
+        this.id = id;
         this.name = name;
         this.createDate = createDate;
         this.description = description;

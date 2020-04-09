@@ -104,6 +104,7 @@ public class PrintUtils {
         Status status = new Status("Статус 1");
 
         Book book = new Book(
+                "1",
                 "книга",
                 new Date(),
                 "Описание",

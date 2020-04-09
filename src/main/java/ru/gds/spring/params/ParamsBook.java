@@ -1,13 +1,10 @@
 package ru.gds.spring.params;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.http.codec.multipart.FilePart;
 
 @Data
-//@AllArgsConstructor
 @NoArgsConstructor
 public class ParamsBook {
 
