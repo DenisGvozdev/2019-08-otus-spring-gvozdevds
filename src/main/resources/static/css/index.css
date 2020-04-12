@@ -1,0 +1,163 @@
+body {
+    background-color: #f6f6ff;
+    font-family: Calibri, Myriad;
+    font-size: 10pt;
+    height: 100%;
+}
+
+div.container{
+    width: 70%;
+}
+
+div.row{
+    width: 100%;
+}
+
+div.main {
+    width: 99%;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    z-index: 3;
+}
+
+div.books {
+    border: 1px solid black;
+    width: 98%;
+    margin-left: 10px;
+    margin-right: 10px;
+    flex: 1 0 auto;
+}
+
+table.books {
+    text-align: center;
+    width: 100%;
+}
+
+table.dataTable tbody tr.selected {
+    color: #abc !important;
+    background-color: #abc !important;
+}
+
+form.one {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    vertical-align: top;
+}
+
+div.addUpdateBook {
+    border: 1px solid green;
+    width: 545px;
+}
+
+div.addBook {
+    border: 1px solid green;
+    width: 270px;
+    float: left;
+}
+
+form.addBook {
+    width: 100%;
+}
+
+div.updateBook {
+    border: 1px solid green;
+    width: 270px;
+    float: right;
+}
+
+form.updateBook {
+    width: 100%;
+}
+
+.inputText {
+    float: right;
+}
+
+div.findBooks {
+    border: 1px solid green;
+    width: 270px;
+    float: right;
+}
+
+#contextMenu {
+    position: absolute;
+    display: none;
+}
+
+.wrap{
+    width:90%;
+    display:block;
+    margin:0 auto;
+}
+
+/*tr:nth-child(even) {background: #F5F5F5}*/
+
+tr{
+    position:relative;
+}
+
+tr:hover{
+    background:#c9e8f7;
+    position:relative;
+}
+
+.button.delete {
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+}
+
+.button.edit {
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+}
+
+.modal.fade.in {
+    top: 10%;
+    width: 500px;
+}
+
+div.bookImage {
+    width: 170px;
+    margin: 0px 0px 0px 0px;
+    float: left;
+}
+
+div.bookForm {
+    width: 270px;
+    margin: 2px 2px 2px 2px;
+    float: right;
+}
+
+div.groupForm {
+    width: 100%;
+}
+
+.labelInput {
+    float: left;
+    text-align: left;
+    margin: 0px 0px 0px 0px;
+    width: 100%
+}
+
+.inputText {
+    float: left;
+    width: 272px;
+    margin: 0px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
+}
+
+select.selectFields {
+    font-size: 10pt;
+    float: right;
+    margin: 0px 0px 0px 0px;
+    width: 100%;
+}
+
+.inputButtonSave {
+}
+
+.inputButtonUpdate {
+}
