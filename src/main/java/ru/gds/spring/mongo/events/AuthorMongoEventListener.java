@@ -1,5 +1,6 @@
 package ru.gds.spring.mongo.events;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventListener;
 import org.springframework.data.mongodb.core.mapping.event.BeforeDeleteEvent;
@@ -9,9 +10,6 @@ import ru.gds.spring.domain.Author;
 import ru.gds.spring.domain.Book;
 import ru.gds.spring.interfaces.BookReactiveRepository;
 import ru.gds.spring.mongo.exceptions.ForeignKeyException;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class AuthorMongoEventListener extends AbstractMongoEventListener<Author> {
@@ -30,12 +28,14 @@ public class AuthorMongoEventListener extends AbstractMongoEventListener<Author>
         event.getDocument();
         String id = event.getSource().get("_id").toString();
 
-        List<Book> bookList = new ArrayList<>();
         Flux<Book> books = bookReactiveRepository.findAllByAuthorsId(id);
-        books.subscribe(bookList::add);
-        if (!bookList.isEmpty())
-            throw new ForeignKeyException("Error delete Author because Book: "
-                    + bookList.get(0).getName() + " related to Author: " + bookList.get(0).getAuthors());
+        books.map(book -> {
+            if (book != null && StringUtils.isBlank(book.getId())) {
+                throw new ForeignKeyException("Error delete Author because Book: "
+                        + book.getName() + " related to Author: " + book.getAuthors());
+            }
+            return book;
+        }).log();
 
         logger.debug("AuthorMongoEventListener delete");
     }
