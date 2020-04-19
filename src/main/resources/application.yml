@@ -1,7 +1,41 @@
 spring:
+  data:
+    mongodb:
+      database: mydb
+      #username: MongoDB
+      #password: root
+      #port: 27017
+      #host: localhost
+      #authentication-database: admin
   profiles:
     active: development
     #active: test
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+    initialization-mode: always
+    hikari:
+      connectionTimeout: 20000
+      maximumPoolSize: 5
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    generate-ddl: false
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+  h2:
+    console:
+      path: /h2-console
+      # http://localhost:8080/h2-console/login.jsp
+      enabled: true
+      settings:
+        trace: false
+        web-allow-others: false
+  batch:
+    job:
+      enabled: false
 ---
 logging:
   level:
