@@ -20,7 +20,7 @@ import javax.persistence.EntityManagerFactory;
 public class JobConfig {
 
     private static final int CHUNK_SIZE = 5;
-    private final Logger logger = LoggerFactory.getLogger("JobConfig");
+    private static final Logger logger = LoggerFactory.getLogger("JobConfig");
 
     public static final String OUTPUT_FILE_NAME = "outputFileName";
     public static final String INPUT_FILE_NAME = "inputFileName";

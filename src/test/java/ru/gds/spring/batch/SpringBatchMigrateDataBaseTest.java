@@ -13,17 +13,26 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
+import ru.gds.spring.jpa.domain.Comment;
+import ru.gds.spring.jpa.interfaces.CommentJpaRepository;
 import ru.gds.spring.mongo.config.JobConfig;
 import ru.gds.spring.mongo.config.tasklets.TaskletTablesClear;
+
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.log4j.Logger;
 
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 @SpringBootTest
 @SpringBatchTest
 @ComponentScan({"ru.gds.spring"})
-@ContextConfiguration(classes  = JobConfig.class)
+@ContextConfiguration(classes = JobConfig.class)
 @Import({TaskletTablesClear.class})
 class SpringBatchMigrateDataBaseTest {
+
+    private static final Logger logger = Logger.getLogger(SpringBatchMigrateDataBaseTest.class);
 
     @Autowired
     private JobLauncher jobLauncher;
@@ -35,7 +44,7 @@ class SpringBatchMigrateDataBaseTest {
     private Job importDataBaseJob;
 
     @Autowired
-    private BatchService batchService;
+    CommentJpaRepository commentJpaRepository;
 
     private JobLauncherTestUtils jobLauncherTestUtils;
 
@@ -47,17 +56,23 @@ class SpringBatchMigrateDataBaseTest {
         jobLauncherTestUtils.setJob(importDataBaseJob);
     }
 
+    // Перед запуском теста, в application.yml нужно отключить интерактивный режим Shell
+    // spring:shell:interactive:enabled: false
     @Test
     void testJob() throws Exception {
-
-        JobParameters jobParameters =
-                new JobParametersBuilder()
-                        .addLong("time", System.currentTimeMillis()).toJobParameters();
-
         JobExecution jobExecution = jobLauncherTestUtils.launchJob();
         Assert.assertEquals(ExitStatus.COMPLETED, jobExecution.getExitStatus());
 
-        StepExecution stepExecution = jobExecution.getStepExecutions().iterator().next();
-        assumeTrue(ExitStatus.COMPLETED.equals(stepExecution.getExitStatus()));
+        Iterator iterator = jobExecution.getStepExecutions().iterator();
+        StepExecution stepExecution;
+        while (iterator.hasNext()) {
+            stepExecution = (StepExecution) iterator.next();
+            logger.info("step " + stepExecution.getStepName() + " is " + stepExecution.getExitStatus());
+            assumeTrue(ExitStatus.COMPLETED.equals(stepExecution.getExitStatus()));
+        }
+
+        List<Comment> commentList = commentJpaRepository.findAll();
+        logger.info("commentList.size =  " + commentList.size());
+        assumeTrue(commentList.size() > 0);
     }
 }
