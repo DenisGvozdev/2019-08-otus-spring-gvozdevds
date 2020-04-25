@@ -1,13 +1,11 @@
 package ru.gds.spring.jpa.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Data
-@AllArgsConstructor
 @Entity
 @Table(name = "AUTHORS")
 public class Author {

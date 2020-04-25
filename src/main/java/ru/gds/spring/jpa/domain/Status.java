@@ -1,12 +1,10 @@
 package ru.gds.spring.jpa.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.persistence.*;
 
 @Data
-@AllArgsConstructor
 @Entity
 @Table(name = "STATUSES")
 public class Status {
