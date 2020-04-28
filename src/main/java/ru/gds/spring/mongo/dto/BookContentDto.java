@@ -6,8 +6,6 @@ public class BookContentDto {
 
     private List<PageDto> pageList;
 
-    BookContentDto(){}
-
     public BookContentDto(List<PageDto> pageList){
         this.pageList = pageList;
     }

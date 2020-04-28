@@ -1,9 +1,8 @@
 package ru.gds.spring.service;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
+import ru.gds.spring.interfaces.ContentService;
 import ru.gds.spring.mongo.domain.BookContent;
 import ru.gds.spring.mongo.dto.BookContentDto;
 import ru.gds.spring.mongo.dto.PageDto;
@@ -14,21 +13,25 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class BookContentService {
+public class BookContentService implements ContentService {
 
     private static final Logger logger = Logger.getLogger(BookContentService.class);
 
     private final BookContentRepository bookContentRepository;
 
-    @Autowired
     public BookContentService(BookContentRepository bookContentRepository) {
         this.bookContentRepository = bookContentRepository;
     }
 
+    public BookContentDto getPagesForBook(String order) {
+        return new BookContentDto(getPages(order));
+    }
+
     public List<BookContentDto> getPagesForBooks(List<String> orders) {
-        List<BookContentDto> result = new ArrayList<BookContentDto>();
+        List<BookContentDto> result = new ArrayList<>();
         for (String order : orders) {
             result.add(new BookContentDto(getPages(order)));
+
         }
         return result;
     }
@@ -38,13 +41,12 @@ public class BookContentService {
         List<PageDto> pageDtoList = new ArrayList<>();
 
         try {
-            BookContent bookContent = bookContentRepository.findById(bookId).orElse(null);
+            String[] sentences = bookContentRepository.findById(bookId)
+                    .map(BookContent::getText)
+                    .map(t -> t.split("[.!?]\\s*")).orElse(null);
 
-            String text = (bookContent != null) ? bookContent.getText() : null;
-            if (StringUtils.isEmpty(text))
+            if (sentences == null)
                 return pageDtoList;
-
-            String[] sentences = bookContent.getText().split("[.!?]\\s*");
 
             int countSentences = 7;
             int index = 0;
