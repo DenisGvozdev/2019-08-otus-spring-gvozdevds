@@ -2,12 +2,16 @@ management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: health,loggers
   endpoint:
     health:
       show-details: always
   health:
-    defaults:
+    loggers:
+      enabled: true
+    database:
+      enabled: false
+    mongo:
       enabled: true
 ---
 spring:

@@ -11,7 +11,7 @@ public class CountUsersHealthIndicator implements HealthIndicator {
 
     private final UserRepository userRepository;
 
-    CountUsersHealthIndicator(UserRepository userRepository) {
+    public CountUsersHealthIndicator(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
