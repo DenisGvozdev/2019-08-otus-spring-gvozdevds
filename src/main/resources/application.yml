@@ -2,13 +2,11 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,loggers
+        include: health,metrics,logfile
   endpoint:
     health:
       show-details: always
   health:
-    loggers:
-      enabled: true
     database:
       enabled: false
     mongo:
@@ -28,10 +26,10 @@ spring:
     #active: test
   jmx:
     enabled: true
-  #rest:
-    #basePath: /
 ---
 logging:
+  file:
+    path: "/home-work-16.log"
   level:
     org:
       springframework: info
