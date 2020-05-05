@@ -12,7 +12,7 @@ public class GenreDto {
     private String name;
     private boolean selected;
 
-    private GenreDto() {
+    public GenreDto() {
     }
 
     public GenreDto(String id, String name, boolean selected) {
@@ -66,7 +66,7 @@ public class GenreDto {
         return genreDto;
     }
 
-    static GenreDto toDto(Genre genre) {
+    public static GenreDto toDto(Genre genre) {
         if (genre == null)
             return null;
 

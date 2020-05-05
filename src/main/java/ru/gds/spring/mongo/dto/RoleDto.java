@@ -10,6 +10,8 @@ public class RoleDto {
     private String description;
     private boolean selected;
 
+    public RoleDto() {}
+
     public RoleDto(String role) {
         this.role = role;
         this.description = null;

@@ -1,9 +1,8 @@
 package ru.gds.spring.microservice.controllers;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.gds.spring.mongo.dto.StatusDto;
+import ru.gds.spring.mongo.params.ParamsStatus;
 import ru.gds.spring.mongo.services.StatusService;
 
 import java.util.List;
@@ -25,5 +24,25 @@ public class StatusController {
     @GetMapping("/statuses/{bookId}")
     public List<StatusDto> findStatusDtoListLight(@RequestParam String bookId) {
         return statusService.findAllByBookId(bookId);
+    }
+
+    @GetMapping("/statuses/{statusId}")
+    public StatusDto findById(@RequestParam String statusId) {
+        return statusService.findById(statusId);
+    }
+
+    @PostMapping("/statuses")
+    public StatusDto add(ParamsStatus params) {
+        return statusService.save(params);
+    }
+
+    @PutMapping("statuses/{id}")
+    public StatusDto update(ParamsStatus params) {
+        return statusService.save(params);
+    }
+
+    @DeleteMapping("statuses/{id}")
+    public String delete(@PathVariable(value = "id") String id) {
+        return statusService.deleteById(id);
     }
 }

@@ -1,9 +1,8 @@
 package ru.gds.spring.microservice.controllers;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.gds.spring.mongo.dto.GenreDto;
+import ru.gds.spring.mongo.params.ParamsGenre;
 import ru.gds.spring.mongo.services.GenreService;
 
 import java.util.List;
@@ -25,5 +24,25 @@ public class GenreController {
     @GetMapping("/genres/{bookId}")
     public List<GenreDto> findAuthorDtoListLight(@RequestParam String bookId) {
         return genreService.findAllByBookId(bookId);
+    }
+
+    @GetMapping("/genres/{genreId}")
+    public GenreDto findById(@RequestParam String genreId) {
+        return genreService.findById(genreId);
+    }
+
+    @PostMapping("/genres")
+    public GenreDto add(ParamsGenre params) {
+        return genreService.save(params);
+    }
+
+    @PutMapping("genres/{id}")
+    public GenreDto update(ParamsGenre params) {
+        return genreService.save(params);
+    }
+
+    @DeleteMapping("genres/{id}")
+    public String delete(@PathVariable(value = "id") String id) {
+        return genreService.deleteById(id);
     }
 }

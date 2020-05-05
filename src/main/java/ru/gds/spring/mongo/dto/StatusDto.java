@@ -1,6 +1,5 @@
 package ru.gds.spring.mongo.dto;
 
-
 import ru.gds.spring.mongo.domain.Status;
 
 public class StatusDto {
@@ -9,7 +8,7 @@ public class StatusDto {
     private String name;
     private boolean selected;
 
-    private StatusDto() {
+    public StatusDto() {
     }
 
     private StatusDto(String id, String name, boolean selected) {

@@ -15,4 +15,6 @@ public interface RoleRepository extends MongoRepository<Role, String> {
     List<Role> findAllByRole(List<String> roles, Sort sort);
 
     Role findByRole(String role);
+
+    void deleteByRole(String role);
 }

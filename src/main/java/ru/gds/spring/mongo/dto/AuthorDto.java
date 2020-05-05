@@ -1,5 +1,7 @@
 package ru.gds.spring.mongo.dto;
 
+import ru.gds.spring.microservice.constant.ConstantFormatDate;
+import ru.gds.spring.microservice.util.DateUtils;
 import ru.gds.spring.mongo.domain.Author;
 
 import java.util.Date;
@@ -13,20 +15,22 @@ public class AuthorDto {
     private String thirdName;
     private String fio;
     private Date birthDate;
+    private String birthDateString;
     private boolean selected;
 
-    private AuthorDto() {
+    public AuthorDto() {
     }
 
     public AuthorDto(String id, String firstName, String secondName,
                      String thirdName, String fio,
-                     Date birthDate, boolean selected) {
+                     Date birthDate, String birthDateString, boolean selected) {
         this.id = id;
         this.firstName = firstName;
         this.secondName = secondName;
         this.thirdName = thirdName;
         this.fio = fio;
         this.birthDate = birthDate;
+        this.birthDateString = birthDateString;
         this.selected = selected;
     }
 
@@ -78,6 +82,14 @@ public class AuthorDto {
         this.birthDate = birthDate;
     }
 
+    public String getBirthDateString() {
+        return birthDateString;
+    }
+
+    public void setBirthDateString(String birthDateString) {
+        this.birthDateString = birthDateString;
+    }
+
     public boolean isSelected() {
         return selected;
     }
@@ -93,6 +105,7 @@ public class AuthorDto {
         AuthorDto authorDto = new AuthorDto();
         authorDto.setId(author.getId());
         authorDto.setFio(author.getFirstName() + " " + author.getSecondName() + " " + author.getThirdName());
+        authorDto.setBirthDateString(DateUtils.getStringFromDate(author.getBirthDate(), ConstantFormatDate.FORMAT_ddMMyyyy));
         return authorDto;
     }
 
@@ -107,7 +120,7 @@ public class AuthorDto {
         return authorDto;
     }
 
-    static AuthorDto toDto(Author author) {
+    public static AuthorDto toDto(Author author) {
         if (author == null)
             return null;
 
@@ -118,6 +131,7 @@ public class AuthorDto {
                 author.getThirdName(),
                 author.getFirstName() + " " + author.getSecondName() + " " + author.getThirdName(),
                 author.getBirthDate(),
+                DateUtils.getStringFromDate(author.getBirthDate(), ConstantFormatDate.FORMAT_ddMMyyyy),
                 false
         );
     }

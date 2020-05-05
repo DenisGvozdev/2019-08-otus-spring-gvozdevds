@@ -15,4 +15,14 @@ public class DateUtils {
         }
         return null;
     }
+
+    public static String getStringFromDate(Date date, String format) {
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat(format);
+            return formatter.format(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
