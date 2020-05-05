@@ -1,0 +1,1535 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <TITLE>Моя библиотека</TITLE>
+
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/swfobject.js"></script>
+
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap-responsive.css">
+
+    <script src="js/bootstrap-select.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap-select.css"/>
+    <link rel="stylesheet" href="css/bootstrap-select.min.css">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
+<!--    <link href="css/bootstrap-glyphicons.css" rel="stylesheet">-->
+
+    <link rel="stylesheet" type="text/css" href="css/jquery.datetimepicker.css"/>
+    <script src="js/jquery.datetimepicker.full.min.js"></script>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/index.css">
+
+</head>
+<body>
+<div id="contextMenu" class="dropdown clearfix" hidden>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu"
+        style="display:block; position:static; margin-bottom:5px;">
+        <li><a tabindex="-1" href="#" onclick="showBookForm(this, 'show')">Просмотр</a></li>
+        <li><a tabindex="-1" href="#" onclick="showBookForm(this, 'edit')">Редактировать</a></li>
+        <li><a tabindex="-1" href="#" onclick="deleteBook(this)">Удалить</a></li>
+    </ul>
+</div>
+
+<div class="modal fade" id="myModal" role="dialog" hidden>
+    <div class="modal-dialog">
+        <form id="formCreateUpdateBook" enctype="multipart/form-data" action="" mode="" method="">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 id="titleBookForm" class="modal-title">Книга</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="bookImage">
+                        <img id="imagePreview" src=""/>
+                    </div>
+
+                    <div class="bookForm">
+
+                        <input id="bookId" name="id" type="hidden" value=""/>
+
+                        <div class="form-group">
+                            <label for="name" class="labelInput">Название</label>
+                            <input id="name" name="name" type="text" class="inputText" value=""/>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="description" class="labelInput">Описание</label>
+                            <textarea id="description" name="description" rows="2" cols="80" class="inputText"
+                                      field=""></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="file" class="labelInput">Обложка</label>
+                            <input id="file" name="file" type="file" onchange="readURL(this)" class="inputText"
+                                   value=""/>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="authorIds" class="labelInput">Авторы</label>
+                            <select id="authorIds" name="authorIds" size="2" class="selectFields"
+                                    multiple data-live-search="true">
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="genreIds" class="labelInput">Жанры</label>
+                            <select id="genreIds" name="genreIds" size="2" class="selectFields"
+                                    multiple data-live-search="true">
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="statusId" class="labelInput">Статус</label>
+                            <select id="statusId" name="statusId" class="selectFields"
+                                    data-live-search="true">
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input id="buttonSaveBook" type="button" value="Сохранить" class="inputButtonSave" onclick="">
+                <input type="button" value="Закрыть" class="btn btn-default" data-dismiss="modal">
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="main">
+
+    <!--    <div class="navbar navbar-inverse navbar-custom">-->
+    <div class="navbar navbar-custom-main ">
+        <!--        <div class="navbar-inner">-->
+        <div class="navbar-custom">
+            <a class="brand" href="/">Моя библиотека</a>
+            <ul class="nav nav-pills">
+                <li>
+                    <form action="/" method="get" class="one">
+                        <input type="submit" class="all-books-button" value="Все книги">
+                    </form>
+                </li>
+                <li>
+                    <div class="search">
+                        <form id="formFindBookByName" action="" method="get" class="form-inline my-2 my-lg-0">
+                            <input name="name" class="form-control mr-sm-2" type="search"
+                                   placeholder="Название книги" aria-label="Поиск">
+                            <button class="search" id="buttonSearch" type="button"
+                                    onclick="findBookByName('formFindBookByName')">Найти
+                            </button>
+                        </form>
+                    </div>
+                </li>
+            </ul>
+            <div class="authorization">
+                <a id="helloUser" href="/login"></a><br/>
+                <a id="exitUser" href="/logout" hidden="">Выход</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid-custom">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a data-toggle="tab" href="#tabBooks">Книги</a>
+            </li>
+            <li id="li-tab-authors" hidden>
+                <a data-toggle="tab" href="#tabAuthors" onclick="findAllAuthors()">Авторы</a>
+            </li>
+            <li id="li-tab-genres" hidden>
+                <a data-toggle="tab" href="#tabGenres" onclick="findAllGenres()">Жанры</a>
+            </li>
+            <li id="li-tab-statuses" hidden>
+                <a data-toggle="tab" href="#tabStatuses" onclick="findAllStatuses()">Статусы</a></li>
+            <li id="li-tab-roles" hidden>
+                <a data-toggle="tab" href="#tabRoles" onclick="findAllRoles()">Роли</a>
+            </li>
+            <li id="li-tab-users" hidden>
+                <a data-toggle="tab" href="#tabUsers" onclick="findAllUsers()">Пользователи</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+
+            <div class="tab-pane active" id="tabBooks">
+                <div class="books">
+                    <table class="books" id="tableBooks">
+                        <thead>
+                        <tr>
+                            <th id="thBookName">Название</th>
+                            <th id="thBookDescription">Описание</th>
+                            <th id="bookCrudButtons">
+                                <button type="button" class="refButton" onclick="showBookForm({bookId: null}, 'add')">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                    <span><strong>Добавить</strong></span>
+                                </button>
+                            </th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="tabAuthors" class="tab-pane">
+                <div class="authors">
+                    <table class="authors" id="tableAuthors">
+                        <thead>
+                        <tr>
+                            <th id="authorFIO">ФИО</th>
+                            <th id="authorBirthDate">Дата рождения</th>
+                            <th id="authorCrudButtons">
+                                <button type="button" class="refButton" onclick="fillAuthorForm(null, 'add')">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                    <span><strong>Добавить</strong></span>
+                                </button>
+                            </th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="authors-form">
+                    <form id="formCreateUpdateAuthor" enctype="multipart/form-data" action="" mode="" method="">
+                        <div class="authorForm">
+                            <h4 id="title-author-form" class="modal-title">Автор</h4>
+                            <input id="author-id" name="id" type="hidden" class="inputAuthorText" value=""/>
+                            <div class="form-group">
+                                <label for="author-first-name" class="labelInput">Фамилия</label>
+                                <input id="author-first-name" name="firstName" type="text" class="inputAuthorText"
+                                       value=""/>
+                            </div>
+                            <div class="form-group">
+                                <label for="author-second-name" class="labelInput">Имя</label>
+                                <input id="author-second-name" name="secondName" type="text" class="inputAuthorText"
+                                       value=""/>
+                            </div>
+                            <div class="form-group">
+                                <label for="author-third-name" class="labelInput">Отчество</label>
+                                <input id="author-third-name" name="thirdName" type="text" class="inputAuthorText"
+                                       value=""/>
+                            </div>
+                            <div class="form-group">
+                                <label for="author-birth-date" class="labelInput">Дата рождения</label>
+                                <input id="author-birth-date" name="birthDate" type="text" >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input id="buttonSaveAuthor" type="button" value="Сохранить" class="object-button-save"
+                                   onclick="addUpdateAuthor()">
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div id="tabGenres" class="tab-pane">
+                <div class="genres">
+                    <table class="genres" id="tableGenres">
+                        <thead>
+                        <tr>
+                            <th id="genreName">Название</th>
+                            <th id="genreCrudButtons">
+                                <button type="button" class="refButton" onclick="fillGenreForm(null, 'add')">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                    <span><strong>Добавить</strong></span>
+                                </button>
+                            </th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="genres-form">
+                    <form id="formCreateUpdateGenre" enctype="multipart/form-data" action="" mode="" method="">
+                        <div class="genreForm">
+                            <h4 id="title-genre-form" class="modal-title">Статус</h4>
+                            <input id="genre-id" name="id" type="hidden" class="inputGenreText" value=""/>
+                            <div class="form-group">
+                                <label for="genre-name" class="labelInput">Название</label>
+                                <input id="genre-name" name="name" type="text" class="inputGenreText" value=""/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input id="buttonSaveGenre" type="button" value="Сохранить" class="object-button-save"
+                                   onclick="addUpdateGenre()">
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div id="tabStatuses" class="tab-pane" hidden>
+                <div class="statuses">
+                    <table class="statuses" id="tableStatuses">
+                        <thead>
+                        <tr>
+                            <th id="statusName">Название</th>
+                            <th id="statusCrudButtons">
+                                <button type="button" class="refButton" onclick="fillStatusForm(null, 'add')">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                    <span><strong>Добавить</strong></span>
+                                </button>
+                            </th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="statuses-form">
+                    <form id="formCreateUpdateStatus" enctype="multipart/form-data" action="" mode="" method="">
+                        <div class="statusForm">
+                            <h4 id="title-status-form" class="modal-title">Статус</h4>
+                            <input id="status-id" name="id" type="hidden" class="inputStatusText" value=""/>
+                            <div class="form-group">
+                                <label for="status-name" class="labelInput">Название</label>
+                                <input id="status-name" name="name" type="text" class="inputStatusText" value=""/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input id="buttonSaveStatus" type="button" value="Сохранить" class="object-button-save"
+                                   onclick="addUpdateStatus()">
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="tab-pane" id="tabUsers">
+                <div class="users">
+                    <table class="users" id="tableUsers">
+                        <thead>
+                        <tr>
+                            <th id="userUsername">Логин</th>
+                            <th id="userFirstName">Фамилия</th>
+                            <th id="userSecondName">Имя</th>
+                            <th id="userThirdName">Отчество</th>
+                            <th id="userCrudButtons">
+                                <button type="button" class="refButton" onclick="fillUserForm(null, 'add')">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                    <span><strong>Добавить</strong></span>
+                                </button>
+                            </th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="users-form">
+                    <form id="formCreateUpdateUser" enctype="multipart/form-data" action="" mode="" method="">
+                        <div class="userForm">
+                            <h4 id="title-user-form" class="modal-title">Пользователь</h4>
+                            <div class="form-group">
+                                <label for="user-username" class="labelInput">Логин</label>
+                                <input id="user-username" name="username" type="text" class="inputUserText" value=""/>
+                            </div>
+                            <div class="form-group">
+                                <label for="user-password" class="labelInput">Пароль</label>
+                                <input id="user-password" name="password" type="text" class="inputUserText" value=""/>
+                            </div>
+                            <div class="form-group">
+                                <label for="user-email" class="labelInput">Почта</label>
+                                <input id="user-email" name="email" type="text" class="inputUserText" value=""/>
+                            </div>
+                            <div class="form-group">
+                                <label for="user-phone" class="labelInput">Телефон</label>
+                                <input id="user-phone" name="phone" type="text" class="inputUserText" value=""/>
+                            </div>
+                            <div class="form-group">
+                                <label for="user-firstName" class="labelInput">Фамилия</label>
+                                <input id="user-firstName" name="firstName" type="text" class="inputUserText" value=""/>
+                            </div>
+                            <div class="form-group">
+                                <label for="user-secondName" class="labelInput">Имя</label>
+                                <input id="user-secondName" name="secondName" type="text" class="inputUserText"
+                                       value=""/>
+                            </div>
+                            <div class="form-group">
+                                <label for="user-thirdName" class="labelInput">Отчество</label>
+                                <input id="user-thirdName" name="thirdName" type="text" class="inputUserText" value=""/>
+                            </div>
+                            <div class="form-group">
+                                <label for="user-roles" class="labelInput">Роли</label>
+                                <select id="user-roles" name="roleIds" size="2" class="selectUserFields"
+                                        multiple data-live-search="true">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input id="buttonSaveUser" type="button" value="Сохранить" class="object-button-save"
+                                   onclick="addUpdateUser()">
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="tab-pane" id="tabRoles">
+                <div class="roles">
+                    <table class="roles" id="tableRoles">
+                        <thead>
+                        <tr>
+                            <th id="roleRole">Роль</th>
+                            <th id="roleDescription">Описание</th>
+                            <th id="roleCrudButtons">
+                                <button type="button" class="refButton" onclick="fillRoleForm(null, 'add')">
+                                    <span class="glyphicon glyphicon-plus"></span>
+                                    <span><strong>Добавить</strong></span>
+                                </button>
+                            </th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="roles-form">
+                    <form id="formCreateUpdateRole" enctype="multipart/form-data" action="" mode="" method="">
+                        <div class="roleForm">
+                            <h4 id="title-role-form" class="modal-title">Роль</h4>
+                            <div class="form-group">
+                                <label for="role-role" class="labelInput">Название</label>
+                                <input id="role-role" name="role" type="text" class="inputRoleText" value=""/>
+                            </div>
+                            <div class="form-group">
+                                <label for="role-description" class="labelInput">Описание</label>
+                                <input id="role-description" name="description" type="text" class="inputRoleText"
+                                       value=""/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input id="buttonSaveRole" type="button" value="Сохранить" class="object-button-save"
+                                   onclick="addUpdateRole()">
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="footer">
+        Copyright © 2020 Моя библиотека Все права защищены.<br>
+        При использовании материалов сайта гиперссылка на <a href="/">Моя библиотека</a> обязательна.
+    </div>
+</div>
+
+<script>
+
+    /*---------------- Общая часть ---------------*/
+    $(function () {
+
+        // Получаем активного пользователя
+        getActiveUser();
+
+        // По-умолчанию показываем все книги
+        findAllBooks();
+
+        // Вешаем событие на открытие модального окна Добавление/Редактирование/Просмотр книги
+        $("#myModal").on('shown', function () {
+
+            var formCreateUpdateBook = $("#formCreateUpdateBook")[0];
+            var bookIdOnForm = $("#bookId")[0];
+            var mode = formCreateUpdateBook.mode;
+            var bookId = bookIdOnForm.value;
+
+            var isShowForm = ("show" === mode);
+            var isEditForm = ("edit" === mode);
+            var isAddForm = ("add" === mode);
+
+            if (isShowForm || isEditForm) {
+                setButtonClickEvents("formCreateUpdateBook", isEditForm, isAddForm);
+                fillMainFields(bookId, isEditForm, isAddForm, isShowForm);
+                fillAuthors(bookId);
+                fillGenres(bookId);
+                fillStatuses(bookId);
+                setDisableFields(isShowForm);
+            } else {
+                setButtonClickEvents("formCreateUpdateBook", isEditForm, isAddForm);
+                fillMainFields(null, isEditForm, isAddForm, isShowForm);
+                fillAuthors(null);
+                fillGenres(null);
+                fillStatuses(null);
+            }
+        });
+    });
+
+    $(function () {
+        var $contextMenu = $("#contextMenu");
+
+        $("tbody").on("click", "tr", function () {
+            selectUnselectRowBookCheckBox(this);
+        });
+
+        $("body").on("contextmenu", "table tr", function (e) {
+            $contextMenu.css({
+                display: "block",
+                left: e.pageX,
+                top: e.pageY,
+                background: "#FFFFFF",
+                margin: "0 0 0 0"
+            });
+
+            var element = $(this)[0];
+            var bookId = null;
+            for (var i = 0; i < element.cells.length; i++) {
+                var itm = element.cells[i];
+                if (itm != null && itm.children[0] != null && itm.children[0].type === "checkbox") {
+                    bookId = itm.children[0].value;
+                }
+            }
+            $contextMenu.ready(function () {
+                for (var i = 0; i < $contextMenu[0].children[0].children.length; i++) {
+                    var li = $contextMenu[0].children[0].children[i];
+                    li.firstChild.bookId = bookId;
+                }
+            });
+            return false;
+        });
+
+        $('html').click(function () {
+            $contextMenu.hide();
+        });
+
+        jQuery.datetimepicker.setLocale('ru');
+
+        jQuery('#author-birth-date').datetimepicker({
+            i18n:{
+                de:{
+                    months:[
+                        'Январь','Февраль','Март','Апрель',
+                        'Май','Июнь','Июль','Август',
+                        'Сентябрь','Октябрь','Ноябрь','Декабрь',
+                    ],
+                    dayOfWeek:[
+                        "Вс.", "Пн", "Вт", "Ср",
+                        "Чт", "Пт", "Сб.",
+                    ]
+                }
+            },
+            timepicker:false,
+            format:'d.m.Y'
+        });
+    });
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#imagePreview')
+                    .attr('src', e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function selectUnselectRowBookCheckBox(element) {
+        for (var i = 0; i < element.cells.length; i++) {
+            var itm = element.cells[i];
+            if (itm != null && itm.children[0] != null && itm.children[0].type === "checkbox") {
+                itm.children[0].checked = !itm.children[0].checked;
+            }
+        }
+    }
+
+    function getActiveUser() {
+        $.get('users/{active}').done(function (user) {
+            if (user == null)
+                return;
+
+            var username = user.username;
+            $("#helloUser")[0].innerText = ("Авторизация" === username) ? username : "Здравствуйте " + username;
+            $("#exitUser")[0].hidden = ("Авторизация" === username);
+
+            var roles = user.roles;
+            if (roles == null)
+                return;
+
+            roles.forEach(function (role) {
+                if ("ROLE_ADMINISTRATION" === role.role || "ROLE_AUTHORS_WRITE" === role.role)
+                    $("#li-tab-authors")[0].hidden = false;
+
+                if ("ROLE_ADMINISTRATION" === role.role || "ROLE_GENRES_WRITE" === role.role)
+                    $("#li-tab-genres")[0].hidden = false;
+
+                if ("ROLE_ADMINISTRATION" === role.role || "ROLE_STATUSES_WRITE" === role.role)
+                    $("#li-tab-statuses")[0].hidden = false;
+
+                if ("ROLE_ADMINISTRATION" === role.role || "ROLE_ROLES_WRITE" === role.role)
+                    $("#li-tab-roles")[0].hidden = false;
+
+                if ("ROLE_ADMINISTRATION" === role.role || "ROLE_USERS_WRITE" === role.role)
+                    $("#li-tab-users")[0].hidden = false;
+            });
+        });
+    }
+
+    /*---------------- Работаем с книгами ---------------*/
+
+    $('.tableBooks tr').click(function () {
+        $(this).toggleClass("clicked");
+    });
+
+    function showBookForm(element, operation) {
+
+        // Передаем на форму идентификатор книги
+        var bookIdOnForm = $("#bookId")[0];
+        bookIdOnForm.value = element.bookId;
+
+        // Задаем режим открытия формы
+        var formCreateUpdateBook = $("#formCreateUpdateBook")[0];
+        formCreateUpdateBook.mode = operation;
+
+        // Показываем форму
+        $("#myModal").modal();
+    }
+
+    function setButtonClickEvents(idForm, isEditForm, isAddForm) {
+        var buttonSaveBook = $("#buttonSaveBook");
+        if (isEditForm) {
+            buttonSaveBook.click(function () {
+                updateBook(idForm);
+            });
+        } else if (isAddForm) {
+            buttonSaveBook.click(function () {
+                addBook(idForm);
+            });
+        }
+    }
+
+    function fillMainFields(bookId, isEditForm, isAddForm, isShowForm) {
+        if (bookId != null) {
+            $.get('books/{param}', {"bookId": bookId, "name": null})
+                .done(function (data) {
+                    var titleBookForm = $("#titleBookForm")[0];
+                    var bookId = $("#bookId")[0];
+                    var name = $("#name")[0];
+                    var imagePreview = $("#imagePreview")[0];
+
+                    var titleForm = "";
+                    if (isEditForm) {
+                        titleForm = "Редактирование книги ";
+                    } else if (isAddForm) {
+                        titleForm = "Добавление книги ";
+                    } else if (isShowForm) {
+                        titleForm = "Книга ";
+                    }
+
+                    titleBookForm.innerText = titleForm + data[0].name;
+
+                    bookId.value = data[0].id;
+                    name.value = data[0].name;
+                    imagePreview.src = data[0].imageString;
+                    description.value = data[0].description;
+                })
+                .fail(function (e) {
+                    alert("При поиске книги возникла ошибка: " + e.responseJSON.message);
+                });
+        } else if (isAddForm) {
+            var titleBookForm = $("#titleBookForm")[0];
+            titleBookForm.innerText = "Добавление книги ";
+        }
+    }
+
+    function fillAuthors(bookId) {
+        var url = '/authors';
+        if (bookId != null)
+            url = '/authors/{bookId}';
+
+        $.get(url, {"bookId": bookId})
+            .done(function (authors) {
+                var selectFieldAuthors = $("#authorIds");
+                selectFieldAuthors.empty();
+                var authorOptions = selectFieldAuthors[0].options;
+                authors.forEach(function (author) {
+                    authorOptions[authorOptions.length] = new Option(author.fio, author.id, true, author.selected > 0);
+                });
+            })
+            .fail(function (e) {
+                alert("Ошибка загрузки авторов: " + e.toString());
+            });
+    }
+
+    function fillGenres(bookId) {
+        var url = '/genres';
+        if (bookId != null)
+            url = '/genres/{bookId}';
+
+        $.get(url, {"bookId": bookId})
+            .done(function (genres) {
+                var selectFieldGenres = $("#genreIds");
+                selectFieldGenres.empty();
+                var genreOptions = selectFieldGenres[0].options;
+                genres.forEach(function (genre) {
+                    option = new Option(genre.name, genre.id, true, genre.selected > 0);
+                    genreOptions[genreOptions.length] = option;
+                });
+            })
+            .fail(function (e) {
+                alert("Ошибка загрузки жанров: " + e.toString());
+            });
+    }
+
+    function fillStatuses(bookId) {
+        var url = '/statuses';
+        if (bookId != null)
+            url = '/statuses/{bookId}';
+
+        $.get(url, {"bookId": bookId})
+            .done(function (statuses) {
+                var selectFieldStatus = $("#statusId");
+                selectFieldStatus.empty();
+                var statusOptions = selectFieldStatus[0].options;
+                statuses.forEach(function (status) {
+                    option = new Option(status.name, status.id, true, status.selected > 0);
+                    statusOptions[statusOptions.length] = option;
+                });
+            })
+            .fail(function (e) {
+                alert("Ошибка загрузки статусов: " + e.toString());
+            });
+    }
+
+    function setDisableFields(isShowForm) {
+
+        var name = $("#name")[0];
+        var description = $("#description")[0];
+        var buttonLoadFile = $("#file")[0];
+        var selectFieldStatus = $("#statusId")[0];
+        var selectFieldGenres = $("#genreIds")[0];
+        var selectFieldAuthors = $("#authorIds")[0];
+        var buttonSaveBook = $("#buttonSaveBook");
+
+        if (isShowForm) {
+            name.disabled = true;
+            description.disabled = true;
+            selectFieldStatus.disabled = true;
+            selectFieldGenres.disabled = true;
+            selectFieldAuthors.disabled = true;
+            buttonLoadFile.disabled = true;
+            buttonSaveBook[0].hidden = true;
+        } else {
+            name.disabled = false;
+            description.disabled = false;
+            selectFieldStatus.disabled = false;
+            selectFieldGenres.disabled = false;
+            selectFieldAuthors.disabled = false;
+            buttonLoadFile.disabled = false;
+            buttonSaveBook[0].hidden = false;
+        }
+    }
+
+    function findAllBooks() {
+        $('#tableBooks tbody').empty();
+
+        $.get('/books').done(function (persons) {
+            persons.forEach(function (books) {
+                $('#tableBooks tbody').append(`
+                    <tr>
+                        <td>${books.name}</td>
+                        <td>${books.description}</td>
+                        <td>
+                            <button type="button" class="refButton" onclick="showBookForm({bookId: '${books.id}'}, 'show')">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                            </button>
+                            <button type="button" class="refButton" onclick="showBookForm({bookId: '${books.id}'}, 'edit')">
+                                <span class="glyphicon glyphicon-edit"></span>
+                            </button>
+                            <button type="button" class="refButton" onclick="deleteBook({bookId: '${books.id}'})">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </td>
+                        <td>
+                            <input type="checkbox" name="bookId" value="${books.id}" disabled>
+                        </td>
+                    </tr>
+                `)
+            });
+        });
+    }
+
+    function findBookByName(formId) {
+        var userReqString = jQuery("#" + formId)[0].elements[0].value;
+        $.get('books/{param}', {"bookId": null, "name": userReqString})
+            .done(function (data) {
+                $('#tableBooks tbody > tr').remove();
+
+                if (data == null || data.length === 0) {
+                    alert("Не удалось найти книги");
+
+                } else {
+                    data.forEach(function (book) {
+                        $('#tableBooks tbody').append(`
+                                    <tr>
+                                        <td>${book.name}</td>
+                                        <td>${book.description}</td>
+                                        <td>
+                                            <input type="checkbox" name="bookId" value="${book.id}" disabled>
+                                        </td>
+                                    </tr>
+                                `)
+                    });
+                }
+            })
+            .fail(function (e) {
+                alert("При поиске книги возникла ошибка: " + e.responseJSON.message);
+            })
+    }
+
+    function addBook(formId) {
+        var form = $("#formCreateUpdateBook")[0];
+        var data = new FormData(form);
+
+        $.ajax({
+            url: "books",
+            type: "POST",
+            data: data,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (book) {
+                if (book != null) {
+                    $("#myModal").modal('hide');
+                    alert("Книга успешно добавлена");
+                    findAllBooks();
+                } else {
+                    alert("Ошибка создания книги");
+                }
+            },
+            error: function (e) {
+                alert("Ошибка создания книги: " + e.toString());
+            }
+        });
+    }
+
+    function updateBook(formId) {
+        var form = $("#" + formId)[0];
+        var data = new FormData(form);
+        $.ajax({
+            url: "books/{id}",
+            type: "PUT",
+            data: data,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (book) {
+                if (book != null) {
+                    $("#myModal").modal('hide');
+                    alert("Книга успешно обновлена");
+                    findAllBooks();
+                } else {
+                    alert("Ошибка обновления книги");
+                }
+            },
+            error: function (e) {
+                alert("Ошибка обновления книги: " + e.toString());
+            }
+        });
+    }
+
+    function deleteBook(element) {
+        $.ajax({
+            type: "DELETE",
+            url: 'books/' + element.bookId,
+            success: function (result) {
+                $('#tableBooks tbody > tr').remove();
+                alert("Книга успешно удалена");
+                findAllBooks();
+            },
+            error: function (e) {
+                alert("Ошибка удаления книги: " + e.toString());
+            }
+        });
+    }
+
+    /*---------------- Работаем с авторами ---------------*/
+
+    function findAllAuthors() {
+        $('#tableAuthors tbody').empty();
+
+        $.get('/authors').done(function (authors) {
+            authors.forEach(function (author) {
+                $('#tableAuthors tbody').append(`
+                    <tr>
+                        <td>${author.fio}</td>
+                        <td>${author.birthDateString}</td>
+                        <td>
+                            <button type="button" class="refButton" onclick="fillAuthorForm('${author.id}', 'show')">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                            </button>
+                            <button type="button" class="refButton" onclick="fillAuthorForm('${author.id}', 'edit')">
+                                <span class="glyphicon glyphicon-edit"></span>
+                            </button>
+                            <button type="button" class="refButton" onclick="deleteAuthor('${author.id}')">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </td>
+                        <td>
+                            <input type="checkbox" name="authorId" value="${author.id}" disabled>
+                        </td>
+                    </tr>
+                `)
+            });
+        });
+    }
+
+    function addUpdateAuthor() {
+
+        var form = $("#formCreateUpdateAuthor")[0];
+        var operation = form.mode;
+        var data = new FormData(form);
+        var type = (operation === "add") ? "POST" : "PUT";
+        var url = (operation === "add") ? "authors" : "authors/{id}";
+        var msgSuccess = (operation === "add") ? "Автор успешно добавлен" : "Автор успешно обновлен";
+        var msgError = (operation === "add") ? "Ошибка создания автора" : "Ошибка обновления автора";
+
+        $.ajax({
+            url: url,
+            type: type,
+            data: data,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (book) {
+                if (book != null) {
+                    alert(msgSuccess);
+                    findAllAuthors();
+                } else {
+                    alert(msgError);
+                }
+            },
+            error: function (e) {
+                alert(msgError + e.toString());
+            }
+        });
+    }
+
+    function fillAuthorForm(id, operation) {
+
+        // Очищаем форму
+        clearAuthorForm();
+
+        // Задаем режим открытия формы
+        var formCreateUpdateAuthor = $("#formCreateUpdateAuthor")[0];
+        formCreateUpdateAuthor.mode = operation;
+
+        var titleAuthorForm = $("#title-author-form")[0];
+        if ("add" === operation) {
+            titleAuthorForm.innerText = "Добавление автора ";
+            setDisableFieldsAuthorForm(false);
+            return;
+
+        } else if ("edit" === operation) {
+            titleAuthorForm.innerText = "Редактирование автора ";
+            setDisableFieldsAuthorForm(false);
+
+        } else if ("show" === operation) {
+            titleAuthorForm.innerText = "Просмотр автора ";
+            setDisableFieldsAuthorForm(true);
+        }
+
+        $.get('authors/{authorId}', {"authorId": id, "name": null})
+            .done(function (data) {
+                if (data != null) {
+                    $("#author-id")[0].value = data.id;
+                    $("#author-first-name")[0].value = data.firstName;
+                    $("#author-second-name")[0].value = data.secondName;
+                    $("#author-third-name")[0].value = data.thirdName;
+                    $("#author-birth-date")[0].value = data.birthDateString;
+                }
+            })
+            .fail(function (e) {
+                alert("При загрузке автора возникла ошибка: " + e.responseJSON.message);
+            });
+    }
+
+    function clearAuthorForm() {
+        $("#author-id")[0].value = null;
+        $("#author-first-name")[0].value = null;
+        $("#author-second-name")[0].value = null;
+        $("#author-third-name")[0].value = null;
+        $("#author-birth-date")[0].value = null;
+    }
+
+    function setDisableFieldsAuthorForm(isShowForm) {
+        $("#author-first-name")[0].disabled = isShowForm;
+        $("#author-second-name")[0].disabled = isShowForm;
+        $("#author-third-name")[0].disabled = isShowForm;
+        $("#author-birth-date")[0].disabled = isShowForm;
+        $("#buttonSaveAuthor")[0].hidden = isShowForm;
+    }
+
+    function deleteAuthor(id) {
+        $.ajax({
+            type: "DELETE",
+            url: 'authors/' + id,
+            success: function (result) {
+                alert("Автор успешно удален");
+                clearAuthorForm();
+                findAllAuthors();
+            },
+            error: function (e) {
+                alert("Ошибка удаления автора: " + e.responseJSON.message);
+            }
+        });
+    }
+
+    /*---------------- Работаем с жанрами ---------------*/
+
+    function findAllGenres() {
+        $('#tableGenres tbody').empty();
+
+        $.get('/genres').done(function (genres) {
+            genres.forEach(function (genre) {
+                $('#tableGenres tbody').append(`
+                    <tr>
+                        <td>${genre.name}</td>
+                        <td>
+                            <button type="button" class="refButton" onclick="fillGenreForm('${genre.id}', 'show')">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                            </button>
+                            <button type="button" class="refButton" onclick="fillGenreForm('${genre.id}', 'edit')">
+                                <span class="glyphicon glyphicon-edit"></span>
+                            </button>
+                            <button type="button" class="refButton" onclick="deleteGenre('${genre.id}')">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </td>
+                        <td>
+                            <input type="checkbox" name="genreId" value="${genre.id}" disabled>
+                        </td>
+                    </tr>
+                `)
+            });
+        });
+    }
+
+    function addUpdateGenre() {
+
+        var form = $("#formCreateUpdateGenre")[0];
+        var operation = form.mode;
+        var data = new FormData(form);
+        var type = (operation === "add") ? "POST" : "PUT";
+        var url = (operation === "add") ? "genres" : "genres/{id}";
+        var msgSuccess = (operation === "add") ? "Жанр успешно добавлен" : "Жанр успешно обновлен";
+        var msgError = (operation === "add") ? "Ошибка создания жанра" : "Ошибка обновления жанра";
+
+        $.ajax({
+            url: url,
+            type: type,
+            data: data,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (book) {
+                if (book != null) {
+                    alert(msgSuccess);
+                    findAllGenres();
+                } else {
+                    alert(msgError);
+                }
+            },
+            error: function (e) {
+                alert(msgError + e.toString());
+            }
+        });
+    }
+
+    function fillGenreForm(id, operation) {
+
+        // Очищаем форму
+        clearGenreForm();
+
+        // Задаем режим открытия формы
+        var formCreateUpdateGenre = $("#formCreateUpdateGenre")[0];
+        formCreateUpdateGenre.mode = operation;
+
+        var titleGenreForm = $("#title-genre-form")[0];
+        if ("add" === operation) {
+            titleGenreForm.innerText = "Добавление жанра ";
+            setDisableFieldsGenreForm(false);
+            return;
+
+        } else if ("edit" === operation) {
+            titleGenreForm.innerText = "Редактирование жанра ";
+            setDisableFieldsGenreForm(false);
+
+        } else if ("show" === operation) {
+            titleGenreForm.innerText = "Просмотр жанра ";
+            setDisableFieldsGenreForm(true);
+        }
+
+        $.get('genres/{genreId}', {"genreId": id, "name": null})
+            .done(function (data) {
+                if (data != null) {
+                    $("#genre-id")[0].value = data.id;
+                    $("#genre-name")[0].value = data.name;
+                }
+            })
+            .fail(function (e) {
+                alert("При загрузке жанра возникла ошибка: " + e.responseJSON.message);
+            });
+    }
+
+    function clearGenreForm() {
+        $("#genre-id")[0].value = null;
+        $("#genre-name")[0].value = null;
+    }
+
+    function setDisableFieldsGenreForm(isShowForm) {
+        $("#genre-name")[0].disabled = isShowForm;
+        $("#buttonSaveGenre")[0].hidden = isShowForm;
+    }
+
+    function deleteGenre(id) {
+        $.ajax({
+            type: "DELETE",
+            url: 'genres/' + id,
+            success: function (result) {
+                alert("Жанр успешно удален");
+                clearGenreForm();
+                findAllGenres();
+            },
+            error: function (e) {
+                alert("Ошибка удаления жанра: " + e.responseJSON.message);
+            }
+        });
+    }
+
+    /*---------------- Работаем со статусами ---------------*/
+
+    function findAllStatuses() {
+        $('#tableStatuses tbody').empty();
+
+        $.get('/statuses').done(function (statuses) {
+            statuses.forEach(function (status) {
+                $('#tableStatuses tbody').append(`
+                    <tr>
+                        <td>${status.name}</td>
+                        <td>
+                            <button type="button" class="refButton" onclick="fillStatusForm('${status.id}', 'show')">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                            </button>
+                            <button type="button" class="refButton" onclick="fillStatusForm('${status.id}', 'edit')">
+                                <span class="glyphicon glyphicon-edit"></span>
+                            </button>
+                            <button type="button" class="refButton" onclick="deleteStatus('${status.id}')">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </td>
+                        <td>
+                            <input type="checkbox" name="statusId" value="${status.id}" disabled>
+                        </td>
+                    </tr>
+                `)
+            });
+        });
+    }
+
+    function addUpdateStatus() {
+
+        var form = $("#formCreateUpdateStatus")[0];
+        var operation = form.mode;
+        var data = new FormData(form);
+        var type = (operation === "add") ? "POST" : "PUT";
+        var url = (operation === "add") ? "statuses" : "statuses/{id}";
+        var msgSuccess = (operation === "add") ? "Статус успешно добавлен" : "Статус успешно обновлен";
+        var msgError = (operation === "add") ? "Ошибка создания статуса" : "Ошибка обновления статуса";
+
+        $.ajax({
+            url: url,
+            type: type,
+            data: data,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (book) {
+                if (book != null) {
+                    alert(msgSuccess);
+                    findAllStatuses();
+                } else {
+                    alert(msgError);
+                }
+            },
+            error: function (e) {
+                alert(msgError + e.toString());
+            }
+        });
+    }
+
+    function fillStatusForm(id, operation) {
+
+        // Очищаем форму
+        clearStatusForm();
+
+        // Задаем режим открытия формы
+        var formCreateUpdateStatus = $("#formCreateUpdateStatus")[0];
+        formCreateUpdateStatus.mode = operation;
+
+        var titleStatusForm = $("#title-status-form")[0];
+        if ("add" === operation) {
+            titleStatusForm.innerText = "Добавление статуса ";
+            setDisableFieldsStatusForm(false);
+            return;
+
+        } else if ("edit" === operation) {
+            titleStatusForm.innerText = "Редактирование статуса ";
+            setDisableFieldsStatusForm(false);
+
+        } else if ("show" === operation) {
+            titleStatusForm.innerText = "Просмотр статуса ";
+            setDisableFieldsStatusForm(true);
+        }
+
+        $.get('statuses/{statusId}', {"statusId": id, "name": null})
+            .done(function (data) {
+                if (data != null) {
+                    $("#status-id")[0].value = data.id;
+                    $("#status-name")[0].value = data.name;
+                }
+            })
+            .fail(function (e) {
+                alert("При загрузке статуса возникла ошибка: " + e.responseJSON.message);
+            });
+    }
+
+    function clearStatusForm() {
+        $("#status-id")[0].value = null;
+        $("#status-name")[0].value = null;
+    }
+
+    function setDisableFieldsStatusForm(isShowForm) {
+        $("#status-name")[0].disabled = isShowForm;
+        $("#buttonSaveStatus")[0].hidden = isShowForm;
+    }
+
+    function deleteStatus(id) {
+        $.ajax({
+            type: "DELETE",
+            url: 'statuses/' + id,
+            success: function (result) {
+                alert("Статус успешно удален");
+                clearStatusForm();
+                findAllStatuses();
+            },
+            error: function (e) {
+                alert("Ошибка удаления статуса: " + e.responseJSON.message);
+            }
+        });
+    }
+
+    /*---------------- Работаем с пользователями ---------------*/
+
+    function findAllUsers() {
+        $('#tableUsers tbody').empty();
+
+        $.get('/users').done(function (users) {
+            users.forEach(function (user) {
+                $('#tableUsers tbody').append(`
+                    <tr>
+                        <td>${user.username}</td>
+                        <td>${user.firstName}</td>
+                        <td>${user.secondName}</td>
+                        <td>${user.thirdName}</td>
+                        <td>
+                            <button type="button" class="refButton" onclick="fillUserForm('${user.username}', 'show')">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                            </button>
+                            <button type="button" class="refButton" onclick="fillUserForm('${user.username}', 'edit')">
+                                <span class="glyphicon glyphicon-edit"></span>
+                            </button>
+                            <button type="button" class="refButton" onclick="deleteUser('${user.username}')">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </td>
+                        <td>
+                            <input type="checkbox" name="userId" value="${user.username}" disabled>
+                        </td>
+                    </tr>
+                `)
+            });
+        });
+    }
+
+    function fillUserForm(username, operation) {
+
+        // Очищаем форму
+        clearUserForm();
+
+        // Задаем режим открытия формы
+        var formCreateUpdateUser = $("#formCreateUpdateUser")[0];
+        formCreateUpdateUser.mode = operation;
+
+        var titleUserForm = $("#title-user-form")[0];
+        if ("add" === operation) {
+            titleUserForm.innerText = "Добавление пользователя ";
+            setDisableFieldsUserForm(false);
+
+        } else if ("edit" === operation) {
+            titleUserForm.innerText = "Редактирование пользователя ";
+            setDisableFieldsUserForm(false);
+
+        } else if ("show" === operation) {
+            titleUserForm.innerText = "Просмотр пользователя ";
+            setDisableFieldsUserForm(true);
+        }
+
+        $.get('users/{param}', {"username": username, "email": null})
+            .done(function (resultList) {
+                if (resultList != null && resultList[0] != null) {
+                    var data = resultList[0];
+                    $("#user-username")[0].value = data.username;
+                    $("#user-password")[0].value = data.password;
+                    $("#user-email")[0].value = data.email;
+                    $("#user-phone")[0].value = data.phone;
+                    $("#user-firstName")[0].value = data.firstName;
+                    $("#user-secondName")[0].value = data.secondName;
+                    $("#user-thirdName")[0].value = data.thirdName;
+                }
+            })
+            .fail(function (e) {
+                alert("При загрузке пользователя возникла ошибка: " + e.responseJSON.message);
+            });
+
+        // Заполняем список ролей
+        fillRolesByUsername(("add" === operation) ? null : username);
+    }
+
+    function setDisableFieldsUserForm(isShowForm) {
+        $("#user-username")[0].disabled = isShowForm;
+        $("#user-password")[0].disabled = isShowForm;
+        $("#user-email")[0].disabled = isShowForm;
+        $("#user-phone")[0].disabled = isShowForm;
+        $("#user-firstName")[0].disabled = isShowForm;
+        $("#user-secondName")[0].disabled = isShowForm;
+        $("#user-thirdName")[0].disabled = isShowForm;
+        $("#user-roles")[0].disabled = isShowForm;
+        $("#buttonSaveUser")[0].hidden = isShowForm;
+    }
+
+    function clearUserForm() {
+        $("#user-username")[0].value = null;
+        $("#user-password")[0].value = null;
+        $("#user-email")[0].value = null;
+        $("#user-phone")[0].value = null;
+        $("#user-firstName")[0].value = null;
+        $("#user-secondName")[0].value = null;
+        $("#user-thirdName")[0].value = null;
+    }
+
+    function deleteUser(username) {
+        $.ajax({
+            type: "DELETE",
+            url: 'users/' + username,
+            success: function (result) {
+                alert("Пользователь успешно удален");
+                clearUserForm();
+                findAllUsers();
+            },
+            error: function (e) {
+                alert("Ошибка удаления пользователя: " + e.responseJSON.message);
+            }
+        });
+    }
+
+    function fillRolesByUsername(username) {
+        var url = '/roles';
+        if (username != null)
+            url = '/roles/{username}';
+
+        $.get(url, {"username": username})
+            .done(function (roles) {
+                if (roles != null) {
+                    var selectFieldRoles = $("#user-roles");
+                    selectFieldRoles.empty();
+                    var roleOptions = selectFieldRoles[0].options;
+                    roles.forEach(function (role) {
+                        roleOptions[roleOptions.length] = new Option(role.description, role.role, true, role.selected);
+                    });
+                }
+            })
+            .fail(function (e) {
+                alert("Ошибка загрузки ролей: " + e.responseJSON.message);
+            });
+    }
+
+    function addUpdateUser() {
+
+        var form = $("#formCreateUpdateUser")[0];
+        var operation = form.mode;
+        var data = new FormData(form);
+        var type = (operation === "add") ? "POST" : "PUT";
+        var url = (operation === "add") ? "users" : "users/{id}";
+        var msgSuccess = (operation === "add") ? "Пользователь успешно добавлен" : "Пользователь успешно обновлен";
+        var msgError = (operation === "add") ? "Ошибка создания пользователя" : "Ошибка обновления пользователя";
+
+        $.ajax({
+            url: url,
+            type: type,
+            data: data,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (book) {
+                if (book != null) {
+                    alert(msgSuccess);
+                    findAllUsers();
+                } else {
+                    alert(msgError);
+                }
+            },
+            error: function (e) {
+                alert(msgError + e.toString());
+            }
+        });
+    }
+
+    /*---------------- Работаем с ролями ---------------*/
+
+    function findAllRoles() {
+        $('#tableRoles tbody').empty();
+
+        $.get('/roles').done(function (roles) {
+            roles.forEach(function (role) {
+                $('#tableRoles tbody').append(`
+                    <tr>
+                        <td>${role.role}</td>
+                        <td>${role.description}</td>
+                          <td>
+                            <button type="button" class="refButton" onclick="fillRoleForm('${role.role}', 'show')">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                            </button>
+                            <button type="button" class="refButton" onclick="fillRoleForm('${role.role}', 'edit')">
+                                <span class="glyphicon glyphicon-edit"></span>
+                            </button>
+                            <button type="button" class="refButton" onclick="deleteRole('${role.role}')">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </td>
+                        <td>
+                            <input type="checkbox" name="roleId" value="${role.role}" disabled>
+                        </td>
+                    </tr>
+                `)
+            });
+        });
+    }
+
+    function fillRoleForm(role, operation) {
+
+        // Очищаем форму
+        clearRoleForm();
+
+        // Задаем режим открытия формы
+        var formCreateUpdateRole = $("#formCreateUpdateRole")[0];
+        formCreateUpdateRole.mode = operation;
+
+        var titleRoleForm = $("#title-role-form")[0];
+        if ("add" === operation) {
+            titleRoleForm.innerText = "Добавление роли ";
+            setDisableFieldsRoleForm(false);
+            return;
+
+        } else if ("edit" === operation) {
+            titleRoleForm.innerText = "Редактирование роли ";
+            setDisableFieldsRoleForm(false);
+
+        } else if ("show" === operation) {
+            titleRoleForm.innerText = "Просмотр роли ";
+            setDisableFieldsRoleForm(true);
+        }
+
+        $.get('roles/{role}', {"role": role, "description": null})
+            .done(function (data) {
+                if (data != null) {
+                    $("#role-role")[0].value = data.role;
+                    $("#role-description")[0].value = data.description;
+                }
+            })
+            .fail(function (e) {
+                alert("При загрузке роли возникла ошибка: " + e.responseJSON.message);
+            });
+    }
+
+    function deleteRole(role) {
+        $.ajax({
+            type: "DELETE",
+            url: 'roles/' + role,
+            success: function (result) {
+                alert("Роль успешно удалена");
+                clearRoleForm();
+                findAllRoles();
+            },
+            error: function (e) {
+                alert("Ошибка удаления роли: " + e.responseJSON.message);
+            }
+        });
+    }
+
+    function clearRoleForm() {
+        $("#role-role")[0].value = null;
+        $("#role-description")[0].value = null;
+    }
+
+    function setDisableFieldsRoleForm(isShowForm) {
+        $("#role-role")[0].disabled = isShowForm;
+        $("#role-description")[0].disabled = isShowForm;
+        $("#buttonSaveRole")[0].hidden = isShowForm;
+    }
+
+
+    function addUpdateRole() {
+
+        var form = $("#formCreateUpdateRole")[0];
+        var operation = form.mode;
+        var data = new FormData(form);
+        var type = (operation === "add") ? "POST" : "PUT";
+        var url = (operation === "add") ? "roles" : "roles/{role}";
+        var msgSuccess = (operation === "add") ? "Роль успешно добавлена" : "Роль успешно обновлена";
+        var msgError = (operation === "add") ? "Ошибка создания роли" : "Ошибка обновления роли";
+
+        $.ajax({
+            url: url,
+            type: type,
+            data: data,
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (book) {
+                if (book != null) {
+                    alert(msgSuccess);
+                    findAllRoles();
+                } else {
+                    alert(msgError);
+                }
+            },
+            error: function (e) {
+                alert(msgError + e.toString());
+            }
+        });
+    }
+
+</script>
+
+</body>
+</html>
