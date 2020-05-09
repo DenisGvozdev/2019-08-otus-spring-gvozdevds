@@ -1,0 +1,23 @@
+version: "3"
+services:
+  web:
+    build: src
+    ports:
+      - "8080:8080"
+    links:
+      - postgres
+    depends_on:
+      - postgres
+    environment:
+      - DB_URL=jdbc:postgresql://postgres:5432/shopdb
+      - DB_LOGIN=postgres
+      - DB_PASSWORD=123456
+
+  postgres:
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123456
+      - POSTGRES_DB=shopdb
+    ports:
+      - "5432:5432"
