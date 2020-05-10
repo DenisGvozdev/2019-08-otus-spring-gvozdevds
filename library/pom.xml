@@ -12,6 +12,8 @@
         <version>2.2.2.RELEASE</version>
     </parent>
 
+    <packaging>jar</packaging>
+
     <properties>
         <java.version>1.8</java.version>
         <downloadSources>true</downloadSources>
