@@ -1,4 +1,4 @@
-version: "3"
+version: "2"
 services:
   file-rest-api:
     image: file-rest-api
@@ -7,15 +7,11 @@ services:
       context: .
       dockerfile: file-server/Dockerfile
     networks:
-      - my-network
+      - myapp
+    depends_on:
+      - mongo
     ports:
       - "8181:8080"
-    #links:
-    #  - mongo
-    #environment:
-    #  database: mydb
-    #  port: 27017
-    #  uri: mongodb://mongo:27017/mydb
   library:
     image: library
     container_name: "library"
@@ -23,27 +19,18 @@ services:
       context: .
       dockerfile: library/Dockerfile
     networks:
-      - my-network
+      - myapp
+    depends_on:
+      - mongo
     ports:
       - "8182:8080"
-    #links:
-    #  - mongo
-    #environment:
-    #  database: mydb
-    #  port: 27017
-    #  uri: mongodb://mongo:27017/mydb
   mongo:
     image: mongo:4.0.4
-    container_name: "mongodb"
+    container_name: "mongo"
     ports:
-      - "27018:27017"
-    #environment:
-    #  database: mydb
-    #  port: 27017
-    #  uri: mongodb://127.0.0.1:27017
-    volumes:
-      - my_dbdata:/data/db
+      - '27018:27017'
+    networks:
+      - myapp
 networks:
-  my-network: {}
-volumes:
-  my_dbdata:
+  myapp:
+    driver: bridge
