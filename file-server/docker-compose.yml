@@ -1,23 +1,27 @@
 version: "3"
 services:
-  web:
-    build: src
+  api:
+    image: api
     ports:
-      - "8080:8080"
+      - "8081:8080"
+    build: .
     links:
-      - postgres
+      - mdb
     depends_on:
-      - postgres
-    environment:
-      - DB_URL=jdbc:postgresql://postgres:5432/shopdb
-      - DB_LOGIN=postgres
-      - DB_PASSWORD=123456
+      - mdb
+    #environment:
+    #  - NODE_ENV=development
+    #  - FOO=bar
+    #entrypoint: "java -Djava.security.egd=file:/dev/./urandom -jar /app.jar"
 
-  postgres:
-    image: postgres
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=123456
-      - POSTGRES_DB=shopdb
+  mdb:
+    image: mdb
+    container_name: "mdb"
     ports:
-      - "5432:5432"
+      - "27018:27018"
+    command: --smallfiles
+    environment:
+      - MONGOCLIENT_DEFAULT_CONNECTION_URL=mongodb://mongo:27018
+    #volumes:
+    #  - ./data/db:/data/db
+    #command: mongod --smallfiles --logpath=/dev/null

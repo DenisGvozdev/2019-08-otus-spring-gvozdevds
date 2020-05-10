@@ -12,7 +12,7 @@ COPY ./pom.xml $PROJECT_DIR
 
 WORKDIR $PROJECT_DIR
 
-RUN mvn install
+RUN mvn clean install -DskipTests=true
 
 #------------
 FROM maven:3.5.4-jdk-8
@@ -20,9 +20,9 @@ ENV PROJECT_DIR=/usr/src/app
 
 RUN mkdir -p $PROJECT_DIR
 WORKDIR $PROJECT_DIR
-COPY --from=0 $PROJECT_DIR/target/adapter18* $PROJECT_DIR/
+COPY --from=0 $PROJECT_DIR/target/file-server* $PROJECT_DIR/
 
 #------------
-EXPOSE 8080
+EXPOSE 8081
 
-CMD ["java", "-jar", "/usr/src/app/adapter18-1.0.1.jar"]
+CMD ["java", "-jar", "/usr/src/app/file-server-1.0.1.jar"]
