@@ -4,8 +4,8 @@ spring:
   data:
     mongodb:
       database: libraryFiles
-      port: 27017
-      host: localhost
+      #port: 27017
+      #host: localhost
 #      username: MongoDB
 #      password: root
 #      port: 27017
