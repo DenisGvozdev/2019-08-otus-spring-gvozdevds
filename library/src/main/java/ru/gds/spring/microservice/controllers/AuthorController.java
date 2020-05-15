@@ -2,8 +2,8 @@ package ru.gds.spring.microservice.controllers;
 
 import org.springframework.web.bind.annotation.*;
 import ru.gds.spring.microservice.dto.AuthorDto;
+import ru.gds.spring.microservice.interfaces.AuthorService;
 import ru.gds.spring.microservice.params.ParamsAuthor;
-import ru.gds.spring.microservice.services.AuthorService;
 
 import java.util.List;
 

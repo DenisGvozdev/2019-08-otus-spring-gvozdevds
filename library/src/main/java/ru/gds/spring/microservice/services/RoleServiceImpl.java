@@ -7,6 +7,7 @@ import ru.gds.spring.microservice.domain.Role;
 import ru.gds.spring.microservice.domain.User;
 import ru.gds.spring.microservice.dto.RoleDto;
 import ru.gds.spring.microservice.interfaces.RoleRepository;
+import ru.gds.spring.microservice.interfaces.RoleService;
 import ru.gds.spring.microservice.interfaces.UserRepository;
 import ru.gds.spring.microservice.params.ParamsRole;
 
@@ -15,14 +16,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class RoleService {
+public class RoleServiceImpl implements RoleService {
 
-    private static final Logger logger = Logger.getLogger(StatusService.class);
+    private static final Logger logger = Logger.getLogger(StatusServiceImpl.class);
 
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
 
-    RoleService(RoleRepository roleRepository, UserRepository userRepository) {
+    RoleServiceImpl(RoleRepository roleRepository, UserRepository userRepository) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
     }
@@ -37,7 +38,7 @@ public class RoleService {
         } catch (Exception e) {
             logger.error("Roles not found Error: " + e.getMessage());
         }
-        return new ArrayList<RoleDto>();
+        return new ArrayList<>();
     }
 
     public RoleDto findByRole(String role) {
@@ -57,7 +58,6 @@ public class RoleService {
             List<String> selectedRoles = new ArrayList<>();
             userRoles.forEach((role) -> selectedRoles.add(role.getRole()));
 
-            List<Role> allRoles = roleRepository.findAll();
             return roleRepository
                     .findAll()
                     .stream()

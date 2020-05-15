@@ -3,6 +3,7 @@ package ru.gds.spring.microservice.services;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import ru.gds.spring.microservice.interfaces.UserService;
 import ru.gds.spring.microservice.util.CommonUtils;
 import ru.gds.spring.microservice.domain.Role;
 import ru.gds.spring.microservice.domain.User;
@@ -16,14 +17,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService {
+public class UserServiceImpl implements UserService {
 
-    private static final Logger logger = Logger.getLogger(UserService.class);
+    private static final Logger logger = Logger.getLogger(UserServiceImpl.class);
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
 
-    UserService(UserRepository userRepository, RoleRepository roleRepository) {
+    UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
     }

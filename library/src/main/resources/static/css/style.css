@@ -134,6 +134,17 @@ button.search{
 	color: #9DAFC3;
 }
 
+.object-button-save {
+	transition-duration: 0.4s;
+	background-color: #F0F0F0;
+	margin: 10px 10px 0px 0px;
+	float: right;
+}
+
+.object-button-save:hover {
+	color: #9DAFC3;
+}
+
 .all-books-button {
 	background: none;
 	border: 0px !important;
@@ -151,9 +162,44 @@ button.search{
 	border: 0px !important;
 	outline:none!important;
 	color: grey;
-	margin-top: 8px;
+	margin-top: 0px;
 }
 
 .refButton:hover {
 	color: #2a29c3;
+}
+
+.divRefA {
+	background: none;
+	border: 0px !important;
+	outline:none!important;
+	color: grey;
+	margin: 0px 0px 0px 0px;
+	margin: 0px 0px 0px 0px;
+}
+
+.divRefA:hover {
+	color: #2a29c3;
+}
+
+.modal-button-save {
+	transition-duration: 0.4s;
+	background-color: #F0F0F0;
+	margin: 30px 10px 0px 0px;
+	float: right;
+}
+
+.modal-button-save:hover {
+	color: #9DAFC3;
+}
+
+.modal-button-close {
+	transition-duration: 0.4s;
+	background-color: #F0F0F0;
+	margin: 0px 10px 0px 0px;
+	float: right;
+}
+
+.modal-button-save:hover {
+	color: #9DAFC3;
 }

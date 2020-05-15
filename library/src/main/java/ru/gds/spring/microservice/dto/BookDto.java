@@ -24,6 +24,7 @@ public class BookDto {
     private List<StatusDto> statuses;
     private List<GenreDto> genres;
     private List<AuthorDto> authors;
+    private boolean write;
 
     public BookDto(){}
 
@@ -47,7 +48,7 @@ public class BookDto {
         return createDate;
     }
 
-    public void setCreateDate(Date createDate) {
+    private void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
 
@@ -71,7 +72,7 @@ public class BookDto {
         return imageString;
     }
 
-    public void setImageString(String imageString) {
+    private void setImageString(String imageString) {
         this.imageString = imageString;
     }
 
@@ -79,7 +80,7 @@ public class BookDto {
         return imageExtension;
     }
 
-    public void setImageExtension(String imageExtension) {
+    private void setImageExtension(String imageExtension) {
         this.imageExtension = imageExtension;
     }
 
@@ -107,7 +108,15 @@ public class BookDto {
         this.authors = authors;
     }
 
-    public static BookDto toDtoLight(Book book) {
+    public boolean isWrite() {
+        return write;
+    }
+
+    public void setWrite(boolean write) {
+        this.write = write;
+    }
+
+    public static BookDto toDtoLight(Book book, boolean write) {
         if (book == null)
             return new BookDto();
 
@@ -116,13 +125,8 @@ public class BookDto {
         bookDto.setName(book.getName());
         bookDto.setCreateDate(book.getCreateDate());
         bookDto.setDescription(book.getDescription());
+        bookDto.setWrite(write);
         return bookDto;
-    }
-
-    public static List<BookDto> toListDto(Book book) {
-        List<BookDto> list = new ArrayList<BookDto>();
-        list.add(toDtoLight(book));
-        return list;
     }
 
     public static BookDto toDto(Book book, List<Author> authors, List<Genre> genres, List<Status> statuses) {

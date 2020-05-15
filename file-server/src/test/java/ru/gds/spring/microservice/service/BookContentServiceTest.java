@@ -7,6 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.web.multipart.MultipartFile;
 import ru.gds.spring.microservice.dto.BookContentDto;
+import ru.gds.spring.microservice.interfaces.BookContentService;
 import ru.gds.spring.microservice.params.ParamsBookContent;
 import ru.gds.spring.microservice.util.FileUtils;
 
@@ -21,13 +22,15 @@ class BookContentServiceTest {
 
     @Test
     void insertBookTest() {
-        BookContentDto bookContentDto = saveBookContent("2", "Черное копье 2", getFile());
+        BookContentDto bookContentDto = saveBookContent(
+                "2", "Черное копье 2", getFileImage(), getFileText());
         assumeTrue(bookContentDto.getBookId() != null);
     }
 
     @Test
     void findFileByBookIdTest() {
-        BookContentDto bookContentDto = saveBookContent("3", "Черное копье 3", getFile());
+        BookContentDto bookContentDto = saveBookContent(
+                "3", "Черное копье 3", getFileImage(), getFileText());
         assumeTrue(bookContentDto.getBookId() != null);
 
         FileSystemResource file = bookContentService.findFileByBookId(bookContentDto.getBookId());
@@ -45,12 +48,16 @@ class BookContentServiceTest {
         assumeTrue(bookContentDto.getBookId() == null);
     }
 
-    private BookContentDto saveBookContent(String bookId, String bookName, MultipartFile file) {
+    private BookContentDto saveBookContent(String bookId, String bookName, MultipartFile image, MultipartFile text) {
         return bookContentService.save(
-                new ParamsBookContent(bookId, bookName, 1, 50, file));
+                new ParamsBookContent(bookId, bookName, 1, 50, image, text));
     }
 
-    private MultipartFile getFile() {
+    private MultipartFile getFileImage() {
+        return FileUtils.getMultipartFile("classpath:files/NicPerumov_ChernoeKopye.jpg");
+    }
+
+    private MultipartFile getFileText() {
         return FileUtils.getMultipartFile("classpath:files/NickPerumovChernoeKopye.txt");
     }
 }

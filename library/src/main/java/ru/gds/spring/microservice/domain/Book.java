@@ -42,9 +42,9 @@ public class Book {
         this.createDate = createDate;
         this.description = description;
         this.image = (image != null) ? image : new byte[]{};
-        this.genres = (genres == null) ? new ArrayList<Genre>() : genres;
+        this.genres = (genres == null) ? new ArrayList<>() : genres;
         this.status = status;
-        this.authors = (authors == null) ? new ArrayList<Author>() : authors;
+        this.authors = (authors == null) ? new ArrayList<>() : authors;
     }
 
     public String getId() {

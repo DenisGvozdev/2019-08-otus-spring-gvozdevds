@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 public class MongoProps {
     private int port;
     private String database;
+    private String host;
     private String uri;
 
     public int getPort() {
@@ -26,6 +27,14 @@ public class MongoProps {
 
     public void setDatabase(String database) {
         this.database = database;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
     }
 
     public String getUri() {

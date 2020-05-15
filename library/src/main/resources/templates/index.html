@@ -7,6 +7,7 @@
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/bootstrap.js"></script>
     <script type="text/javascript" src="js/swfobject.js"></script>
+    <script type="text/javascript" src="download/download.js"></script>
 
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/bootstrap-responsive.css">
@@ -15,7 +16,6 @@
     <link rel="stylesheet" href="css/bootstrap-select.css"/>
     <link rel="stylesheet" href="css/bootstrap-select.min.css">
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
-<!--    <link href="css/bootstrap-glyphicons.css" rel="stylesheet">-->
 
     <link rel="stylesheet" type="text/css" href="css/jquery.datetimepicker.css"/>
     <script src="js/jquery.datetimepicker.full.min.js"></script>
@@ -29,8 +29,9 @@
     <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu"
         style="display:block; position:static; margin-bottom:5px;">
         <li><a tabindex="-1" href="#" onclick="showBookForm(this, 'show')">Просмотр</a></li>
-        <li><a tabindex="-1" href="#" onclick="showBookForm(this, 'edit')">Редактировать</a></li>
-        <li><a tabindex="-1" href="#" onclick="deleteBook(this)">Удалить</a></li>
+        <li id="contextEditBook" hidden><a tabindex="-1" href="#" onclick="showBookForm(this, 'edit')">Редактировать</a>
+        </li>
+        <li id="contextDeleteBook" hidden><a tabindex="-1" href="#" onclick="deleteBook(this)">Удалить</a></li>
     </ul>
 </div>
 
@@ -65,8 +66,16 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="file" class="labelInput">Обложка</label>
-                            <input id="file" name="file" type="file" onchange="readURL(this)" class="inputText"
+                            <label for="fileTitle" class="labelInput">Обложка</label>
+                            <input id="fileTitle" name="fileTitle" type="file" onchange="readTitleURL(this)"
+                                   class="inputText"
+                                   value=""/>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="fileContent" class="labelInput">Содержимое</label>
+                            <input id="fileContent" name="fileContent" type="file" onchange="readContentURL(this)"
+                                   class="inputText"
                                    value=""/>
                         </div>
 
@@ -95,8 +104,11 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <input id="buttonSaveBook" type="button" value="Сохранить" class="inputButtonSave" onclick="">
-                <input type="button" value="Закрыть" class="btn btn-default" data-dismiss="modal">
+                <input id="buttonSaveBook" type="button" value="Сохранить" class="modal-button-save"
+                       onclick="addBook()">
+                <input id="buttonUpdateBook" type="button" value="Обновить" class="modal-button-save"
+                       onclick="updateBook()">
+                <input type="button" value="Закрыть" class="modal-button-close" data-dismiss="modal">
             </div>
         </form>
     </div>
@@ -104,9 +116,7 @@
 
 <div class="main">
 
-    <!--    <div class="navbar navbar-inverse navbar-custom">-->
-    <div class="navbar navbar-custom-main ">
-        <!--        <div class="navbar-inner">-->
+    <div class="navbar navbar-custom-main">
         <div class="navbar-custom">
             <a class="brand" href="/">Моя библиотека</a>
             <ul class="nav nav-pills">
@@ -164,7 +174,8 @@
                             <th id="thBookName">Название</th>
                             <th id="thBookDescription">Описание</th>
                             <th id="bookCrudButtons">
-                                <button type="button" class="refButton" onclick="showBookForm({bookId: null}, 'add')">
+                                <button id="buttonAddBook" type="button" class="refButton"
+                                        onclick="showBookForm({bookId: null}, 'add')" hidden>
                                     <span class="glyphicon glyphicon-plus"></span>
                                     <span><strong>Добавить</strong></span>
                                 </button>
@@ -184,7 +195,7 @@
                         <thead>
                         <tr>
                             <th id="authorFIO">ФИО</th>
-                            <th id="authorBirthDate">Дата рождения</th>
+                            <!--th id="authorBirthDate">Дата рождения</th-->
                             <th id="authorCrudButtons">
                                 <button type="button" class="refButton" onclick="fillAuthorForm(null, 'add')">
                                     <span class="glyphicon glyphicon-plus"></span>
@@ -221,7 +232,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="author-birth-date" class="labelInput">Дата рождения</label>
-                                <input id="author-birth-date" name="birthDate" type="text" >
+                                <input id="author-birth-date" name="birthDate" type="text">
                             </div>
                         </div>
                         <div class="form-group">
@@ -451,14 +462,14 @@
             var isAddForm = ("add" === mode);
 
             if (isShowForm || isEditForm) {
-                setButtonClickEvents("formCreateUpdateBook", isEditForm, isAddForm);
+                setButtonClickEvents("formCreateUpdateBook", isEditForm, isShowForm, isAddForm);
                 fillMainFields(bookId, isEditForm, isAddForm, isShowForm);
                 fillAuthors(bookId);
                 fillGenres(bookId);
                 fillStatuses(bookId);
                 setDisableFields(isShowForm);
             } else {
-                setButtonClickEvents("formCreateUpdateBook", isEditForm, isAddForm);
+                setButtonClickEvents("formCreateUpdateBook", isEditForm, isShowForm, isAddForm);
                 fillMainFields(null, isEditForm, isAddForm, isShowForm);
                 fillAuthors(null);
                 fillGenres(null);
@@ -470,11 +481,11 @@
     $(function () {
         var $contextMenu = $("#contextMenu");
 
-        $("tbody").on("click", "tr", function () {
+        $("#tableBooks tbody").on("click", "tr", function () {
             selectUnselectRowBookCheckBox(this);
         });
 
-        $("body").on("contextmenu", "table tr", function (e) {
+        $("body").on("contextmenu", "#tableBooks tr", function (e) {
             $contextMenu.css({
                 display: "block",
                 left: e.pageX,
@@ -507,30 +518,41 @@
         jQuery.datetimepicker.setLocale('ru');
 
         jQuery('#author-birth-date').datetimepicker({
-            i18n:{
-                de:{
-                    months:[
-                        'Январь','Февраль','Март','Апрель',
-                        'Май','Июнь','Июль','Август',
-                        'Сентябрь','Октябрь','Ноябрь','Декабрь',
+            i18n: {
+                de: {
+                    months: [
+                        'Январь', 'Февраль', 'Март', 'Апрель',
+                        'Май', 'Июнь', 'Июль', 'Август',
+                        'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь',
                     ],
-                    dayOfWeek:[
+                    dayOfWeek: [
                         "Вс.", "Пн", "Вт", "Ср",
                         "Чт", "Пт", "Сб.",
                     ]
                 }
             },
-            timepicker:false,
-            format:'d.m.Y'
+            timepicker: false,
+            format: 'd.m.Y'
         });
     });
 
-    function readURL(input) {
+    function readTitleURL(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
             reader.onload = function (e) {
                 $('#imagePreview')
                     .attr('src', e.target.result);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function readContentURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                //$('#imagePreview')
+                //    .attr('src', e.target.result);
             };
             reader.readAsDataURL(input.files[0]);
         }
@@ -551,8 +573,8 @@
                 return;
 
             var username = user.username;
-            $("#helloUser")[0].innerText = ("Авторизация" === username) ? username : "Здравствуйте " + username;
-            $("#exitUser")[0].hidden = ("Авторизация" === username);
+            $("#helloUser")[0].innerText = ("Вход" === username) ? username : "Здравствуйте " + username;
+            $("#exitUser")[0].hidden = ("Вход" === username);
 
             var roles = user.roles;
             if (roles == null)
@@ -573,6 +595,12 @@
 
                 if ("ROLE_ADMINISTRATION" === role.role || "ROLE_USERS_WRITE" === role.role)
                     $("#li-tab-users")[0].hidden = false;
+
+                if ("ROLE_ADMINISTRATION" === role.role || "ROLE_BOOKS_WRITE" === role.role) {
+                    $("#buttonAddBook")[0].hidden = false;
+                    $("#contextDeleteBook")[0].hidden = false;
+                    $("#contextEditBook")[0].hidden = false;
+                }
             });
         });
     }
@@ -582,6 +610,10 @@
     $('.tableBooks tr').click(function () {
         $(this).toggleClass("clicked");
     });
+
+    function downloadBook(id) {
+        downloadFile('/content/bookId?bookId=' + id);
+    }
 
     function showBookForm(element, operation) {
 
@@ -597,16 +629,18 @@
         $("#myModal").modal();
     }
 
-    function setButtonClickEvents(idForm, isEditForm, isAddForm) {
-        var buttonSaveBook = $("#buttonSaveBook");
+    function setButtonClickEvents(idForm, isEditForm, isShowForm, isAddForm) {
+        var buttonSaveBook = document.getElementById('buttonSaveBook');
+        var buttonUpdateBook = document.getElementById('buttonUpdateBook');
         if (isEditForm) {
-            buttonSaveBook.click(function () {
-                updateBook(idForm);
-            });
+            buttonSaveBook.setAttribute('class', 'hidden');
+            buttonUpdateBook.setAttribute('class', 'visible');
         } else if (isAddForm) {
-            buttonSaveBook.click(function () {
-                addBook(idForm);
-            });
+            buttonSaveBook.setAttribute('class', 'visible');
+            buttonUpdateBook.setAttribute('class', 'hidden');
+        } else if (isShowForm) {
+            buttonSaveBook.setAttribute('class', 'hidden');
+            buttonUpdateBook.setAttribute('class', 'hidden');
         }
     }
 
@@ -735,28 +769,9 @@
     function findAllBooks() {
         $('#tableBooks tbody').empty();
 
-        $.get('/books').done(function (persons) {
-            persons.forEach(function (books) {
-                $('#tableBooks tbody').append(`
-                    <tr>
-                        <td>${books.name}</td>
-                        <td>${books.description}</td>
-                        <td>
-                            <button type="button" class="refButton" onclick="showBookForm({bookId: '${books.id}'}, 'show')">
-                                <span class="glyphicon glyphicon-eye-open"></span>
-                            </button>
-                            <button type="button" class="refButton" onclick="showBookForm({bookId: '${books.id}'}, 'edit')">
-                                <span class="glyphicon glyphicon-edit"></span>
-                            </button>
-                            <button type="button" class="refButton" onclick="deleteBook({bookId: '${books.id}'})">
-                                <span class="glyphicon glyphicon-remove"></span>
-                            </button>
-                        </td>
-                        <td>
-                            <input type="checkbox" name="bookId" value="${books.id}" disabled>
-                        </td>
-                    </tr>
-                `)
+        $.get('/books').done(function (books) {
+            books.forEach(function (book) {
+                addTableBooksRow(book);
             });
         });
     }
@@ -772,15 +787,7 @@
 
                 } else {
                     data.forEach(function (book) {
-                        $('#tableBooks tbody').append(`
-                                    <tr>
-                                        <td>${book.name}</td>
-                                        <td>${book.description}</td>
-                                        <td>
-                                            <input type="checkbox" name="bookId" value="${book.id}" disabled>
-                                        </td>
-                                    </tr>
-                                `)
+                        addTableBooksRow(book)
                     });
                 }
             })
@@ -789,7 +796,41 @@
             })
     }
 
-    function addBook(formId) {
+    function addTableBooksRow(book) {
+
+        var display = (book.write) ? 'true' : 'none';
+
+        $('#tableBooks tbody').append(`
+           <tr>
+               <td>${book.name}</td>
+               <td>${book.description}</td>
+               <td>
+                   <a href="/content?bookId=${book.id}&pageStart=1&countPages=1000"  class="refButton" title="Читать" target="_blank">
+                       <span class="glyphicon glyphicon-book"></span>
+                   </a>
+                   <button type="button" class="refButton" title="Скачать" onclick="downloadBook('${book.id}')">
+                       <span class="glyphicon glyphicon-download-alt"></span>
+                   </button>
+                   <button type="button" class="refButton" title="Просмотр" onclick="showBookForm({bookId: '${book.id}'}, 'show')">
+                       <span class="glyphicon glyphicon-eye-open"></span>
+                   </button>
+                   <button type="button" class="refButton" title="Редактировать"
+                       onclick="showBookForm({bookId: '${book.id}'}, 'edit')" style="display: ${display}">
+                       <span class="glyphicon glyphicon-edit"></span>
+                   </button>
+                   <button type="button" class="refButton" title="Удалить"
+                       onclick="deleteBook({bookId: '${book.id}'})" style="display: ${display}">
+                       <span class="glyphicon glyphicon-remove"></span>
+                   </button>
+               </td>
+               <td>
+                   <input type="checkbox" name="bookId" value="${book.id}" hidden>
+               </td>
+           </tr>
+        `)
+    }
+
+    function addBook() {
         var form = $("#formCreateUpdateBook")[0];
         var data = new FormData(form);
 
@@ -802,22 +843,24 @@
             contentType: false,
             cache: false,
             success: function (book) {
+                $("#myModal").modal('hide');
                 if (book != null) {
-                    $("#myModal").modal('hide');
                     alert("Книга успешно добавлена");
-                    findAllBooks();
                 } else {
                     alert("Ошибка создания книги");
                 }
+                findAllBooks();
             },
             error: function (e) {
+                $("#myModal").modal('hide');
                 alert("Ошибка создания книги: " + e.toString());
+                findAllBooks();
             }
         });
     }
 
-    function updateBook(formId) {
-        var form = $("#" + formId)[0];
+    function updateBook() {
+        var form = $("#formCreateUpdateBook")[0];
         var data = new FormData(form);
         $.ajax({
             url: "books/{id}",
@@ -828,16 +871,18 @@
             contentType: false,
             cache: false,
             success: function (book) {
+                $("#myModal").modal('hide');
                 if (book != null) {
-                    $("#myModal").modal('hide');
                     alert("Книга успешно обновлена");
-                    findAllBooks();
                 } else {
                     alert("Ошибка обновления книги");
                 }
+                findAllBooks();
             },
             error: function (e) {
+                $("#myModal").modal('hide');
                 alert("Ошибка обновления книги: " + e.toString());
+                findAllBooks();
             }
         });
     }
@@ -867,20 +912,20 @@
                 $('#tableAuthors tbody').append(`
                     <tr>
                         <td>${author.fio}</td>
-                        <td>${author.birthDateString}</td>
+                        <!--td>${author.birthDateString}</td-->
                         <td>
-                            <button type="button" class="refButton" onclick="fillAuthorForm('${author.id}', 'show')">
+                            <button type="button" class="refButton" title="Просмотр" onclick="fillAuthorForm('${author.id}', 'show')">
                                 <span class="glyphicon glyphicon-eye-open"></span>
                             </button>
-                            <button type="button" class="refButton" onclick="fillAuthorForm('${author.id}', 'edit')">
+                            <button type="button" class="refButton" title="Редактировать" onclick="fillAuthorForm('${author.id}', 'edit')">
                                 <span class="glyphicon glyphicon-edit"></span>
                             </button>
-                            <button type="button" class="refButton" onclick="deleteAuthor('${author.id}')">
+                            <button type="button" class="refButton" title="Удалить" onclick="deleteAuthor('${author.id}')">
                                 <span class="glyphicon glyphicon-remove"></span>
                             </button>
                         </td>
                         <td>
-                            <input type="checkbox" name="authorId" value="${author.id}" disabled>
+                            <input type="checkbox" name="authorId" value="${author.id}" hidden>
                         </td>
                     </tr>
                 `)
@@ -1001,18 +1046,18 @@
                     <tr>
                         <td>${genre.name}</td>
                         <td>
-                            <button type="button" class="refButton" onclick="fillGenreForm('${genre.id}', 'show')">
+                            <button type="button" class="refButton" title="Просмотр" onclick="fillGenreForm('${genre.id}', 'show')">
                                 <span class="glyphicon glyphicon-eye-open"></span>
                             </button>
-                            <button type="button" class="refButton" onclick="fillGenreForm('${genre.id}', 'edit')">
+                            <button type="button" class="refButton" title="Редактировать" onclick="fillGenreForm('${genre.id}', 'edit')">
                                 <span class="glyphicon glyphicon-edit"></span>
                             </button>
-                            <button type="button" class="refButton" onclick="deleteGenre('${genre.id}')">
+                            <button type="button" class="refButton" title="Удалить" onclick="deleteGenre('${genre.id}')">
                                 <span class="glyphicon glyphicon-remove"></span>
                             </button>
                         </td>
                         <td>
-                            <input type="checkbox" name="genreId" value="${genre.id}" disabled>
+                            <input type="checkbox" name="genreId" value="${genre.id}" hidden>
                         </td>
                     </tr>
                 `)
@@ -1124,18 +1169,18 @@
                     <tr>
                         <td>${status.name}</td>
                         <td>
-                            <button type="button" class="refButton" onclick="fillStatusForm('${status.id}', 'show')">
+                            <button type="button" class="refButton" title="Просмотр" onclick="fillStatusForm('${status.id}', 'show')">
                                 <span class="glyphicon glyphicon-eye-open"></span>
                             </button>
-                            <button type="button" class="refButton" onclick="fillStatusForm('${status.id}', 'edit')">
+                            <button type="button" class="refButton" title="Редактировать" onclick="fillStatusForm('${status.id}', 'edit')">
                                 <span class="glyphicon glyphicon-edit"></span>
                             </button>
-                            <button type="button" class="refButton" onclick="deleteStatus('${status.id}')">
+                            <button type="button" class="refButton" title="Удалить" onclick="deleteStatus('${status.id}')">
                                 <span class="glyphicon glyphicon-remove"></span>
                             </button>
                         </td>
                         <td>
-                            <input type="checkbox" name="statusId" value="${status.id}" disabled>
+                            <input type="checkbox" name="statusId" value="${status.id}" hidden>
                         </td>
                     </tr>
                 `)
@@ -1250,18 +1295,18 @@
                         <td>${user.secondName}</td>
                         <td>${user.thirdName}</td>
                         <td>
-                            <button type="button" class="refButton" onclick="fillUserForm('${user.username}', 'show')">
+                            <button type="button" class="refButton" title="Просмотр" onclick="fillUserForm('${user.username}', 'show')">
                                 <span class="glyphicon glyphicon-eye-open"></span>
                             </button>
-                            <button type="button" class="refButton" onclick="fillUserForm('${user.username}', 'edit')">
+                            <button type="button" class="refButton" title="Редактировать" onclick="fillUserForm('${user.username}', 'edit')">
                                 <span class="glyphicon glyphicon-edit"></span>
                             </button>
-                            <button type="button" class="refButton" onclick="deleteUser('${user.username}')">
+                            <button type="button" class="refButton" title="Удалить" onclick="deleteUser('${user.username}')">
                                 <span class="glyphicon glyphicon-remove"></span>
                             </button>
                         </td>
                         <td>
-                            <input type="checkbox" name="userId" value="${user.username}" disabled>
+                            <input type="checkbox" name="userId" value="${user.username}" hidden>
                         </td>
                     </tr>
                 `)
@@ -1415,18 +1460,18 @@
                         <td>${role.role}</td>
                         <td>${role.description}</td>
                           <td>
-                            <button type="button" class="refButton" onclick="fillRoleForm('${role.role}', 'show')">
+                            <button type="button" class="refButton" title="Просмотр" onclick="fillRoleForm('${role.role}', 'show')">
                                 <span class="glyphicon glyphicon-eye-open"></span>
                             </button>
-                            <button type="button" class="refButton" onclick="fillRoleForm('${role.role}', 'edit')">
+                            <button type="button" class="refButton" title="Редактировать" onclick="fillRoleForm('${role.role}', 'edit')">
                                 <span class="glyphicon glyphicon-edit"></span>
                             </button>
-                            <button type="button" class="refButton" onclick="deleteRole('${role.role}')">
+                            <button type="button" class="refButton" title="Удалить" onclick="deleteRole('${role.role}')">
                                 <span class="glyphicon glyphicon-remove"></span>
                             </button>
                         </td>
                         <td>
-                            <input type="checkbox" name="roleId" value="${role.role}" disabled>
+                            <input type="checkbox" name="roleId" value="${role.role}" hidden>
                         </td>
                     </tr>
                 `)

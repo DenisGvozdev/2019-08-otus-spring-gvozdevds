@@ -1,6 +1,7 @@
 package ru.gds.spring.microservice.util;
 
 import org.apache.log4j.Logger;
+import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
@@ -20,9 +21,8 @@ public class FileUtils {
 
     private static final int COUNT_WORDS_ON_PAGE = 200;
 
-    private static File getFileFromByteArray(String filePath) {
+    private static File getFileByFilePath(String filePath) {
         logger.debug("start getFile: " + filePath);
-
         try {
             File file = new File(filePath);
             if (!file.exists()) {
@@ -36,6 +36,17 @@ public class FileUtils {
         } catch (Exception e) {
             logger.error("file not found: " + filePath);
             return null;
+        }
+    }
+
+    public static byte[] getByteArrayByFilePath(String filePath) {
+        try {
+            File file = getFileByFilePath(filePath);
+            return convertFileToByteArray(file);
+
+        } catch (Exception e) {
+            logger.error("file not found error: " + Arrays.asList(e.getStackTrace()));
+            return "".getBytes();
         }
     }
 
@@ -100,7 +111,8 @@ public class FileUtils {
         try {
             Path path = Paths.get(directory + name);
             Files.write(path, bytes);
-            return getFileFromByteArray(directory + name);
+            logger.debug("File " + directory + name + " success saved");
+            return getFileByFilePath(directory + name);
 
         } catch (Exception e) {
             logger.error("saveFile error: " + Arrays.asList(e.getStackTrace()));
@@ -118,5 +130,35 @@ public class FileUtils {
             logger.error("getMultipartFile error: " + Arrays.asList(e.getStackTrace()));
         }
         return null;
+    }
+
+    public static byte[] convertFileToByteArray(File file) {
+        FileInputStream fileInputStream = null;
+        byte[] bytesArray = null;
+        try {
+            if (file == null) {
+                throw new Exception("file is null");
+            }
+
+            logger.debug("convert file: " + file.getAbsolutePath());
+            bytesArray = new byte[(int) file.length()];
+            fileInputStream = new FileInputStream(file);
+            fileInputStream.read(bytesArray);
+
+        } catch (Exception e) {
+            logger.error("file not found: " + Arrays.asList(e.getStackTrace()));
+            e.printStackTrace();
+
+        } finally {
+            if (fileInputStream != null) {
+                try {
+                    fileInputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return bytesArray;
     }
 }

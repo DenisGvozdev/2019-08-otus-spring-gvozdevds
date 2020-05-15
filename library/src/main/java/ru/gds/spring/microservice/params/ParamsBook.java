@@ -11,17 +11,19 @@ public class ParamsBook {
     private String id;
     private String name;
     private String description;
-    private MultipartFile file;
+    private MultipartFile fileTitle;
+    private MultipartFile fileContent;
     private String statusId;
     private String genreIds;
     private String authorIds;
 
-    public ParamsBook(String id, String name, String description, MultipartFile file,
-                      String genreIds, String authorIds, String statusId) {
+    public ParamsBook(String id, String name, String description, MultipartFile fileTitle,
+                      MultipartFile fileContent, String genreIds, String authorIds, String statusId) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.file = file;
+        this.fileTitle = fileTitle;
+        this.fileContent = fileContent;
         this.statusId = statusId;
         this.genreIds = genreIds;
         this.authorIds = authorIds;
@@ -51,12 +53,20 @@ public class ParamsBook {
         this.description = description;
     }
 
-    public MultipartFile getFile() {
-        return file;
+    public MultipartFile getFileTitle() {
+        return fileTitle;
     }
 
-    public void setFile(MultipartFile file) {
-        this.file = file;
+    public void setFileTitle(MultipartFile fileTitle) {
+        this.fileTitle = fileTitle;
+    }
+
+    public MultipartFile getFileContent() {
+        return fileContent;
+    }
+
+    public void setFileContent(MultipartFile fileContent) {
+        this.fileContent = fileContent;
     }
 
     public String getStatusId() {

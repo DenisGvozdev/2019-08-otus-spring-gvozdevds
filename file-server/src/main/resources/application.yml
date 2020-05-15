@@ -4,19 +4,23 @@ spring:
   data:
     mongodb:
       database: libraryFiles
+      #username: MongoDB
+      #password: root
       #port: 27017
-      #host: localhost
-#      username: MongoDB
-#      password: root
-#      port: 27017
-#      host: localhost
-#      authentication-database: admin
-#  jmx:
-#    enabled: true
+      #host: 127.0.0.1
+  servlet:
+    multipart:
+      max-file-size: 128MB
+      max-request-size: 128MB
+      enabled: true
+app:
+  #fileDirectory: /opt/project
   fileDirectory: C:\fileStorage\
 
----
 logging:
   level:
     org:
       springframework: info
+
+server:
+  port: 8081

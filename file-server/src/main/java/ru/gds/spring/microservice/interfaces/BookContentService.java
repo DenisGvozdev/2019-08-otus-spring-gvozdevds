@@ -4,9 +4,7 @@ import org.springframework.core.io.FileSystemResource;
 import ru.gds.spring.microservice.dto.BookContentDto;
 import ru.gds.spring.microservice.params.ParamsBookContent;
 
-import java.io.File;
-
-public interface ContentService {
+public interface BookContentService {
 
     BookContentDto getPagesForBook(String bookId, int pageStart, int countPages);
 

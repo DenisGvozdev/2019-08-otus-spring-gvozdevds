@@ -8,6 +8,7 @@ import ru.gds.spring.microservice.domain.Genre;
 import ru.gds.spring.microservice.dto.GenreDto;
 import ru.gds.spring.microservice.interfaces.BookRepository;
 import ru.gds.spring.microservice.interfaces.GenreRepository;
+import ru.gds.spring.microservice.interfaces.GenreService;
 import ru.gds.spring.microservice.params.ParamsGenre;
 
 import java.util.ArrayList;
@@ -16,14 +17,14 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class GenreService {
+public class GenreServiceImpl implements GenreService {
 
-    private static final Logger logger = Logger.getLogger(GenreService.class);
+    private static final Logger logger = Logger.getLogger(GenreServiceImpl.class);
 
     private final GenreRepository genreRepository;
     private final BookRepository bookRepository;
 
-    GenreService(GenreRepository genreRepository, BookRepository bookRepository) {
+    GenreServiceImpl(GenreRepository genreRepository, BookRepository bookRepository) {
         this.genreRepository = genreRepository;
         this.bookRepository = bookRepository;
     }
@@ -38,7 +39,7 @@ public class GenreService {
         } catch (Exception e) {
             logger.error("Genres not found Error: " + e.getMessage());
         }
-        return new ArrayList<GenreDto>();
+        return new ArrayList<>();
     }
 
     public List<GenreDto> findAllByBookId(String bookId) {
@@ -46,7 +47,7 @@ public class GenreService {
             Book book = bookRepository.findById(bookId).orElse(null);
 
             if (book == null)
-                return new ArrayList<GenreDto>();
+                return new ArrayList<>();
 
             List<Genre> genresSelected = book.getGenres();
 
@@ -62,7 +63,7 @@ public class GenreService {
         } catch (Exception e) {
             logger.error("Genres not found by bookId= " + bookId + " Error: " + e.getMessage());
         }
-        return new ArrayList<GenreDto>();
+        return new ArrayList<>();
     }
 
     public List<GenreDto> findAllById(List<String> idList) {
@@ -75,7 +76,7 @@ public class GenreService {
         } catch (Exception e) {
             logger.error("Genres not found Error: " + e.getMessage());
         }
-        return new ArrayList<GenreDto>();
+        return new ArrayList<>();
     }
 
     public GenreDto findById(String id) {

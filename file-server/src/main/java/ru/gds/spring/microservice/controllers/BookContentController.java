@@ -4,14 +4,14 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.web.bind.annotation.*;
 import ru.gds.spring.microservice.dto.BookContentDto;
 import ru.gds.spring.microservice.params.ParamsBookContent;
-import ru.gds.spring.microservice.interfaces.ContentService;
+import ru.gds.spring.microservice.interfaces.BookContentService;
 
 @RestController
 public class BookContentController {
 
-    private final ContentService contentService;
+    private final BookContentService contentService;
 
-    public BookContentController(ContentService contentService) {
+    public BookContentController(BookContentService contentService) {
         this.contentService = contentService;
     }
 

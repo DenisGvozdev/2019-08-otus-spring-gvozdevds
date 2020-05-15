@@ -5,6 +5,8 @@ import com.github.cloudyrock.mongock.ChangeSet;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import ru.gds.spring.microservice.domain.*;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -74,8 +76,11 @@ public class DatabaseChangelog {
         template.save(new Role("ROLE_ADMINISTRATION", "Полные права"));
         template.save(new Role("ROLE_BOOKS_WRITE", "Созлание"));
         template.save(new Role("ROLE_BOOKS_READ", "Чтение"));
+        template.save(new Role("ROLE_AUTHORS_READ", "Чтение авторов"));
         template.save(new Role("ROLE_AUTHORS_WRITE", "Создание авторов"));
+        template.save(new Role("ROLE_GENRES_READ", "Чтение жанров"));
         template.save(new Role("ROLE_GENRES_WRITE", "Создание жанров"));
+        template.save(new Role("ROLE_STATUSES_READ", "Чтение статусов"));
         template.save(new Role("ROLE_STATUSES_WRITE", "Создание статусов"));
         template.save(new Role("ROLE_USERS_WRITE", "Создание пользователей"));
         template.save(new Role("ROLE_ROLES_WRITE", "Создание ролей"));
@@ -84,8 +89,9 @@ public class DatabaseChangelog {
 
     @ChangeSet(order = "007", id = "addUsers", author = "dgvozdev")
     public void insertUsers(MongoTemplate template) {
-        List<Role> rolesAdmin = template.findAll(Role.class);
-        List<Role> rolesUser = template.find(query(where("role").is("ROLE_BOOKS_READ")), Role.class);
+        List<Role> rolesAdmin = template.find(query(where("role").is("ROLE_ADMINISTRATION")), Role.class);
+        List<Role> rolesUser = template.find(query(where("role")
+                .in("ROLE_BOOKS_READ","ROLE_AUTHORS_READ","ROLE_GENRES_READ","ROLE_STATUSES_READ")), Role.class);
         template.save(new User(
                 "admin",
                 "password",

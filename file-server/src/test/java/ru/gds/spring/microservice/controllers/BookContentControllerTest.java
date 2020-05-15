@@ -49,8 +49,12 @@ class BookContentControllerTest {
     @DisplayName("Проверка API: добавления содержимого книги")
     void addBookContentTest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.multipart("/content")
-                .file("file", "Файл".getBytes())
+                .file("fileTitle", "Обложка".getBytes())
+                .file("fileContent", "Содержимое".getBytes())
+                .param("fileTitleName", "картинка")
+                .param("fileContentName", "книга")
                 .param("bookId", "1")
+                .param("bookName", "1")
                 .param("pageStart", "1")
                 .param("countPages", "50"))
                 .andExpect(status().is(200));

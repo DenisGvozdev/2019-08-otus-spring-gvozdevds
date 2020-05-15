@@ -2,8 +2,8 @@ package ru.gds.spring.microservice.controllers;
 
 import org.springframework.web.bind.annotation.*;
 import ru.gds.spring.microservice.dto.RoleDto;
+import ru.gds.spring.microservice.interfaces.RoleService;
 import ru.gds.spring.microservice.params.ParamsRole;
-import ru.gds.spring.microservice.services.RoleService;
 
 import java.util.List;
 

@@ -10,16 +10,19 @@ public class ParamsBookContent {
     private String bookName;
     private int startPage;
     private int countPages;
-    private MultipartFile file;
+    private MultipartFile fileTitle;
+    private MultipartFile fileContent;
 
     public ParamsBookContent(){}
 
-    public ParamsBookContent(String bookId, String bookName, int pageStart, int countPages, MultipartFile file){
+    public ParamsBookContent(String bookId, String bookName, int pageStart, int countPages,
+                             MultipartFile fileTitle, MultipartFile fileContent){
         this.bookId = bookId;
         this.bookName = bookName;
         this.startPage = pageStart;
         this.countPages = countPages;
-        this.file = file;
+        this.fileTitle = fileTitle;
+        this.fileContent = fileContent;
     }
 
     public String getBookId() {
@@ -54,11 +57,19 @@ public class ParamsBookContent {
         this.countPages = countPages;
     }
 
-    public MultipartFile getFile() {
-        return file;
+    public MultipartFile getFileTitle() {
+        return fileTitle;
     }
 
-    public void setFile(MultipartFile file) {
-        this.file = file;
+    public void setFileTitle(MultipartFile fileTitle) {
+        this.fileTitle = fileTitle;
+    }
+
+    public MultipartFile getFileContent() {
+        return fileContent;
+    }
+
+    public void setFileContent(MultipartFile fileContent) {
+        this.fileContent = fileContent;
     }
 }

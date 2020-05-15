@@ -3,20 +3,24 @@ package ru.gds.spring.microservice.services;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 import ru.gds.spring.microservice.dto.BookDto;
+import ru.gds.spring.microservice.dto.UserDto;
 import ru.gds.spring.microservice.params.ParamsBook;
+import ru.gds.spring.microservice.params.ParamsBookContent;
 import ru.gds.spring.microservice.util.CommonUtils;
 import ru.gds.spring.microservice.domain.*;
 import ru.gds.spring.microservice.interfaces.*;
+import ru.gds.spring.microservice.util.FileUtils;
 
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class BookService {
+public class BookServiceImpl implements BookService {
 
-    private static final Logger logger = Logger.getLogger(BookService.class);
+    private static final Logger logger = Logger.getLogger(BookServiceImpl.class);
 
     private final BookRepository bookRepository;
     private final GenreRepository genreRepository;
@@ -27,14 +31,14 @@ public class BookService {
     private final AclClassRepository aclClassRepository;
     private final AclSidRepository aclSidRepository;
 
-    BookService(BookRepository bookRepository,
-                GenreRepository genreRepository,
-                AuthorRepository authorRepository,
-                StatusRepository statusRepository,
-                AclEntryRepository aclEntryRepository,
-                AclObjectIdentityRepository aclObjectIdentityRepository,
-                AclClassRepository aclClassRepository,
-                AclSidRepository aclSidRepository) {
+    BookServiceImpl(BookRepository bookRepository,
+                    GenreRepository genreRepository,
+                    AuthorRepository authorRepository,
+                    StatusRepository statusRepository,
+                    AclEntryRepository aclEntryRepository,
+                    AclObjectIdentityRepository aclObjectIdentityRepository,
+                    AclClassRepository aclClassRepository,
+                    AclSidRepository aclSidRepository) {
 
         this.bookRepository = bookRepository;
         this.genreRepository = genreRepository;
@@ -48,10 +52,14 @@ public class BookService {
 
     public List<BookDto> findAllLight() {
         try {
+            UserDto userDto = CommonUtils.getCurrentUser();
+            boolean write = (UserDto.findRole("ROLE_ADMINISTRATION", userDto.getRoles())
+                    || UserDto.findRole("ROLE_BOOKS_WRITE", userDto.getRoles()));
+
             return bookRepository
                     .findAll()
                     .stream()
-                    .map(BookDto::toDtoLight)
+                    .map(book -> BookDto.toDtoLight(book, write))
                     .collect(Collectors.toList());
         } catch (Exception e) {
             logger.error("Book not found");
@@ -90,7 +98,7 @@ public class BookService {
         } catch (Exception e) {
             logger.error("Book not found");
         }
-        return new ArrayList<BookDto>();
+        return new ArrayList<>();
     }
 
     private List<BookDto> findAllById(String id) {
@@ -114,9 +122,13 @@ public class BookService {
     private List<BookDto> findByNameLight(String name) {
         List<BookDto> bookDtoList = new ArrayList<>();
         try {
+            UserDto userDto = CommonUtils.getCurrentUser();
+            boolean write = (UserDto.findRole("ROLE_ADMINISTRATION", userDto.getRoles())
+                    || UserDto.findRole("ROLE_BOOKS_WRITE", userDto.getRoles()));
+
             bookRepository
                     .findByNameContainingIgnoreCase(name)
-                    .forEach((book) -> bookDtoList.add(BookDto.toDtoLight(book)));
+                    .forEach((book) -> bookDtoList.add(BookDto.toDtoLight(book, write)));
         } catch (Exception e) {
             logger.error("Book not found by name= " + name + ". Error: " + e.getMessage());
         }
@@ -135,7 +147,7 @@ public class BookService {
             List<Author> authors = authorRepository.findAllById(CommonUtils.convertStringToListString(params.getAuthorIds()), null);
 
             Status status = statusRepository.findById(params.getStatusId()).orElse(null);
-            byte[] image = (params.getFile() != null) ? params.getFile().getBytes() : null;
+            byte[] image = (params.getFileTitle() != null) ? params.getFileTitle().getBytes() : null;
 
             checkStatusGenresAuthors(status, genres, authors);
 
@@ -152,7 +164,12 @@ public class BookService {
 
                 book = bookRepository.save(book);
                 //addAclToDataBase(book);
-                return BookDto.toDtoLight(book);
+
+                UserDto userDto = CommonUtils.getCurrentUser();
+                boolean write = (UserDto.findRole("ROLE_ADMINISTRATION", userDto.getRoles())
+                        || UserDto.findRole("ROLE_BOOKS_WRITE", userDto.getRoles()));
+
+                return BookDto.toDtoLight(book, write);
 
             } else {
                 book = bookRepository.findById(params.getId()).orElse(null);
@@ -165,7 +182,12 @@ public class BookService {
                 book.setAuthors(authors);
                 book.setStatus(status);
                 book.setImage((image != null && image.length > 0) ? image : book.getImage());
-                return BookDto.toDtoLight(bookRepository.save(book));
+
+                UserDto userDto = CommonUtils.getCurrentUser();
+                boolean write = (UserDto.findRole("ROLE_ADMINISTRATION", userDto.getRoles())
+                        || UserDto.findRole("ROLE_BOOKS_WRITE", userDto.getRoles()));
+
+                return BookDto.toDtoLight(bookRepository.save(book), write);
             }
 
         } catch (Exception e) {
@@ -240,10 +262,14 @@ public class BookService {
 
     public List<BookDto> findAll() {
         try {
+            UserDto userDto = CommonUtils.getCurrentUser();
+            boolean write = (UserDto.findRole("ROLE_ADMINISTRATION", userDto.getRoles())
+                    || UserDto.findRole("ROLE_BOOKS_WRITE", userDto.getRoles()));
+
             return bookRepository
                     .findAll()
                     .stream()
-                    .map(BookDto::toDtoLight)
+                    .map(book -> BookDto.toDtoLight(book, write))
                     .collect(Collectors.toList());
         } catch (Exception e) {
             logger.error("Book not found");
@@ -282,5 +308,26 @@ public class BookService {
 
         if (authors == null || authors.isEmpty())
             throw new Exception("Author not found");
+    }
+
+    public ParamsBookContent prepareRequestForAddBookContent(ParamsBook params, BookDto bookDto) {
+        try {
+            MultipartFile fileTitle = params.getFileTitle();
+            if (fileTitle == null)
+                fileTitle = FileUtils.byteArrayToMultipartFile(bookDto.getImage(), bookDto.getId());
+
+            ParamsBookContent paramsBookContent = new ParamsBookContent();
+            paramsBookContent.setBookId(bookDto.getId());
+            paramsBookContent.setBookName(params.getName());
+            paramsBookContent.setStartPage(0);
+            paramsBookContent.setCountPages(0);
+            paramsBookContent.setFileTitle(fileTitle);
+            paramsBookContent.setFileContent(params.getFileContent());
+            return paramsBookContent;
+
+        } catch (Exception e) {
+            logger.error("prepareRequestForAddBookContent error: " + Arrays.asList(e.getStackTrace()));
+            return new ParamsBookContent();
+        }
     }
 }

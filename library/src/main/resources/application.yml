@@ -1,27 +1,21 @@
 spring:
   profiles:
     active: development
-  datasource:
-    url: jdbc:h2:mem:testdb
-    driverClassName: org.h2.Driver
-    username: sa
-    password: password
-    initialization-mode: always
-    hikari:
-      connectionTimeout: 20000
-      maximumPoolSize: 5
+
   data:
     mongodb:
       database: mydb
-#      username: MongoDB
-#      password: root
-#      port: 27017
-#      host: localhost
-#      authentication-database: admin
+      #username: MongoDB
+      #password: root
+      #port: 27017
+      #host: 127.0.0.1
   jmx:
     enabled: true
----
+
 logging:
   level:
     org:
       springframework: info
+
+server:
+  port: 8080

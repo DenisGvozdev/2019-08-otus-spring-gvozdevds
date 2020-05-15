@@ -21,13 +21,22 @@ spring:
   data:
     mongodb:
       database: mydb
-#      username: MongoDB
-#      password: root
-#      port: 27017
-#      host: localhost
-#      authentication-database: admin
   jmx:
     enabled: true
+  servlet:
+    multipart:
+      max-file-size: 128MB
+      max-request-size: 128MB
+      enabled: true
+  security:
+    user:
+      name: user
+      password: password
+      roles: ROLE_BOOKS_READ,ROLE_AUTHORS_READ,ROLE_GENRES_READ,ROLE_STATUSES_READ
+  #http:
+  #  multipart:
+  #    max-file-size: 20MB
+  #    max-request-size: 20MB
 ---
 logging:
   level:

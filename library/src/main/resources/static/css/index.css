@@ -264,17 +264,7 @@ select.selectUserFields {
     padding: 0px 0px 0px 0px;
 }
 
-.object-button-save {
-    transition-duration: 0.4s;
-    background-color: #4fb952;
-    margin: 10px 10px 0px 0px;
-    float: right;
-}
 
-.object-button-save:hover {
-    background-color: #5ada5e;
-    color: white;
-}
 
 .modal-title {
     margin: 0px 0px 0px 0px;
@@ -372,7 +362,7 @@ table.genres {
 /*---------------- Работаем с авторами ---------------*/
 
 .authors-form {
-    width: 37%;
+    width: 33%;
     float: right;
     margin: 0px 0px 0px 0px;
     padding: 0px 0px 0px 0px;
@@ -380,7 +370,7 @@ table.genres {
 
 div.authors {
     border: 1px solid black;
-    width: 60%;
+    width: 65%;
     margin-left: 10px;
     margin-right: 0px;
     float: left;
@@ -393,7 +383,7 @@ table.authors {
 
 .inputAuthorText {
     float: left;
-    width: 220px;
+    width: 200px;
     margin: 0px 0px 0px 0px;
     padding: 0px 0px 0px 0px;
 }

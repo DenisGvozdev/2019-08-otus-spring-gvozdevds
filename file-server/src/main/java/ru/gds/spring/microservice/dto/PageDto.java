@@ -1,7 +1,5 @@
 package ru.gds.spring.microservice.dto;
 
-import lombok.Data;
-
 public class PageDto {
 
     private int page;
@@ -11,7 +9,7 @@ public class PageDto {
     public PageDto() {
     }
 
-    public PageDto(int page, String image, String text) {
+    PageDto(int page, String image, String text) {
         this.page = page;
         this.image = image;
         this.text = text;

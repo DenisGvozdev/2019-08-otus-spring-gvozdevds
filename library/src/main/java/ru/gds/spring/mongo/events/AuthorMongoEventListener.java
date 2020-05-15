@@ -6,8 +6,8 @@ import org.springframework.data.mongodb.core.mapping.event.BeforeDeleteEvent;
 import org.springframework.stereotype.Component;
 import ru.gds.spring.microservice.domain.Author;
 import ru.gds.spring.microservice.domain.Book;
-import ru.gds.spring.mongo.exceptions.ForeignKeyException;
 import ru.gds.spring.microservice.interfaces.BookRepository;
+import ru.gds.spring.mongo.exceptions.ForeignKeyException;
 
 import java.util.List;
 

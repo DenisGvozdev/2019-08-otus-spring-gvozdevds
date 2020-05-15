@@ -16,7 +16,6 @@ public interface BookRepository extends MongoRepository<Book, String> {
 
     List<Book> findAllByStatusId(String id);
 
-
     //@PostFilter("hasPermission(filterObject, 'READ')")
     List<Book> findAll();
 

@@ -21,7 +21,7 @@ public class UserDto {
     public UserDto() {
     }
 
-    public UserDto(
+    private UserDto(
             String username,
             String password,
             String email,
@@ -128,7 +128,7 @@ public class UserDto {
                 user.getFirstName(),
                 user.getSecondName(),
                 user.getThirdName(),
-                new ArrayList<RoleDto>()
+                new ArrayList<>()
         );
     }
 
@@ -149,5 +149,12 @@ public class UserDto {
                 user.getThirdName(),
                 roleDtoList
         );
+    }
+
+    public static boolean findRole(String role, List<RoleDto> roles) {
+        RoleDto foundRoleDto = roles.stream()
+                .filter(roleDto -> roleDto.getRole().equals(role))
+                .findAny().orElse(null);
+        return foundRoleDto != null;
     }
 }

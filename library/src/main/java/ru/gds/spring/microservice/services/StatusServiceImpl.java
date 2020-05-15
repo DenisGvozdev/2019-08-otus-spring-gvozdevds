@@ -8,22 +8,22 @@ import ru.gds.spring.microservice.domain.Status;
 import ru.gds.spring.microservice.dto.StatusDto;
 import ru.gds.spring.microservice.interfaces.BookRepository;
 import ru.gds.spring.microservice.interfaces.StatusRepository;
+import ru.gds.spring.microservice.interfaces.StatusService;
 import ru.gds.spring.microservice.params.ParamsStatus;
-
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class StatusService {
+public class StatusServiceImpl implements StatusService {
 
-    private static final Logger logger = Logger.getLogger(StatusService.class);
+    private static final Logger logger = Logger.getLogger(StatusServiceImpl.class);
 
     private final StatusRepository statusRepository;
     private final BookRepository bookRepository;
 
-    StatusService(StatusRepository statusRepository, BookRepository bookRepository) {
+    StatusServiceImpl(StatusRepository statusRepository, BookRepository bookRepository) {
         this.statusRepository = statusRepository;
         this.bookRepository = bookRepository;
     }
@@ -38,7 +38,7 @@ public class StatusService {
         } catch (Exception e) {
             logger.error("Statuses not found Error: " + e.getMessage());
         }
-        return new ArrayList<StatusDto>();
+        return new ArrayList<>();
     }
 
     public List<StatusDto> findAllByBookId(String bookId) {
@@ -61,7 +61,7 @@ public class StatusService {
         } catch (Exception e) {
             logger.error("Authors not found by bookId= " + bookId + " Error: " + e.getMessage());
         }
-        return new ArrayList<StatusDto>();
+        return new ArrayList<>();
     }
 
     public StatusDto findById(String id) {

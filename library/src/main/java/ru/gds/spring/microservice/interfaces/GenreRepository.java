@@ -11,6 +11,7 @@ import java.util.List;
 @Repository
 public interface GenreRepository extends MongoRepository<Genre, String> {
 
+    @Query("{_id: { $in: ?0 } })")
     List<Genre> findAllById(List<String> ids, Sort sort);
 
     @Query("{name: { $in: ?0 } })")

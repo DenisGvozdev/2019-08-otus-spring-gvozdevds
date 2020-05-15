@@ -23,20 +23,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
-        web.ignoring().antMatchers("/");
-        //web.ignoring().antMatchers("books", "books/{param}");
+        //web.ignoring().antMatchers("/");
+        web.ignoring().antMatchers("books", "books/{param}");
     }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
+        //"ROLE_BOOKS_READ","ROLE_AUTHORS_READ","ROLE_GENRES_READ","ROLE_STATUSES_READ"
         http.csrf().disable()
                 .authorizeRequests()
-                    .antMatchers("/books", "books", "books/{param}").authenticated()
+                    //.antMatchers("/books", "books", "books/{param}").authenticated()
                     .antMatchers( "books/{id}", "books/{bookId}").hasAnyRole("BOOKS_WRITE", "BOOKS_READ", "ADMINISTRATION")
                     .antMatchers("users","users/{param}","/users","users/{id}","users/{username}").hasAnyRole("USERS_WRITE", "ADMINISTRATION")
-                    .antMatchers("/authors","/authors/{bookId}").hasAnyRole("AUTHORS_WRITE", "ADMINISTRATION")
-                    .antMatchers("/genres","/genres/{bookId}").hasAnyRole("GENRES_WRITE", "ADMINISTRATION")
-                    .antMatchers("/statuses","/statuses/{bookId}").hasAnyRole("STATUSES_WRITE", "ADMINISTRATION")
+                    .antMatchers("/authors","/authors/{bookId}").hasAnyRole("AUTHORS_READ", "AUTHORS_WRITE", "ADMINISTRATION")
+                    .antMatchers("/genres","/genres/{bookId}").hasAnyRole("GENRES_READ", "GENRES_WRITE", "ADMINISTRATION")
+                    .antMatchers("/statuses","/statuses/{bookId}").hasAnyRole("STATUSES_READ", "STATUSES_WRITE", "ADMINISTRATION")
                     .antMatchers("/roles","/roles/{role}","/roles/{username}").hasAnyRole("ROLES_WRITE", "ADMINISTRATION")
                     .antMatchers("/**").permitAll()
                 .and()

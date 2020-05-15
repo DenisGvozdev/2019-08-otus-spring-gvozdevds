@@ -4,12 +4,13 @@ import org.apache.log4j.Logger;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import ru.gds.spring.config.AppConfig;
+import org.springframework.web.multipart.MultipartFile;
+import ru.gds.spring.config.AppProperties;
 import ru.gds.spring.microservice.domain.BookContent;
 import ru.gds.spring.microservice.dto.BookContentDto;
 import ru.gds.spring.microservice.dto.PageDto;
+import ru.gds.spring.microservice.interfaces.BookContentService;
 import ru.gds.spring.microservice.params.ParamsBookContent;
-import ru.gds.spring.microservice.interfaces.ContentService;
 import ru.gds.spring.microservice.repository.BookContentRepository;
 import ru.gds.spring.microservice.util.FileUtils;
 
@@ -19,16 +20,16 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class BookContentService implements ContentService {
+public class BookContentServiceImpl implements BookContentService {
 
-    private static final Logger logger = Logger.getLogger(BookContentService.class);
+    private static final Logger logger = Logger.getLogger(BookContentServiceImpl.class);
 
     private final BookContentRepository bookContentRepository;
-    private final AppConfig appConfig;
+    private final AppProperties appProperties;
 
-    public BookContentService(BookContentRepository bookContentRepository, AppConfig appConfig) {
+    public BookContentServiceImpl(BookContentRepository bookContentRepository, AppProperties appProperties) {
         this.bookContentRepository = bookContentRepository;
-        this.appConfig = appConfig;
+        this.appProperties = appProperties;
     }
 
     public BookContentDto getPagesForBook(String bookId, int pageStart, int countPages) {
@@ -67,10 +68,12 @@ public class BookContentService implements ContentService {
             bookContentDto.setStartPage(pageStart);
             bookContentDto.setCountPages(subPages.size());
 
+            return bookContentDto;
+
         } catch (Exception e) {
-            logger.error("Error save contentBook: " + Arrays.asList(e.getStackTrace()));
+            logger.error("Error getPagesForBook: " + Arrays.asList(e.getStackTrace()));
+            return bookContentDto;
         }
-        return bookContentDto;
     }
 
     public FileSystemResource findFileByBookId(String bookId) {
@@ -94,8 +97,8 @@ public class BookContentService implements ContentService {
 
         } catch (Exception e) {
             logger.error("Error save contentBook: " + Arrays.asList(e.getStackTrace()));
+            return null;
         }
-        return null;
     }
 
     public BookContentDto save(ParamsBookContent params) {
@@ -106,37 +109,14 @@ public class BookContentService implements ContentService {
             if (StringUtils.isEmpty(params.getBookId()))
                 throw new Exception("Book id is empty");
 
-            if (params.getFile() == null)
-                throw new Exception("File is empty");
+            saveBookTitle(params);
 
-            String fileName = (params.getFile() != null) ? params.getFile().getName() : null;
-            String fileDirectory = appConfig.getFileDirectory();
-            File file = FileUtils.saveFile(fileName, fileDirectory, params.getFile().getBytes());
-
-            if (file == null)
-                throw new Exception("file not found by path: " + fileDirectory + fileName);
-
-            List<String> bookPages = FileUtils.getBookPages(file.getAbsolutePath());
-
-            BookContent bookContent = new BookContent(
-                    params.getBookId(),
-                    params.getBookId(),
-                    params.getBookName(),
-                    new Date(),
-                    file.getAbsolutePath(),
-                    file.getName(),
-                    bookPages.size(),
-                    bookPages
-            );
-
-            bookContent = bookContentRepository.save(bookContent);
-
-            return BookContentDto.toDtoLight(bookContent);
+            return saveBookContent(params);
 
         } catch (Exception e) {
             logger.error("Error save contentBook: " + Arrays.asList(e.getStackTrace()));
+            return new BookContentDto();
         }
-        return new BookContentDto();
     }
 
     public String deleteByBookId(String bookId) {
@@ -149,6 +129,74 @@ public class BookContentService implements ContentService {
 
         } catch (Exception e) {
             return "Ошибка удаления содержимого книги: " + e.getMessage();
+        }
+    }
+
+    private void saveBookTitle(ParamsBookContent params) {
+        try {
+            MultipartFile multipartFileTitle = params.getFileTitle();
+            if (multipartFileTitle == null) {
+                logger.error("saveBookTitle error: multipartFileTitle is null");
+                return;
+            }
+
+            String fileNameTitle = (!StringUtils.isEmpty(multipartFileTitle.getOriginalFilename()))
+                    ? multipartFileTitle.getOriginalFilename()
+                    : multipartFileTitle.getName();
+
+            String fileDirectory = appProperties.getFileDirectory();
+            FileUtils.saveFile(fileNameTitle, fileDirectory, multipartFileTitle.getBytes());
+
+        } catch (Exception e) {
+            logger.error(" saveBookTitle error: " + Arrays.asList(e.getStackTrace()));
+        }
+    }
+
+    private BookContentDto saveBookContent(ParamsBookContent params) {
+        try {
+            MultipartFile multipartFileContent = params.getFileContent();
+
+            if (multipartFileContent == null) {
+                BookContent bookContent = bookContentRepository.findByBookId(params.getBookId());
+                multipartFileContent = FileUtils.getMultipartFile(bookContent.getContentFilePath());
+            }
+
+            if (multipartFileContent == null) {
+                logger.error("saveBookContent error: multipartFileContent is null");
+                return new BookContentDto();
+            }
+
+            String fileNameContent = (!StringUtils.isEmpty(multipartFileContent.getOriginalFilename()))
+                    ? multipartFileContent.getOriginalFilename()
+                    : multipartFileContent.getName();
+
+            String fileDirectory = appProperties.getFileDirectory();
+            File fileContent = FileUtils.saveFile(fileNameContent, fileDirectory, params.getFileContent().getBytes());
+
+            if (fileContent == null) {
+                logger.error("file content not found by path: " + fileDirectory + fileNameContent);
+                return new BookContentDto();
+            }
+
+            List<String> bookPages = FileUtils.getBookPages(fileContent.getAbsolutePath());
+
+            BookContent bookContent = new BookContent(
+                    params.getBookId(),
+                    params.getBookId(),
+                    params.getBookName(),
+                    new Date(),
+                    fileContent.getAbsolutePath(),
+                    fileContent.getName(),
+                    bookPages.size(),
+                    bookPages
+            );
+
+            bookContent = bookContentRepository.save(bookContent);
+            return BookContentDto.toDtoLight(bookContent);
+
+        } catch (Exception e) {
+            logger.error("saveBookContent error: " + Arrays.asList(e.getStackTrace()));
+            return new BookContentDto();
         }
     }
 }

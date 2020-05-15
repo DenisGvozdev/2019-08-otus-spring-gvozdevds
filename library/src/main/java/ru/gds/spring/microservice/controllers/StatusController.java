@@ -2,8 +2,8 @@ package ru.gds.spring.microservice.controllers;
 
 import org.springframework.web.bind.annotation.*;
 import ru.gds.spring.microservice.dto.StatusDto;
+import ru.gds.spring.microservice.interfaces.StatusService;
 import ru.gds.spring.microservice.params.ParamsStatus;
-import ru.gds.spring.microservice.services.StatusService;
 
 import java.util.List;
 

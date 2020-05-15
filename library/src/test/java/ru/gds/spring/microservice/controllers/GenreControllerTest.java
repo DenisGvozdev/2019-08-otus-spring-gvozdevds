@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequ
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
 import ru.gds.spring.microservice.interfaces.GenreRepository;
-import ru.gds.spring.microservice.services.GenreService;
+import ru.gds.spring.microservice.interfaces.GenreService;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

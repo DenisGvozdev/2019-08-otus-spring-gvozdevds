@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import ru.gds.spring.microservice.constant.ConstantFormatDate;
+import ru.gds.spring.microservice.interfaces.AuthorService;
 import ru.gds.spring.microservice.util.DateUtils;
 import ru.gds.spring.microservice.domain.Author;
 import ru.gds.spring.microservice.domain.Book;
@@ -19,14 +20,14 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class AuthorService {
+public class AuthorServiceImpl implements AuthorService {
 
-    private static final Logger logger = Logger.getLogger(AuthorService.class);
+    private static final Logger logger = Logger.getLogger(AuthorServiceImpl.class);
 
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
 
-    AuthorService(AuthorRepository authorRepository, BookRepository bookRepository) {
+    AuthorServiceImpl(AuthorRepository authorRepository, BookRepository bookRepository) {
         this.authorRepository = authorRepository;
         this.bookRepository = bookRepository;
     }
@@ -40,14 +41,14 @@ public class AuthorService {
         } catch (Exception e) {
             logger.error("Authors not found Error: " + e.getMessage());
         }
-        return new ArrayList<AuthorDto>();
+        return new ArrayList<>();
     }
 
     public List<AuthorDto> findAllByBookId(String bookId) {
         try {
             Book book = bookRepository.findById(bookId).orElse(null);
             if (book == null)
-                return new ArrayList<AuthorDto>();
+                return new ArrayList<>();
 
             List<Author> authorsSelected = book.getAuthors();
 
@@ -63,7 +64,7 @@ public class AuthorService {
         } catch (Exception e) {
             logger.error("Authors not found by bookId= " + bookId + " Error: " + e.getMessage());
         }
-        return new ArrayList<AuthorDto>();
+        return new ArrayList<>();
     }
 
     public List<AuthorDto> findAllById(List<String> idList) {
@@ -75,7 +76,7 @@ public class AuthorService {
         } catch (Exception e) {
             logger.error("Authors not found Error: " + e.getMessage());
         }
-        return new ArrayList<AuthorDto>();
+        return new ArrayList<>();
     }
 
     public AuthorDto findById(String id) {

@@ -1,7 +1,7 @@
 package ru.gds.spring.microservice.controllers;
 
 import org.springframework.web.bind.annotation.*;
-import ru.gds.spring.microservice.services.UserService;
+import ru.gds.spring.microservice.interfaces.UserService;
 import ru.gds.spring.microservice.util.CommonUtils;
 import ru.gds.spring.microservice.dto.UserDto;
 import ru.gds.spring.microservice.params.ParamsUser;
