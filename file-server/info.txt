@@ -1,0 +1,18 @@
+Как все запустить
+
+Переходим в корневую директорию в которой лежит docker-compose.yml
+cd C:/store/development/github/OTUS/2019-11-home_works/file-server
+
+Выполняем
+docker-compose up -d
+
+Смотрим созданные образы
+docker image ls
+
+Смотрим запущенные контейнеры
+docker ps
+
+Для повторного запуска нужно удалить старые образы
+docker rmi -f file-rest-api
+docker rmi -f library
+docker rmi -f mongo:latest

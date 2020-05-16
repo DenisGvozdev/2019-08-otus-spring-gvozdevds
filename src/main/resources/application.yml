@@ -1,9 +1,0 @@
-spring:
-  profiles:
-    active: development
-    #active: test
----
-logging:
-  level:
-    org:
-      springframework: info
