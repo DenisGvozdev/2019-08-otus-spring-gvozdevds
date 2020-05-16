@@ -1,0 +1,8 @@
+cd C:/store/development/github/OTUS/2019-11-home_works/file-server
+
+docker image ls
+docker rmi -f file-rest-api
+docker rmi -f qoomon/docker-host
+docker rmi -f mongo:4.0.4
+
+docker-compose up -d

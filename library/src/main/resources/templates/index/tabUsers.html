@@ -1,0 +1,67 @@
+<div class="users">
+    <table class="users" id="tableUsers">
+        <thead>
+        <tr>
+            <th id="userUsername">Логин</th>
+            <th id="userFirstName">Фамилия</th>
+            <th id="userSecondName">Имя</th>
+            <th id="userThirdName">Отчество</th>
+            <th id="userCrudButtons">
+                <button type="button" class="refButton" onclick="fillUserForm(null, 'add')">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span><strong>Добавить</strong></span>
+                </button>
+            </th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+<div class="users-form">
+    <form id="formCreateUpdateUser" enctype="multipart/form-data" action="" mode="" method="">
+        <div class="userForm">
+            <h4 id="title-user-form" class="modal-title">Пользователь</h4>
+            <div class="form-group">
+                <label for="user-username" class="labelInput">Логин</label>
+                <input id="user-username" name="username" type="text" class="inputUserText" value=""/>
+            </div>
+            <div class="form-group">
+                <label for="user-password" class="labelInput">Пароль</label>
+                <input id="user-password" name="password" type="text" class="inputUserText" value=""/>
+            </div>
+            <div class="form-group">
+                <label for="user-email" class="labelInput">Почта</label>
+                <input id="user-email" name="email" type="text" class="inputUserText" value=""/>
+            </div>
+            <div class="form-group">
+                <label for="user-phone" class="labelInput">Телефон</label>
+                <input id="user-phone" name="phone" type="text" class="inputUserText" value=""/>
+            </div>
+            <div class="form-group">
+                <label for="user-firstName" class="labelInput">Фамилия</label>
+                <input id="user-firstName" name="firstName" type="text" class="inputUserText" value=""/>
+            </div>
+            <div class="form-group">
+                <label for="user-secondName" class="labelInput">Имя</label>
+                <input id="user-secondName" name="secondName" type="text" class="inputUserText"
+                       value=""/>
+            </div>
+            <div class="form-group">
+                <label for="user-thirdName" class="labelInput">Отчество</label>
+                <input id="user-thirdName" name="thirdName" type="text" class="inputUserText" value=""/>
+            </div>
+            <div class="form-group">
+                <label for="user-roles" class="labelInput">Роли</label>
+                <select id="user-roles" name="roleIds" size="2" class="selectUserFields"
+                        multiple data-live-search="true">
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <input id="buttonSaveUser" type="button" value="Сохранить" class="object-button-save"
+                   onclick="addUpdateUser()">
+        </div>
+    </form>
+</div>

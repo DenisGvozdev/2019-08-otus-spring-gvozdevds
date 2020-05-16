@@ -1,0 +1,105 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.springframework.org/schema/security">
+<head>
+    <meta charset="utf-8">
+    <TITLE>Моя библиотека</TITLE>
+
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/swfobject.js"></script>
+    <script type="text/javascript" src="download/download.js"></script>
+
+    <script type="text/javascript" src="index/common.js"></script>
+    <script type="text/javascript" src="index/book.js"></script>
+    <script type="text/javascript" src="index/author.js"></script>
+    <script type="text/javascript" src="index/genre.js"></script>
+    <script type="text/javascript" src="index/role.js"></script>
+    <script type="text/javascript" src="index/status.js"></script>
+    <script type="text/javascript" src="index/user.js"></script>
+
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap-responsive.css">
+
+    <script src="js/bootstrap-select.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap-select.css"/>
+    <link rel="stylesheet" href="css/bootstrap-select.min.css">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="css/jquery.datetimepicker.css"/>
+    <script src="js/jquery.datetimepicker.full.min.js"></script>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/index.css">
+
+</head>
+<body>
+
+<div id="contextMenu" class="dropdown clearfix" hidden>
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu"
+        style="display:block; position:static; margin-bottom:5px;">
+        <li><a tabindex="-1" href="#" onclick="showBookForm(this, 'show')">Просмотр</a></li>
+        <li id="contextEditBook" hidden><a tabindex="-1" href="#" onclick="showBookForm(this, 'edit')">Редактировать</a>
+        </li>
+        <li id="contextDeleteBook" hidden><a tabindex="-1" href="#" onclick="deleteBook(this)">Удалить</a></li>
+    </ul>
+</div>
+
+<div id="myModal" class="modal fade" role="dialog" hidden>
+    <div th:insert="./index/modal-dialog.html :: div"></div>
+</div>
+
+<div class="main">
+
+    <div class="navbar navbar-custom-main">
+        <div th:insert="./index/navbar-custom.html :: div"></div>
+    </div>
+
+    <div class="container-fluid-custom">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a data-toggle="tab" href="#tabBooks">Книги</a>
+            </li>
+            <li id="li-tab-authors" hidden>
+                <a data-toggle="tab" href="#tabAuthors" onclick="findAllAuthors()">Авторы</a>
+            </li>
+            <li id="li-tab-genres" hidden>
+                <a data-toggle="tab" href="#tabGenres" onclick="findAllGenres()">Жанры</a>
+            </li>
+            <li id="li-tab-statuses" hidden>
+                <a data-toggle="tab" href="#tabStatuses" onclick="findAllStatuses()">Статусы</a></li>
+            <li id="li-tab-roles" hidden>
+                <a data-toggle="tab" href="#tabRoles" onclick="findAllRoles()">Роли</a>
+            </li>
+            <li id="li-tab-users" hidden>
+                <a data-toggle="tab" href="#tabUsers" onclick="findAllUsers()">Пользователи</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="tabBooks">
+                <div th:insert="./index/tab-pane active.html :: div"></div>
+            </div>
+            <div id="tabAuthors" class="tab-pane">
+                <div th:insert="./index/tabAuthors.html :: div"></div>
+            </div>
+            <div id="tabGenres" class="tab-pane">
+                <div th:insert="./index/tabGenres.html :: div"></div>
+            </div>
+            <div id="tabStatuses" class="tab-pane" hidden>
+                <div th:insert="./index/tabStatuses.html :: div"></div>
+            </div>
+            <div id="tabUsers" class="tab-pane">
+                <div th:insert="./index/tabUsers.html :: div"></div>
+            </div>
+            <div id="tabRoles" class="tab-pane">
+                <div th:insert="./index/tabRoles.html :: div"></div>
+            </div>
+        </div>
+        <div class="footer">
+            Copyright © 2020 Моя библиотека Все права защищены.<br>
+            При использовании материалов сайта гиперссылка на <a href="/">Моя библиотека</a> обязательна.
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
