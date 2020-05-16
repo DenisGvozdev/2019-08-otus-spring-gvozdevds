@@ -1,6 +1,5 @@
 package ru.gds.spring.microservice.interfaces;
 
-import org.springframework.http.ResponseEntity;
 import ru.gds.spring.microservice.params.ParamsBookContent;
 
 public interface Sender {

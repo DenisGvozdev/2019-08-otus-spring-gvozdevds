@@ -23,13 +23,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
-        //web.ignoring().antMatchers("/");
         web.ignoring().antMatchers("books", "books/{param}");
     }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        //"ROLE_BOOKS_READ","ROLE_AUTHORS_READ","ROLE_GENRES_READ","ROLE_STATUSES_READ"
         http.csrf().disable()
                 .authorizeRequests()
                     //.antMatchers("/books", "books", "books/{param}").authenticated()

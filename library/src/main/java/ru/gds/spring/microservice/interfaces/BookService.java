@@ -17,8 +17,6 @@ public interface BookService {
 
     BookDto save(ParamsBook params);
 
-    List<BookDto> findAll();
-
     List<Book> findAllByName(String name);
 
     String deleteById(String id);

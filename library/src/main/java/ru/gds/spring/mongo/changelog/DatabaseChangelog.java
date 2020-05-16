@@ -5,8 +5,6 @@ import com.github.cloudyrock.mongock.ChangeSet;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import ru.gds.spring.microservice.domain.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -126,50 +124,5 @@ public class DatabaseChangelog {
         template.save(new Role("ROLE_ADMINISTRATION", "Полные права"));
         template.save(new Role("ROLE_WRITE", "Создание"));
         template.save(new Role("ROLE_READ", "Чтение"));
-    }
-
-    // Субъект авторизации
-    @ChangeSet(order = "009", id = "addAclSid", author = "dgvozdev")
-    public void insertAclSid(MongoTemplate template) {
-        template.save(new AclSid(100, 1, "admin"));
-        template.save(new AclSid(101, 1, "user"));
-        template.save(new AclSid(102, 0, "ROLE_WRITE"));
-        template.save(new AclSid(103, 0, "ROLE_READ"));
-        template.save(new AclSid(104, 0, "ROLE_ADMINISTRATION"));
-    }
-
-    // Класс объекта идентификации
-    @ChangeSet(order = "010", id = "addAclClass", author = "dgvozdev")
-    public void insertAclClass(MongoTemplate template) {
-        template.save(new AclClass(200, "ru.gds.spring.domain.Book"));
-    }
-
-    // Объект идентификации
-    @ChangeSet(order = "011", id = "addAclObjectIdentity", author = "dgvozdev")
-    public void insertAclObjectIdentity(MongoTemplate template) {
-        // id Book bookId=0 parent=null owner=ROLE_WRITE mask=read
-        template.save(new AclObjectIdentity(300, 200, 0, null, 102, 0));
-        // id Book bookId=1 parent=null owner=ROLE_WRITE mask=read
-        template.save(new AclObjectIdentity(301, 200, 1, null, 102, 0));
-        // id Book bookId=2 parent=null owner=ROLE_WRITE mask=read
-        template.save(new AclObjectIdentity(302, 200, 2, null, 102, 0));
-    }
-
-    // Связка Объект идентификации-Субъект авторизации
-    @ChangeSet(order = "011", id = "addAclEntry", author = "dgvozdev")
-    public void insertAclEntry(MongoTemplate template) {
-        // id book=1 order=1 sid=admin mask=read
-        template.save(new AclEntry(401, 300, 1, 100, 1, 1, 1, 1));
-        // id book=2 order=1 sid=admin mask=read
-        template.save(new AclEntry(402, 301, 1, 100, 1, 1, 1, 1));
-        // id book=3 order=1 sid=admin mask=read
-        template.save(new AclEntry(413, 302, 1, 100, 1, 1, 1, 1));
-
-        // id book=1 order=2 sid=user mask=read
-        template.save(new AclEntry(404, 300, 2, 101, 1, 1, 1, 1));
-        // id book=2 order=2 sid=user mask=read
-        template.save(new AclEntry(405, 301, 2, 101, 1, 1, 1, 1));
-        // id book=3 order=2 sid=user mask=read
-        template.save(new AclEntry(416, 302, 2, 101, 1, 1, 1, 1));
     }
 }

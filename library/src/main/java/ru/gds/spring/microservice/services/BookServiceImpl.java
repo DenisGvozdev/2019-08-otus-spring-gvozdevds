@@ -26,28 +26,16 @@ public class BookServiceImpl implements BookService {
     private final GenreRepository genreRepository;
     private final AuthorRepository authorRepository;
     private final StatusRepository statusRepository;
-    private final AclEntryRepository aclEntryRepository;
-    private final AclObjectIdentityRepository aclObjectIdentityRepository;
-    private final AclClassRepository aclClassRepository;
-    private final AclSidRepository aclSidRepository;
 
     BookServiceImpl(BookRepository bookRepository,
                     GenreRepository genreRepository,
                     AuthorRepository authorRepository,
-                    StatusRepository statusRepository,
-                    AclEntryRepository aclEntryRepository,
-                    AclObjectIdentityRepository aclObjectIdentityRepository,
-                    AclClassRepository aclClassRepository,
-                    AclSidRepository aclSidRepository) {
+                    StatusRepository statusRepository) {
 
         this.bookRepository = bookRepository;
         this.genreRepository = genreRepository;
         this.authorRepository = authorRepository;
         this.statusRepository = statusRepository;
-        this.aclEntryRepository = aclEntryRepository;
-        this.aclObjectIdentityRepository = aclObjectIdentityRepository;
-        this.aclClassRepository = aclClassRepository;
-        this.aclSidRepository = aclSidRepository;
     }
 
     public List<BookDto> findAllLight() {
@@ -163,7 +151,6 @@ public class BookServiceImpl implements BookService {
                         status);
 
                 book = bookRepository.save(book);
-                //addAclToDataBase(book);
 
                 UserDto userDto = CommonUtils.getCurrentUser();
                 boolean write = (UserDto.findRole("ROLE_ADMINISTRATION", userDto.getRoles())
@@ -194,87 +181,6 @@ public class BookServiceImpl implements BookService {
             logger.error("Error add book: " + e.getMessage());
         }
         return new BookDto();
-    }
-
-    private void addAclToDataBase(Book book) {
-
-        String ACL_CLASS_BOOK = "ru.gds.spring.domain.Book";
-        try {
-            if (book != null) {
-
-                String objectIdEdentity = book.getId();
-
-                /*
-                AclClass aclClass = aclClassRepository.findByClasss(ACL_CLASS_BOOK);
-                long objectIdClass = (aclClass != null) ? aclClass.getId() : 0;
-
-                AclSid aclSidRoleRead = aclSidRepository.findBySid("ROLE_READ");
-                long sidRoleRead = (aclSidRoleRead != null) ? aclSidRoleRead.getId() : 0;
-
-                AclSid aclSidAdmin = aclSidRepository.findBySid("admin");
-                long sidAdmin = (aclSidAdmin != null) ? aclSidAdmin.getId() : 0;
-
-                AclSid aclSidUser = aclSidRepository.findBySid("user");
-                long sidUser = (aclSidUser != null) ? aclSidUser.getId() : 0;
-
-                int maxAceOrder = aclEntryRepository.findMaxAceOrder();
-
-
-                if (objectIdEdentity != null && objectIdClass > 0 && sidRoleRead > 0 && sidUser > 0) {
-
-                    // Добавляем "объект идентификации"
-                    AclObjectIdentity aclObjIdentity = new AclObjectIdentity();
-                    aclObjIdentity.setObjectIdClass(objectIdClass);
-                    aclObjIdentity.setObjectIdIdentity(objectIdEdentity);
-                    aclObjIdentity.setOwnerSid(sidRoleRead);
-                    aclObjIdentity.setEntriesInheriting(0L);
-                    aclObjIdentity.setParentObject(null);
-                    aclObjIdentity = aclObjectIdentityRepository.save(aclObjIdentity);
-
-                    // Добавляем связку "объект идентификации-Субъект авторизации" для admin
-                    AclEntry aclEntryAdm = new AclEntry();
-                    aclEntryAdm.setAclObjectIdentity(aclObjIdentity.getId());
-                    aclEntryAdm.setAceOrder(maxAceOrder + 1);
-                    aclEntryAdm.setSid(sidAdmin);
-                    aclEntryAdm.setMask(1);
-                    aclEntryAdm.setGranting(1);
-                    aclEntryAdm.setAuditSuccess(1);
-                    aclEntryAdm.setAuditFailure(1);
-                    aclEntryRepository.save(aclEntryAdm);
-
-                    // Добавляем связку "объект идентификации-Субъект авторизации" для user
-                    AclEntry aclEntryUsr = new AclEntry();
-                    aclEntryUsr.setAclObjectIdentity(aclObjIdentity.getId());
-                    aclEntryUsr.setAceOrder(maxAceOrder + 2);
-                    aclEntryUsr.setSid(sidUser);
-                    aclEntryUsr.setMask(1);
-                    aclEntryUsr.setGranting(1);
-                    aclEntryUsr.setAuditSuccess(1);
-                    aclEntryUsr.setAuditFailure(1);
-                    aclEntryRepository.save(aclEntryUsr);
-                }*/
-            }
-
-        } catch (Exception e) {
-            logger.error("addAclToDataBase error: " + Arrays.asList(e.getStackTrace()));
-        }
-    }
-
-    public List<BookDto> findAll() {
-        try {
-            UserDto userDto = CommonUtils.getCurrentUser();
-            boolean write = (UserDto.findRole("ROLE_ADMINISTRATION", userDto.getRoles())
-                    || UserDto.findRole("ROLE_BOOKS_WRITE", userDto.getRoles()));
-
-            return bookRepository
-                    .findAll()
-                    .stream()
-                    .map(book -> BookDto.toDtoLight(book, write))
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            logger.error("Book not found");
-        }
-        return new ArrayList<>();
     }
 
     public List<Book> findAllByName(String name) {

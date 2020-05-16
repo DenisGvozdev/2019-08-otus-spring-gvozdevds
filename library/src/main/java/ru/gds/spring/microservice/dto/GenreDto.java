@@ -1,7 +1,5 @@
 package ru.gds.spring.microservice.dto;
 
-
-
 import ru.gds.spring.microservice.domain.Genre;
 
 import java.util.List;
@@ -15,7 +13,7 @@ public class GenreDto {
     public GenreDto() {
     }
 
-    public GenreDto(String id, String name, boolean selected) {
+    private GenreDto(String id, String name, boolean selected) {
         this.id = id;
         this.name = name;
         this.selected = selected;

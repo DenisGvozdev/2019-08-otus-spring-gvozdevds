@@ -1,0 +1,50 @@
+<div class="authors">
+    <table class="authors" id="tableAuthors">
+        <thead>
+        <tr>
+            <th id="authorFIO">ФИО</th>
+            <th id="authorCrudButtons">
+                <button type="button" class="refButton" onclick="fillAuthorForm(null, 'add')">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span><strong>Добавить</strong></span>
+                </button>
+            </th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+<div class="authors-form">
+    <form id="formCreateUpdateAuthor" enctype="multipart/form-data" action="" mode="" method="">
+        <div class="authorForm">
+            <h4 id="title-author-form" class="modal-title">Автор</h4>
+            <input id="author-id" name="id" type="hidden" class="inputAuthorText" value=""/>
+            <div class="form-group">
+                <label for="author-first-name" class="labelInput">Фамилия</label>
+                <input id="author-first-name" name="firstName" type="text" class="inputAuthorText"
+                       value=""/>
+            </div>
+            <div class="form-group">
+                <label for="author-second-name" class="labelInput">Имя</label>
+                <input id="author-second-name" name="secondName" type="text" class="inputAuthorText"
+                       value=""/>
+            </div>
+            <div class="form-group">
+                <label for="author-third-name" class="labelInput">Отчество</label>
+                <input id="author-third-name" name="thirdName" type="text" class="inputAuthorText"
+                       value=""/>
+            </div>
+            <div class="form-group">
+                <label for="author-birth-date" class="labelInput">Дата рождения</label>
+                <input id="author-birth-date" name="birthDate" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <input id="buttonSaveAuthor" type="button" value="Сохранить" class="object-button-save"
+                   onclick="addUpdateAuthor()">
+        </div>
+    </form>
+</div>

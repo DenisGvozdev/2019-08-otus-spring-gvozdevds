@@ -1,19 +1,16 @@
 package ru.gds.spring.microservice.http;
 
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.log4j.Logger;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.*;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
+import ru.gds.spring.microservice.config.AppProperties;
 import ru.gds.spring.microservice.interfaces.Sender;
 import ru.gds.spring.microservice.params.ParamsBookContent;
 
@@ -29,27 +26,14 @@ public class SenderImpl implements Sender {
     private HttpHeaders headers;
     private HttpStatus status;
 
-    public SenderImpl() {
+    public SenderImpl(AppProperties appProperties) {
         this.rest = new RestTemplate();
         this.headers = new HttpHeaders();
-        this.server = "http://127.0.0.1:8081";
+        this.server = appProperties.getFileServerUrl();
         headers.add("Content-Type", "application/json");
         headers.add("Accept", "*/*");
         this.rest.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
     }
-
-//    public String get(String uri) {
-//        try {
-//            HttpEntity<String> requestEntity = new HttpEntity<>("", headers);
-//            ResponseEntity<String> responseEntity = rest.exchange(server + uri, HttpMethod.GET, requestEntity, String.class);
-//            this.setStatus(responseEntity.getStatusCode());
-//            return responseEntity.getBody();
-//
-//        } catch (Exception e) {
-//            logger.error(getMessage("get", uri, null, e.getMessage()));
-//            return null;
-//        }
-//    }
 
     public String get(String uri) {
         try {
@@ -102,9 +86,7 @@ public class SenderImpl implements Sender {
             );
             org.apache.http.HttpEntity multipart = builder.build();
             uploadFile.setEntity(multipart);
-            CloseableHttpResponse response = httpClient.execute(uploadFile);
-            org.apache.http.HttpEntity responseEntity = response.getEntity();
-            System.out.println();
+            httpClient.execute(uploadFile);
 
         } catch (Exception e) {
             logger.error(getMessage("postMVC", uri, params.toString(), e.getMessage()));

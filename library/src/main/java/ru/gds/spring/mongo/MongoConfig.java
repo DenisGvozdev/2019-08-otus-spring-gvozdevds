@@ -19,19 +19,12 @@ public class MongoConfig {
     @Bean
     public Mongock mongock(MongoProps mongoProps, MongoClient mongoClient) {
         try {
-            /*MongoProps mongoPropsCustom = new MongoProps();
-            mongoPropsCustom.setDatabase("mydb");
-            mongoPropsCustom.setPort(27017);
-            mongoPropsCustom.setUri("mongodb://hostIpOnWhichMongoIsRunning:27017/mydb");
-            mongoPropsCustom.setHost("hostIpOnWhichMongoIsRunning");*/
-
             logger.debug("MongoProps Library info: dataBase=" + mongoProps.getDatabase()
                     + " uri=" + mongoProps.getUri()
                     + " host=" + mongoProps.getHost()
                     + " port=" + mongoProps.getPort());
 
-            return new SpringMongockBuilder(mongoClient, mongoProps.getDatabase(), CHANGELOGS_PACKAGE)
-                    .build();
+            return new SpringMongockBuilder(mongoClient, mongoProps.getDatabase(), CHANGELOGS_PACKAGE).build();
         } catch (Exception e) {
             logger.error("mongock error: " + Arrays.asList(e.getStackTrace()));
             return null;

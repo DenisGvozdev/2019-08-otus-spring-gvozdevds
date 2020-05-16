@@ -18,7 +18,7 @@ public class RoleDto {
         this.selected = false;
     }
 
-    public RoleDto(String role, String description, boolean selected) {
+    private RoleDto(String role, String description, boolean selected) {
         this.role = role;
         this.description = description;
         this.selected = selected;

@@ -1,0 +1,34 @@
+<div class="genres">
+    <table class="genres" id="tableGenres">
+        <thead>
+        <tr>
+            <th id="genreName">Название</th>
+            <th id="genreCrudButtons">
+                <button type="button" class="refButton" onclick="fillGenreForm(null, 'add')">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span><strong>Добавить</strong></span>
+                </button>
+            </th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+<div class="genres-form">
+    <form id="formCreateUpdateGenre" enctype="multipart/form-data" action="" mode="" method="">
+        <div class="genreForm">
+            <h4 id="title-genre-form" class="modal-title">Статус</h4>
+            <input id="genre-id" name="id" type="hidden" class="inputGenreText" value=""/>
+            <div class="form-group">
+                <label for="genre-name" class="labelInput">Название</label>
+                <input id="genre-name" name="name" type="text" class="inputGenreText" value=""/>
+            </div>
+        </div>
+        <div class="form-group">
+            <input id="buttonSaveGenre" type="button" value="Сохранить" class="object-button-save"
+                   onclick="addUpdateGenre()">
+        </div>
+    </form>
+</div>

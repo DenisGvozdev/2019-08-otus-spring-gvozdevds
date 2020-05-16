@@ -1,7 +1,6 @@
 package ru.gds.spring.microservice.util;
 
 import org.apache.log4j.Logger;
-import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
@@ -36,17 +35,6 @@ public class FileUtils {
         } catch (Exception e) {
             logger.error("file not found: " + filePath);
             return null;
-        }
-    }
-
-    public static byte[] getByteArrayByFilePath(String filePath) {
-        try {
-            File file = getFileByFilePath(filePath);
-            return convertFileToByteArray(file);
-
-        } catch (Exception e) {
-            logger.error("file not found error: " + Arrays.asList(e.getStackTrace()));
-            return "".getBytes();
         }
     }
 
@@ -130,35 +118,5 @@ public class FileUtils {
             logger.error("getMultipartFile error: " + Arrays.asList(e.getStackTrace()));
         }
         return null;
-    }
-
-    public static byte[] convertFileToByteArray(File file) {
-        FileInputStream fileInputStream = null;
-        byte[] bytesArray = null;
-        try {
-            if (file == null) {
-                throw new Exception("file is null");
-            }
-
-            logger.debug("convert file: " + file.getAbsolutePath());
-            bytesArray = new byte[(int) file.length()];
-            fileInputStream = new FileInputStream(file);
-            fileInputStream.read(bytesArray);
-
-        } catch (Exception e) {
-            logger.error("file not found: " + Arrays.asList(e.getStackTrace()));
-            e.printStackTrace();
-
-        } finally {
-            if (fileInputStream != null) {
-                try {
-                    fileInputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        return bytesArray;
     }
 }

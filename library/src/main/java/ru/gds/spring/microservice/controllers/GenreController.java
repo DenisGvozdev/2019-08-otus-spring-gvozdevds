@@ -4,7 +4,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.gds.spring.microservice.dto.GenreDto;
 import ru.gds.spring.microservice.interfaces.GenreService;
 import ru.gds.spring.microservice.params.ParamsGenre;
-import ru.gds.spring.microservice.services.GenreServiceImpl;
 
 import java.util.List;
 

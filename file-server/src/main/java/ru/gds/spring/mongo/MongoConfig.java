@@ -19,12 +19,6 @@ public class MongoConfig {
     @Bean
     public Mongock mongock(MongoProps mongoProps, MongoClient mongoClient) {
         try {
-            /*MongoProps mongoPropsCustom = new MongoProps();
-            mongoPropsCustom.setDatabase("libraryFiles");
-            mongoPropsCustom.setPort(27017);
-            mongoPropsCustom.setUri("mongodb://0.0.0.0:27017/libraryFiles");
-            mongoPropsCustom.setHost("0.0.0.0");*/
-
             logger.debug("MongoProps FileServer info: dataBase=" + mongoProps.getDatabase()
                     + " uri=" + mongoProps.getUri()
                     + " host=" + mongoProps.getHost()

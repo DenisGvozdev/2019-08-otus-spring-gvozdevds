@@ -5,10 +5,6 @@ spring:
   data:
     mongodb:
       database: mydb
-      #username: MongoDB
-      #password: root
-      #port: 27017
-      #host: 127.0.0.1
   jmx:
     enabled: true
 
@@ -19,3 +15,6 @@ logging:
 
 server:
   port: 8080
+
+app:
+  fileServerUrl: http://127.0.0.1:8081

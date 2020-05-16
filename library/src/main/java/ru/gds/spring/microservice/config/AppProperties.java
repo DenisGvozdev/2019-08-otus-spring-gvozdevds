@@ -18,11 +18,21 @@ import javax.servlet.MultipartConfigElement;
 @ServletComponentScan
 public class AppProperties {
 
+    private String fileServerUrl;
+
     @Bean
     MultipartConfigElement multipartConfigElement() {
         MultipartConfigFactory factory = new MultipartConfigFactory();
         factory.setMaxFileSize(DataSize.ofBytes(512000000L));
         factory.setMaxRequestSize(DataSize.ofBytes(512000000L));
         return factory.createMultipartConfig();
+    }
+
+    public String getFileServerUrl() {
+        return fileServerUrl;
+    }
+
+    public void setFileServerUrl(String fileServerUrl) {
+        this.fileServerUrl = fileServerUrl;
     }
 }

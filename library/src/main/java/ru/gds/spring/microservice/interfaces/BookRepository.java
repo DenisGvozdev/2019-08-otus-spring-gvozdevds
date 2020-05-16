@@ -16,13 +16,7 @@ public interface BookRepository extends MongoRepository<Book, String> {
 
     List<Book> findAllByStatusId(String id);
 
-    //@PostFilter("hasPermission(filterObject, 'READ')")
     List<Book> findAll();
 
-    //@PostFilter("hasPermission(filterObject, 'READ')")
     List<Book> findByNameContainingIgnoreCase(@Param("name") String name);
-
-    @SuppressWarnings("unchecked")
-    //@PreAuthorize("hasRole('WRITE')")
-    Book save(@Param("book") Book book);
 }

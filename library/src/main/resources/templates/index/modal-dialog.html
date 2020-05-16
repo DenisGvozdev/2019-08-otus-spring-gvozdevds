@@ -1,0 +1,76 @@
+<div class="modal-dialog">
+    <form id="formCreateUpdateBook" enctype="multipart/form-data" action="" mode="" method="">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 id="titleBookForm" class="modal-title">Книга</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="bookImage">
+                    <img id="imagePreview" src=""/>
+                </div>
+
+                <div class="bookForm">
+
+                    <input id="bookId" name="id" type="hidden" value=""/>
+
+                    <div class="form-group">
+                        <label for="name" class="labelInput">Название</label>
+                        <input id="name" name="name" type="text" class="inputText" value=""/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description" class="labelInput">Описание</label>
+                        <textarea id="description" name="description" rows="2" cols="80" class="inputText"
+                                  field=""></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fileTitle" class="labelInput">Обложка</label>
+                        <input id="fileTitle" name="fileTitle" type="file" onchange="readTitleURL(this)"
+                               class="inputText"
+                               value=""/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fileContent" class="labelInput">Содержимое</label>
+                        <input id="fileContent" name="fileContent" type="file" onchange="readContentURL(this)"
+                               class="inputText"
+                               value=""/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="authorIds" class="labelInput">Авторы</label>
+                        <select id="authorIds" name="authorIds" size="2" class="selectFields"
+                                multiple data-live-search="true">
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="genreIds" class="labelInput">Жанры</label>
+                        <select id="genreIds" name="genreIds" size="2" class="selectFields"
+                                multiple data-live-search="true">
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="statusId" class="labelInput">Статус</label>
+                        <select id="statusId" name="statusId" class="selectFields"
+                                data-live-search="true">
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input id="buttonSaveBook" type="button" value="Сохранить" class="modal-button-save"
+                   onclick="addBook()">
+            <input id="buttonUpdateBook" type="button" value="Обновить" class="modal-button-save"
+                   onclick="updateBook()">
+            <input type="button" value="Закрыть" class="modal-button-close" data-dismiss="modal">
+        </div>
+    </form>
+</div>

@@ -1,11 +1,8 @@
 package ru.gds.spring.microservice.params;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
-//@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class ParamsBookContent {
 
     @JsonProperty("bookId")

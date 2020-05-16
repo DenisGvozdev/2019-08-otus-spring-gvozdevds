@@ -1,0 +1,34 @@
+<div class="statuses">
+    <table class="statuses" id="tableStatuses">
+        <thead>
+        <tr>
+            <th id="statusName">Название</th>
+            <th id="statusCrudButtons">
+                <button type="button" class="refButton" onclick="fillStatusForm(null, 'add')">
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span><strong>Добавить</strong></span>
+                </button>
+            </th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+<div class="statuses-form">
+    <form id="formCreateUpdateStatus" enctype="multipart/form-data" action="" mode="" method="">
+        <div class="statusForm">
+            <h4 id="title-status-form" class="modal-title">Статус</h4>
+            <input id="status-id" name="id" type="hidden" class="inputStatusText" value=""/>
+            <div class="form-group">
+                <label for="status-name" class="labelInput">Название</label>
+                <input id="status-name" name="name" type="text" class="inputStatusText" value=""/>
+            </div>
+        </div>
+        <div class="form-group">
+            <input id="buttonSaveStatus" type="button" value="Сохранить" class="object-button-save"
+                   onclick="addUpdateStatus()">
+        </div>
+    </form>
+</div>
