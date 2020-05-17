@@ -1,0 +1,44 @@
+spring:
+  profiles:
+    active: test
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+    initialization-mode: always
+    hikari:
+      connectionTimeout: 20000
+      maximumPoolSize: 5
+  h2:
+    console:
+      path: /h2-console
+      # http://localhost:8080/h2-console/login.jsp
+      enabled: true
+      settings:
+        trace: false
+        web-allow-others: false
+  data:
+    mongodb:
+      database: mydb
+  jmx:
+    enabled: true
+  servlet:
+    multipart:
+      max-file-size: 128MB
+      max-request-size: 128MB
+      enabled: true
+  security:
+    user:
+      name: user
+      password: password
+      roles: ROLE_BOOKS_READ,ROLE_AUTHORS_READ,ROLE_GENRES_READ,ROLE_STATUSES_READ
+  #http:
+  #  multipart:
+  #    max-file-size: 20MB
+  #    max-request-size: 20MB
+---
+logging:
+  level:
+    org:
+      springframework: info

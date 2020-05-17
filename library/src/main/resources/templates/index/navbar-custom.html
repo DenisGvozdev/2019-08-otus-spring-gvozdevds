@@ -1,0 +1,26 @@
+<div class="navbar-custom">
+    <a class="brand" href="/">Моя библиотека</a>
+    <ul class="nav nav-pills">
+        <li>
+            <form action="/" method="get" class="one">
+                <input type="submit" class="all-books-button" value="Все книги">
+            </form>
+        </li>
+        <li>
+            <div class="search">
+                <form id="formFindBookByName" action="" method="get" class="form-inline my-2 my-lg-0">
+                    <input name="name" class="form-control mr-sm-2" type="search"
+                           placeholder="Название книги" aria-label="Поиск">
+                    <button class="search" id="buttonSearch" type="button"
+                            onclick="findBookByName('formFindBookByName')">Найти
+                    </button>
+                </form>
+            </div>
+        </li>
+    </ul>
+    <div class="authorization">
+        <a id="helloUser" href="/login"></a><br/>
+        <a id="exitUser" href="/logout" hidden="">Выход</a>
+    </div>
+</div>
+<!--/div-->
