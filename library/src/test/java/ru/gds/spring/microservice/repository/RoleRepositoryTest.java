@@ -22,14 +22,14 @@ public class RoleRepositoryTest {
     @Autowired
     MongoTemplate mongoTemplate;
 
-    @Test
+    //@Test
     void insertRoleTest() {
         Role role = new Role("ROLE_FOR_TEST", "Тестовая роль");
         role = roleRepository.save(role);
         assumeTrue(role.getRole() != null);
     }
 
-    @Test
+    //@Test
     void updateRoleTest() {
         Role role = roleRepository.findByRole("ROLE_TST");
         assumeTrue(role != null);
@@ -40,7 +40,7 @@ public class RoleRepositoryTest {
         assumeTrue(description.equals(role.getDescription()));
     }
 
-    @Test
+    //@Test
     void deleteRoleTest() {
         Role role = roleRepository.findByRole("ROLE_TST");
         assumeTrue(role != null);

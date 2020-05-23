@@ -2,6 +2,7 @@ package ru.gds.spring.microservice.util;
 
 import org.apache.log4j.Logger;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,13 +15,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Service
 public class FileUtils {
 
     private static final Logger logger = Logger.getLogger(FileUtils.class);
 
     private static final int COUNT_WORDS_ON_PAGE = 200;
 
-    private static File getFileByFilePath(String filePath) {
+    private File getFileByFilePath(String filePath) {
         logger.debug("start getFile: " + filePath);
         try {
             File file = new File(filePath);
@@ -38,7 +40,7 @@ public class FileUtils {
         }
     }
 
-    public static File getFile(String filePath) {
+    public File getFile(String filePath) {
         try {
             File file = ResourceUtils.getFile(filePath);
             if (!file.exists()) {
@@ -55,7 +57,7 @@ public class FileUtils {
         }
     }
 
-    public static List<String> getBookPages(String filePath) {
+    public List<String> getBookPages(String filePath) {
         List<String> bookPageList = new ArrayList<>();
         try {
 
@@ -95,7 +97,7 @@ public class FileUtils {
         return bookPageList;
     }
 
-    public static File saveFile(String name, String directory, byte[] bytes) {
+    public File saveFile(String name, String directory, byte[] bytes) {
         try {
             Path path = Paths.get(directory + name);
             Files.write(path, bytes);
@@ -108,7 +110,7 @@ public class FileUtils {
         }
     }
 
-    public static MultipartFile getMultipartFile(String filePath) {
+    public MultipartFile getMultipartFile(String filePath) {
         try {
             File file = getFile(filePath);
             if (file != null)

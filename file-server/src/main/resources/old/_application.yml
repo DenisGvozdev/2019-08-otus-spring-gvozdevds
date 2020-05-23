@@ -19,4 +19,4 @@ logging:
       springframework: info
 
 server:
-  port: 8081
+  port: 7001

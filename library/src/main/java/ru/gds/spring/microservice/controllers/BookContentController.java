@@ -10,10 +10,10 @@ import ru.gds.spring.microservice.interfaces.Sender;
 @Controller
 public class BookContentController {
 
-    private final Sender restClient;
+    private final Sender sender;
 
-    BookContentController(Sender restClient) {
-        this.restClient = restClient;
+    BookContentController(Sender sender) {
+        this.sender = sender;
     }
 
     @GetMapping("/content")
@@ -22,8 +22,7 @@ public class BookContentController {
             @RequestParam(value = "pageStart") int pageStart,
             @RequestParam(value = "countPages") int countPages,
             Model model) {
-        String uri = String.format("/content/?bookId=%s&pageStart=%d&countPages=%d", bookId, pageStart, countPages);
-        String response = restClient.get(uri);
+        String response = sender.get(bookId, pageStart, countPages);
         model.addAttribute("book", response);
         return "/read";
     }
@@ -31,7 +30,6 @@ public class BookContentController {
     @GetMapping("content/bookId")
     @ResponseBody
     public String findFileByBookId(@RequestParam(value = "bookId") String bookId) {
-        String uri = String.format("/content/bookId?bookId=%s", bookId);
-        return restClient.get(uri);
+        return sender.findFileByBookId(bookId);
     }
 }

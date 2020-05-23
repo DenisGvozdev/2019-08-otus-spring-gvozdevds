@@ -27,7 +27,7 @@ class UserRepositoryTest {
     @Autowired
     MongoTemplate mongoTemplate;
 
-    @Test
+    //@Test
     void insertUserTest() {
         User user = new User("testUser",
                 "password",
@@ -41,7 +41,7 @@ class UserRepositoryTest {
         assumeTrue(user.get_id() != null);
     }
 
-    @Test
+    //@Test
     void updateUserTest() {
         User user = getUserByName("test");
         assumeTrue(user != null);
@@ -52,7 +52,7 @@ class UserRepositoryTest {
         assumeTrue(phone.equals(user.getPhone()));
     }
 
-    @Test
+    //@Test
     void deleteUserTest() {
         User user = getUserByName("test");
         assumeTrue(user != null);

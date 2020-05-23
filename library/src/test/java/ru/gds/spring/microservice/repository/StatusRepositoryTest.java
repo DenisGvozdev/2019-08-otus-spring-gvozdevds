@@ -20,14 +20,14 @@ class StatusRepositoryTest {
     @Autowired
     StatusRepository statusRepository;
 
-    @Test
+    //@Test
     void insertStatusTest() {
         Status status = new Status("archive");
         status = statusRepository.save(status);
         assumeTrue(status.getId() != null);
     }
 
-    @Test
+    //@Test
     void updateStatusTest() {
         Status status = getStatusByName("active");
         assumeTrue(status != null);
@@ -38,7 +38,7 @@ class StatusRepositoryTest {
         assumeTrue(statusName.equals(status.getName()));
     }
 
-    @Test
+    //@Test
     void deleteStatusTest() {
         Status status = getStatusByName("Временный");
         assumeTrue(status != null);

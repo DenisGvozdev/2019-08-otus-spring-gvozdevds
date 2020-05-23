@@ -26,7 +26,7 @@ class CommentRepositoryTest {
     @Autowired
     MongoTemplate mongoTemplate;
 
-    @Test
+    //@Test
     void insertCommentTest() {
         Book book = getFirstBook();
         Comment comment = new Comment(book, "Тестовый комментарий", new Date());
@@ -34,7 +34,7 @@ class CommentRepositoryTest {
         assumeTrue(comment.getId() != null);
     }
 
-    @Test
+    //@Test
     void findCommentByBookTest() {
         Comment comment = getFirstComment();
         assumeTrue(comment != null && comment.getBook() != null);
@@ -43,7 +43,7 @@ class CommentRepositoryTest {
         assumeTrue(!commentList.isEmpty());
     }
 
-    @Test
+    //@Test
     void deleteCommentTest() {
         List<Comment> commentList = getCommentList();
         int countCommets = commentList.size();

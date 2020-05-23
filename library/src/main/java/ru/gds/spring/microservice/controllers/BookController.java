@@ -1,6 +1,7 @@
 package ru.gds.spring.microservice.controllers;
 
 import org.springframework.web.bind.annotation.*;
+import ru.gds.spring.microservice.dto.BookContentDto;
 import ru.gds.spring.microservice.dto.BookDto;
 import ru.gds.spring.microservice.interfaces.BookService;
 import ru.gds.spring.microservice.interfaces.Sender;
@@ -35,8 +36,11 @@ public class BookController {
     @PostMapping("/books")
     public BookDto add(ParamsBook params) {
         BookDto bookDto = bookService.save(params);
+
         ParamsBookContent reqParams = bookService.prepareRequestForAddBookContent(params, bookDto);
-        sender.postMVC("/content", reqParams);
+        BookContentDto saveFilesResult = sender.addUpdateBookContent(reqParams);
+        bookDto.setStatus(saveFilesResult.getStatus());
+        bookDto.setMessage(saveFilesResult.getMessage());
         return bookDto;
     }
 
@@ -44,7 +48,9 @@ public class BookController {
     public BookDto update(ParamsBook params) {
         BookDto bookDto = bookService.save(params);
         ParamsBookContent reqParams = bookService.prepareRequestForAddBookContent(params, bookDto);
-        sender.postMVC("/content", reqParams);
+        BookContentDto saveFilesResult = sender.addUpdateBookContent(reqParams);
+        bookDto.setStatus(saveFilesResult.getStatus());
+        bookDto.setMessage(saveFilesResult.getMessage());
         return bookDto;
     }
 

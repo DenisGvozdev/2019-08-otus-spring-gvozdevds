@@ -12,9 +12,11 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final CommonUtils commonUtils;
 
-    UserController(UserService userService) {
+    UserController(UserService userService, CommonUtils commonUtils) {
         this.userService = userService;
+        this.commonUtils = commonUtils;
     }
 
     @GetMapping("users")
@@ -34,7 +36,7 @@ public class UserController {
 
     @GetMapping("users/{active}")
     public UserDto getActiveUser() {
-        return CommonUtils.getCurrentUser();
+        return commonUtils.getCurrentUser();
     }
 
     @PostMapping("/users")

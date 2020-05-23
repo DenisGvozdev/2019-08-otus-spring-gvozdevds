@@ -5,6 +5,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
 import ru.gds.spring.microservice.dto.RoleDto;
 import ru.gds.spring.microservice.dto.UserDto;
 
@@ -12,9 +13,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@Service
 public class CommonUtils {
 
-    public static List<String> convertStringToListString(String ids) {
+    public List<String> convertStringToListString(String ids) {
         List<String> idList = new ArrayList<>();
         String[] authorIdArray = ids.split(",");
         if (authorIdArray.length > 0) {
@@ -25,7 +27,7 @@ public class CommonUtils {
         return idList;
     }
 
-    public static UserDto getCurrentUser() {
+    public UserDto getCurrentUser() {
         UserDto userDto = new UserDto();
 
         SecurityContext securityContext = SecurityContextHolder.getContext();

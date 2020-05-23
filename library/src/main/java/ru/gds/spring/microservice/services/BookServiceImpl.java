@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+import ru.gds.spring.microservice.constant.Constant;
 import ru.gds.spring.microservice.dto.BookDto;
 import ru.gds.spring.microservice.dto.UserDto;
 import ru.gds.spring.microservice.params.ParamsBook;
@@ -12,7 +13,6 @@ import ru.gds.spring.microservice.util.CommonUtils;
 import ru.gds.spring.microservice.domain.*;
 import ru.gds.spring.microservice.interfaces.*;
 import ru.gds.spring.microservice.util.FileUtils;
-
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -26,21 +26,24 @@ public class BookServiceImpl implements BookService {
     private final GenreRepository genreRepository;
     private final AuthorRepository authorRepository;
     private final StatusRepository statusRepository;
+    private final CommonUtils commonUtils;
 
     BookServiceImpl(BookRepository bookRepository,
                     GenreRepository genreRepository,
                     AuthorRepository authorRepository,
-                    StatusRepository statusRepository) {
+                    StatusRepository statusRepository,
+                    CommonUtils commonUtils) {
 
         this.bookRepository = bookRepository;
         this.genreRepository = genreRepository;
         this.authorRepository = authorRepository;
         this.statusRepository = statusRepository;
+        this.commonUtils = commonUtils;
     }
 
     public List<BookDto> findAllLight() {
         try {
-            UserDto userDto = CommonUtils.getCurrentUser();
+            UserDto userDto = commonUtils.getCurrentUser();
             boolean write = (UserDto.findRole("ROLE_ADMINISTRATION", userDto.getRoles())
                     || UserDto.findRole("ROLE_BOOKS_WRITE", userDto.getRoles()));
 
@@ -110,7 +113,7 @@ public class BookServiceImpl implements BookService {
     private List<BookDto> findByNameLight(String name) {
         List<BookDto> bookDtoList = new ArrayList<>();
         try {
-            UserDto userDto = CommonUtils.getCurrentUser();
+            UserDto userDto = commonUtils.getCurrentUser();
             boolean write = (UserDto.findRole("ROLE_ADMINISTRATION", userDto.getRoles())
                     || UserDto.findRole("ROLE_BOOKS_WRITE", userDto.getRoles()));
 
@@ -124,6 +127,7 @@ public class BookServiceImpl implements BookService {
     }
 
     public BookDto save(ParamsBook params) {
+        BookDto bookDto = new BookDto();
         try {
             if (params == null)
                 throw new Exception("Input params is empty");
@@ -131,8 +135,8 @@ public class BookServiceImpl implements BookService {
             if (StringUtils.isEmpty(params.getName()))
                 throw new Exception("Book name is empty");
 
-            List<Genre> genres = genreRepository.findAllById(CommonUtils.convertStringToListString(params.getGenreIds()), null);
-            List<Author> authors = authorRepository.findAllById(CommonUtils.convertStringToListString(params.getAuthorIds()), null);
+            List<Genre> genres = genreRepository.findAllById(commonUtils.convertStringToListString(params.getGenreIds()), null);
+            List<Author> authors = authorRepository.findAllById(commonUtils.convertStringToListString(params.getAuthorIds()), null);
 
             Status status = statusRepository.findById(params.getStatusId()).orElse(null);
             byte[] image = (params.getFileTitle() != null) ? params.getFileTitle().getBytes() : null;
@@ -152,11 +156,11 @@ public class BookServiceImpl implements BookService {
 
                 book = bookRepository.save(book);
 
-                UserDto userDto = CommonUtils.getCurrentUser();
+                UserDto userDto = commonUtils.getCurrentUser();
                 boolean write = (UserDto.findRole("ROLE_ADMINISTRATION", userDto.getRoles())
                         || UserDto.findRole("ROLE_BOOKS_WRITE", userDto.getRoles()));
 
-                return BookDto.toDtoLight(book, write);
+                bookDto = BookDto.toDtoLight(book, write);
 
             } else {
                 book = bookRepository.findById(params.getId()).orElse(null);
@@ -170,17 +174,19 @@ public class BookServiceImpl implements BookService {
                 book.setStatus(status);
                 book.setImage((image != null && image.length > 0) ? image : book.getImage());
 
-                UserDto userDto = CommonUtils.getCurrentUser();
+                UserDto userDto = commonUtils.getCurrentUser();
                 boolean write = (UserDto.findRole("ROLE_ADMINISTRATION", userDto.getRoles())
                         || UserDto.findRole("ROLE_BOOKS_WRITE", userDto.getRoles()));
 
-                return BookDto.toDtoLight(bookRepository.save(book), write);
+                bookDto = BookDto.toDtoLight(bookRepository.save(book), write);
             }
 
         } catch (Exception e) {
             logger.error("Error add book: " + e.getMessage());
+            bookDto.setStatus(Constant.ERROR);
+            bookDto.setMessage(e.getMessage());
         }
-        return new BookDto();
+        return bookDto;
     }
 
     public List<Book> findAllByName(String name) {

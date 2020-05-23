@@ -1,16 +1,16 @@
 package ru.gds.spring.microservice.interfaces;
 
+import ru.gds.spring.microservice.dto.BookContentDto;
 import ru.gds.spring.microservice.params.ParamsBookContent;
+
 
 public interface Sender {
 
-    String get(String uri);
+    String get(String bookId, int pageStart, int countPages);
 
-    void post(String uri, String json);
+    String findFileByBookId(String bookId);
 
-    void postMVC(String uri, ParamsBookContent params);
-
-    void put(String uri, String json);
+    BookContentDto addUpdateBookContent(ParamsBookContent params);
 
     void delete(String uri);
 }

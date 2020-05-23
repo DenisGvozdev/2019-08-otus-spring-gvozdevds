@@ -1,5 +1,6 @@
 package ru.gds.spring.microservice.dto;
 
+import ru.gds.spring.microservice.constant.Constant;
 import ru.gds.spring.microservice.domain.Author;
 import ru.gds.spring.microservice.domain.Book;
 import ru.gds.spring.microservice.domain.Genre;
@@ -25,6 +26,8 @@ public class BookDto {
     private List<GenreDto> genres;
     private List<AuthorDto> authors;
     private boolean write;
+    private String status;
+    private String message;
 
     public BookDto(){}
 
@@ -112,8 +115,24 @@ public class BookDto {
         return write;
     }
 
-    public void setWrite(boolean write) {
+    private void setWrite(boolean write) {
         this.write = write;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public static BookDto toDtoLight(Book book, boolean write) {
@@ -126,6 +145,7 @@ public class BookDto {
         bookDto.setCreateDate(book.getCreateDate());
         bookDto.setDescription(book.getDescription());
         bookDto.setWrite(write);
+        bookDto.setStatus(Constant.OK);
         return bookDto;
     }
 
@@ -159,13 +179,16 @@ public class BookDto {
         try {
             String base64SignatureImage = Base64.getEncoder().encodeToString(book.getImage());
             encodedImage = URLEncoder.encode(base64SignatureImage, "utf-8");
+
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+
         String extension = "data:image/jpg;base64,";
         bookDto.setImage(book.getImage());
         bookDto.setImageExtension(extension);
         bookDto.setImageString(extension + encodedImage);
+        bookDto.setStatus(Constant.OK);
 
         return bookDto;
     }

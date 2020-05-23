@@ -1,12 +1,15 @@
 package ru.gds.spring.microservice.util;
 
+import org.springframework.stereotype.Service;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+@Service
 public class DateUtils {
 
-    public static Date getDateFromString(String dateString, String format) {
+    public Date getDateFromString(String dateString, String format) {
         try {
             SimpleDateFormat formatter = new SimpleDateFormat(format);
             return formatter.parse(dateString);
@@ -16,7 +19,7 @@ public class DateUtils {
         return null;
     }
 
-    public static String getStringFromDate(Date date, String format) {
+    public String getStringFromDate(Date date, String format) {
         try {
             SimpleDateFormat formatter = new SimpleDateFormat(format);
             return formatter.format(date);

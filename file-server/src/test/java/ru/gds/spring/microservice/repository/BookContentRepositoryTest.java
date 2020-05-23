@@ -23,6 +23,9 @@ class BookContentRepositoryTest {
     @Autowired
     BookContentRepository bookContentRepository;
 
+    @Autowired
+    FileUtils fileUtils;
+
     @Test
     void insertBookContentTest() {
         File file = getFile();
@@ -58,10 +61,10 @@ class BookContentRepositoryTest {
         if (file == null)
             return new ArrayList<>();
 
-        return FileUtils.getBookPages(file.getAbsolutePath());
+        return fileUtils.getBookPages(file.getAbsolutePath());
     }
 
     private File getFile() {
-        return FileUtils.getFile("classpath:files/NickPerumovChernoeKopye.txt");
+        return fileUtils.getFile("classpath:files/NickPerumovChernoeKopye.txt");
     }
 }

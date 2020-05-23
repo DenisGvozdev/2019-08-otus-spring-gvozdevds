@@ -1,5 +1,6 @@
 package ru.gds.spring.microservice.dto;
 
+import ru.gds.spring.constant.Constant;
 import ru.gds.spring.microservice.domain.BookContent;
 
 import java.util.ArrayList;
@@ -12,6 +13,10 @@ public class BookContentDto {
     private int startPage;
     private int countPages;
     private List<PageDto> pageList = new ArrayList<>();
+    private String fileName;
+    private String filePath;
+    private String status;
+    private String message;
 
     public BookContentDto() {
     }
@@ -62,6 +67,38 @@ public class BookContentDto {
         this.pageList = pageList;
     }
 
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     public static BookContentDto toDtoLight(BookContent bookContent) {
         BookContentDto bookContentDto = new BookContentDto();
 
@@ -75,6 +112,9 @@ public class BookContentDto {
         bookContentDto.setBookName(bookContent.getBookName());
         bookContentDto.setStartPage(1);
         bookContentDto.setCountPages(bookContentDto.getPageList().size());
+        bookContentDto.setFileName(bookContent.getContentFileName());
+        bookContentDto.setFilePath(bookContent.getContentFilePath());
+        bookContentDto.setStatus(Constant.OK);
         return bookContentDto;
     }
 }

@@ -1,26 +1,16 @@
 package ru.gds.spring.microservice.params;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
+@Data
 public class ParamsBookContent {
 
-    @JsonProperty("bookId")
     private String bookId;
-
-    @JsonProperty("bookName")
     private String bookName;
-
-    @JsonProperty("startPage")
     private int startPage;
-
-    @JsonProperty("countPages")
     private int countPages;
-
-    @JsonProperty("fileTitle")
     private MultipartFile fileTitle;
-
-    @JsonProperty("fileContent")
     private MultipartFile fileContent;
 
     public ParamsBookContent() {

@@ -62,3 +62,184 @@
 2020-05-17 17:25:22 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NickPerumovChernoeKopye.txt success saved
 2020-05-17 17:25:22 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NickPerumovChernoeKopye.txt
 2020-05-17 17:25:22 [ERROR][main][spring.microservice.service.BookContentServiceImpl] - return because bookContent not found by bookId = 1
+2020-05-18 22:35:39 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-18 22:35:42 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\fileTitle success saved
+2020-05-18 22:35:42 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\fileTitle
+2020-05-18 22:35:42 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\fileContent success saved
+2020-05-18 22:35:42 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\fileContent
+2020-05-18 22:35:45 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-18 22:35:48 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-18 22:35:48 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NicPerumov_ChernoeKopye.jpg success saved
+2020-05-18 22:35:48 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NicPerumov_ChernoeKopye.jpg
+2020-05-18 22:35:48 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NickPerumovChernoeKopye.txt success saved
+2020-05-18 22:35:48 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NickPerumovChernoeKopye.txt
+2020-05-18 22:35:48 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NicPerumov_ChernoeKopye.jpg success saved
+2020-05-18 22:35:48 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NicPerumov_ChernoeKopye.jpg
+2020-05-18 22:35:48 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NickPerumovChernoeKopye.txt success saved
+2020-05-18 22:35:48 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NickPerumovChernoeKopye.txt
+2020-05-18 22:35:48 [ERROR][main][spring.microservice.service.BookContentServiceImpl] - return because bookContent not found by bookId = 1
+2020-05-18 22:37:04 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-18 22:37:07 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\fileTitle success saved
+2020-05-18 22:37:07 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\fileTitle
+2020-05-18 22:37:07 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\fileContent success saved
+2020-05-18 22:37:07 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\fileContent
+2020-05-18 22:37:09 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-18 22:37:12 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-18 22:37:12 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NicPerumov_ChernoeKopye.jpg success saved
+2020-05-18 22:37:12 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NicPerumov_ChernoeKopye.jpg
+2020-05-18 22:37:12 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NickPerumovChernoeKopye.txt success saved
+2020-05-18 22:37:12 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NickPerumovChernoeKopye.txt
+2020-05-18 22:37:12 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NicPerumov_ChernoeKopye.jpg success saved
+2020-05-18 22:37:12 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NicPerumov_ChernoeKopye.jpg
+2020-05-18 22:37:12 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NickPerumovChernoeKopye.txt success saved
+2020-05-18 22:37:12 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NickPerumovChernoeKopye.txt
+2020-05-18 22:37:12 [ERROR][main][spring.microservice.service.BookContentServiceImpl] - return because bookContent not found by bookId = 1
+2020-05-18 22:38:43 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-18 22:38:46 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\fileTitle success saved
+2020-05-18 22:38:46 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\fileTitle
+2020-05-18 22:38:46 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\fileContent success saved
+2020-05-18 22:38:46 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\fileContent
+2020-05-18 22:38:48 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-18 22:38:51 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-18 22:38:51 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NicPerumov_ChernoeKopye.jpg success saved
+2020-05-18 22:38:51 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NicPerumov_ChernoeKopye.jpg
+2020-05-18 22:38:51 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NickPerumovChernoeKopye.txt success saved
+2020-05-18 22:38:51 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NickPerumovChernoeKopye.txt
+2020-05-18 22:38:51 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NicPerumov_ChernoeKopye.jpg success saved
+2020-05-18 22:38:51 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NicPerumov_ChernoeKopye.jpg
+2020-05-18 22:38:51 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NickPerumovChernoeKopye.txt success saved
+2020-05-18 22:38:51 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NickPerumovChernoeKopye.txt
+2020-05-18 22:38:51 [ERROR][main][spring.microservice.service.BookContentServiceImpl] - return because bookContent not found by bookId = 1
+2020-05-18 22:40:34 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-18 22:40:37 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\fileTitle success saved
+2020-05-18 22:40:37 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\fileTitle
+2020-05-18 22:40:37 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\fileContent success saved
+2020-05-18 22:40:37 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\fileContent
+2020-05-18 22:40:39 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-18 22:40:42 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-18 22:40:42 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NicPerumov_ChernoeKopye.jpg success saved
+2020-05-18 22:40:42 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NicPerumov_ChernoeKopye.jpg
+2020-05-18 22:40:42 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NickPerumovChernoeKopye.txt success saved
+2020-05-18 22:40:42 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NickPerumovChernoeKopye.txt
+2020-05-18 22:40:42 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NicPerumov_ChernoeKopye.jpg success saved
+2020-05-18 22:40:42 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NicPerumov_ChernoeKopye.jpg
+2020-05-18 22:40:42 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NickPerumovChernoeKopye.txt success saved
+2020-05-18 22:40:42 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NickPerumovChernoeKopye.txt
+2020-05-18 22:40:42 [ERROR][main][spring.microservice.service.BookContentServiceImpl] - return because bookContent not found by bookId = 1
+2020-05-18 23:12:43 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-18 23:12:46 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\fileTitle success saved
+2020-05-18 23:12:46 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\fileTitle
+2020-05-18 23:12:46 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\fileContent success saved
+2020-05-18 23:12:46 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\fileContent
+2020-05-18 23:12:48 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-18 23:12:51 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-18 23:12:51 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NicPerumov_ChernoeKopye.jpg success saved
+2020-05-18 23:12:51 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NicPerumov_ChernoeKopye.jpg
+2020-05-18 23:12:51 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NickPerumovChernoeKopye.txt success saved
+2020-05-18 23:12:51 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NickPerumovChernoeKopye.txt
+2020-05-18 23:12:52 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NicPerumov_ChernoeKopye.jpg success saved
+2020-05-18 23:12:52 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NicPerumov_ChernoeKopye.jpg
+2020-05-18 23:12:52 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NickPerumovChernoeKopye.txt success saved
+2020-05-18 23:12:52 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NickPerumovChernoeKopye.txt
+2020-05-18 23:12:52 [ERROR][main][spring.microservice.service.BookContentServiceImpl] - return because bookContent not found by bookId = 1
+2020-05-19 00:24:43 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-19 00:24:47 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\fileTitle success saved
+2020-05-19 00:24:47 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\fileTitle
+2020-05-19 00:24:47 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\fileContent success saved
+2020-05-19 00:24:47 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\fileContent
+2020-05-19 00:24:50 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-19 00:24:53 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-19 00:24:53 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NicPerumov_ChernoeKopye.jpg success saved
+2020-05-19 00:24:53 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NicPerumov_ChernoeKopye.jpg
+2020-05-19 00:24:53 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NickPerumovChernoeKopye.txt success saved
+2020-05-19 00:24:53 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NickPerumovChernoeKopye.txt
+2020-05-19 00:24:54 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NicPerumov_ChernoeKopye.jpg success saved
+2020-05-19 00:24:54 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NicPerumov_ChernoeKopye.jpg
+2020-05-19 00:24:54 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NickPerumovChernoeKopye.txt success saved
+2020-05-19 00:24:54 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NickPerumovChernoeKopye.txt
+2020-05-19 00:24:54 [ERROR][main][spring.microservice.service.BookContentServiceImpl] - return because bookContent not found by bookId = 1
+2020-05-20 00:01:34 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-20 00:01:39 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\fileTitle success saved
+2020-05-20 00:01:39 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\fileTitle
+2020-05-20 00:01:39 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\fileContent success saved
+2020-05-20 00:01:39 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\fileContent
+2020-05-20 00:01:44 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-20 00:01:50 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-20 00:01:51 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NicPerumov_ChernoeKopye.jpg success saved
+2020-05-20 00:01:51 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NicPerumov_ChernoeKopye.jpg
+2020-05-20 00:01:51 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NickPerumovChernoeKopye.txt success saved
+2020-05-20 00:01:51 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NickPerumovChernoeKopye.txt
+2020-05-20 00:01:51 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NicPerumov_ChernoeKopye.jpg success saved
+2020-05-20 00:01:51 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NicPerumov_ChernoeKopye.jpg
+2020-05-20 00:01:51 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NickPerumovChernoeKopye.txt success saved
+2020-05-20 00:01:51 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NickPerumovChernoeKopye.txt
+2020-05-20 00:01:51 [ERROR][main][spring.microservice.service.BookContentServiceImpl] - return because bookContent not found by bookId = 1
+2020-05-20 00:04:08 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-20 00:04:16 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-20 00:04:16 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NicPerumov_ChernoeKopye.jpg success saved
+2020-05-20 00:04:16 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NicPerumov_ChernoeKopye.jpg
+2020-05-20 00:04:16 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NickPerumovChernoeKopye.txt success saved
+2020-05-20 00:04:16 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NickPerumovChernoeKopye.txt
+2020-05-20 00:04:16 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NicPerumov_ChernoeKopye.jpg success saved
+2020-05-20 00:04:16 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NicPerumov_ChernoeKopye.jpg
+2020-05-20 00:04:16 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NickPerumovChernoeKopye.txt success saved
+2020-05-20 00:04:16 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NickPerumovChernoeKopye.txt
+2020-05-20 00:04:16 [ERROR][main][spring.microservice.service.BookContentServiceImpl] - return because bookContent not found by bookId = 1
+2020-05-21 22:56:47 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-21 22:56:50 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-21 22:56:50 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NicPerumov_ChernoeKopye.jpg success saved
+2020-05-21 22:56:50 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NicPerumov_ChernoeKopye.jpg
+2020-05-21 22:56:50 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NickPerumovChernoeKopye.txt success saved
+2020-05-21 22:56:50 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NickPerumovChernoeKopye.txt
+2020-05-21 22:56:50 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NicPerumov_ChernoeKopye.jpg success saved
+2020-05-21 22:56:50 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NicPerumov_ChernoeKopye.jpg
+2020-05-21 22:56:50 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\NickPerumovChernoeKopye.txt success saved
+2020-05-21 22:56:50 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\NickPerumovChernoeKopye.txt
+2020-05-21 22:56:51 [ERROR][main][spring.microservice.service.BookContentServiceImpl] - return because bookContent not found by bookId = 1
+2020-05-23 21:51:32 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-23 21:52:12 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-23 21:52:29 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-23 21:52:29 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\2_NickPerumovChernoeKopye.txt success saved
+2020-05-23 21:52:29 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\2_NickPerumovChernoeKopye.txt
+2020-05-23 21:52:29 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\3_NickPerumovChernoeKopye.txt success saved
+2020-05-23 21:52:29 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\3_NickPerumovChernoeKopye.txt
+2020-05-23 21:52:29 [ERROR][main][spring.microservice.service.BookContentServiceImpl] - return because bookContent not found by bookId = 1
+2020-05-23 21:53:50 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-23 21:55:04 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-23 21:55:58 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-23 22:08:06 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-23 22:09:59 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-23 22:10:01 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-23 22:10:02 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\2_NickPerumovChernoeKopye.txt success saved
+2020-05-23 22:10:02 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\2_NickPerumovChernoeKopye.txt
+2020-05-23 22:10:02 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\3_NickPerumovChernoeKopye.txt success saved
+2020-05-23 22:10:02 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\3_NickPerumovChernoeKopye.txt
+2020-05-23 22:10:02 [ERROR][main][spring.microservice.service.BookContentServiceImpl] - return because bookContent not found by bookId = 1
+2020-05-23 22:19:07 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-23 22:19:10 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-23 22:19:10 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\2_NickPerumovChernoeKopye.txt success saved
+2020-05-23 22:19:10 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\2_NickPerumovChernoeKopye.txt
+2020-05-23 22:19:10 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\3_NickPerumovChernoeKopye.txt success saved
+2020-05-23 22:19:10 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\3_NickPerumovChernoeKopye.txt
+2020-05-23 22:19:10 [ERROR][main][spring.microservice.service.BookContentServiceImpl] - return because bookContent not found by bookId = 1
+2020-05-23 23:16:25 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-23 23:16:28 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-23 23:16:28 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\2_NickPerumovChernoeKopye.txt success saved
+2020-05-23 23:16:28 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\2_NickPerumovChernoeKopye.txt
+2020-05-23 23:16:28 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\3_NickPerumovChernoeKopye.txt success saved
+2020-05-23 23:16:28 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\3_NickPerumovChernoeKopye.txt
+2020-05-23 23:16:28 [ERROR][main][spring.microservice.service.BookContentServiceImpl] - return because bookContent not found by bookId = 1
+2020-05-24 00:36:15 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-24 00:36:18 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-24 00:36:18 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\2_NickPerumovChernoeKopye.txt success saved
+2020-05-24 00:36:18 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\2_NickPerumovChernoeKopye.txt
+2020-05-24 00:36:18 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\3_NickPerumovChernoeKopye.txt success saved
+2020-05-24 00:36:18 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\3_NickPerumovChernoeKopye.txt
+2020-05-24 00:36:18 [ERROR][main][spring.microservice.service.BookContentServiceImpl] - return because bookContent not found by bookId = 1
+2020-05-24 00:49:35 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-24 00:49:38 [DEBUG][main][ ru.gds.spring.mongo.MongoConfig] - MongoProps FileServer info: dataBase=libraryFiles uri=null host=null port=0
+2020-05-24 00:49:38 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\2_NickPerumovChernoeKopye.txt success saved
+2020-05-24 00:49:38 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\2_NickPerumovChernoeKopye.txt
+2020-05-24 00:49:38 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - File C:\fileStorage\3_NickPerumovChernoeKopye.txt success saved
+2020-05-24 00:49:38 [DEBUG][main][ru.gds.spring.microservice.util.FileUtils] - start getFile: C:\fileStorage\3_NickPerumovChernoeKopye.txt
+2020-05-24 00:49:38 [ERROR][main][spring.microservice.service.BookContentServiceImpl] - return because bookContent not found by bookId = 1

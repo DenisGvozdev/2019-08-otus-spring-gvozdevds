@@ -23,10 +23,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final CommonUtils commonUtils;
 
-    UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
+    UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository, CommonUtils commonUtils) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.commonUtils = commonUtils;
     }
 
     public List<UserDto> findAll() {
@@ -63,7 +65,7 @@ public class UserServiceImpl implements UserService {
                 throw new Exception("Username is empty");
 
             List<Role> roles = roleRepository.findAllByRole(
-                    CommonUtils.convertStringToListString(params.getRoleIds()), null);
+                    commonUtils.convertStringToListString(params.getRoleIds()), null);
 
             User userOld = userRepository.findByUsername(params.getUsername());
 

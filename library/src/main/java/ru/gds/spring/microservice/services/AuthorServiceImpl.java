@@ -26,10 +26,13 @@ public class AuthorServiceImpl implements AuthorService {
 
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
+    private final DateUtils dateUtils;
 
-    AuthorServiceImpl(AuthorRepository authorRepository, BookRepository bookRepository) {
+
+    AuthorServiceImpl(AuthorRepository authorRepository, BookRepository bookRepository, DateUtils dateUtils) {
         this.authorRepository = authorRepository;
         this.bookRepository = bookRepository;
+        this.dateUtils = dateUtils;
     }
 
     public List<AuthorDto> findAllLight() {
@@ -96,7 +99,7 @@ public class AuthorServiceImpl implements AuthorService {
             if (StringUtils.isEmpty(params.getFirstName()))
                 throw new Exception("FirstName is empty");
 
-            Date BirthDate = DateUtils.getDateFromString(params.getBirthDate(), ConstantFormatDate.FORMAT_ddMMyyyy);
+            Date BirthDate = dateUtils.getDateFromString(params.getBirthDate(), ConstantFormatDate.FORMAT_ddMMyyyy);
 
             if (StringUtils.isEmpty(params.getId())) {
                 return AuthorDto.toDto(authorRepository.save(

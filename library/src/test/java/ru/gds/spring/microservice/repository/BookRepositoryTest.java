@@ -31,7 +31,7 @@ class BookRepositoryTest {
     @Autowired
     MongoTemplate mongoTemplate;
 
-    @Test
+    //@Test
     void insertBookTest() {
         Book book = new Book(
                 "Мастер и Маргарита",
@@ -45,7 +45,7 @@ class BookRepositoryTest {
         assumeTrue(book.getId() != null);
     }
 
-    @Test
+    //@Test
     void updateBookTest() {
         Book book = getFirstBook();
         assumeTrue(book != null);
@@ -62,7 +62,7 @@ class BookRepositoryTest {
         assumeTrue(bookName.equals(book.getName()));
     }
 
-    @Test
+    //@Test
     void deleteBookTest() {
         int countAuthors = getAuthorList().size();
         int countGenres = getGenreList().size();

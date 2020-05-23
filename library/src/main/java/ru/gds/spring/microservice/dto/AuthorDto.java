@@ -18,6 +18,8 @@ public class AuthorDto {
     private String birthDateString;
     private boolean selected;
 
+    private static final DateUtils dateUtils = new DateUtils();
+
     public AuthorDto() {
     }
 
@@ -105,7 +107,7 @@ public class AuthorDto {
         AuthorDto authorDto = new AuthorDto();
         authorDto.setId(author.getId());
         authorDto.setFio(author.getFirstName() + " " + author.getSecondName() + " " + author.getThirdName());
-        authorDto.setBirthDateString(DateUtils.getStringFromDate(author.getBirthDate(), ConstantFormatDate.FORMAT_ddMMyyyy));
+        authorDto.setBirthDateString(dateUtils.getStringFromDate(author.getBirthDate(), ConstantFormatDate.FORMAT_ddMMyyyy));
         return authorDto;
     }
 
@@ -131,7 +133,7 @@ public class AuthorDto {
                 author.getThirdName(),
                 author.getFirstName() + " " + author.getSecondName() + " " + author.getThirdName(),
                 author.getBirthDate(),
-                DateUtils.getStringFromDate(author.getBirthDate(), ConstantFormatDate.FORMAT_ddMMyyyy),
+                dateUtils.getStringFromDate(author.getBirthDate(), ConstantFormatDate.FORMAT_ddMMyyyy),
                 false
         );
     }

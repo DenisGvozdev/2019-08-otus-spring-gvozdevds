@@ -1,16 +1,29 @@
 package ru.gds.spring.microservice.params;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import feign.form.FormProperty;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class ParamsBookContent {
 
+    @FormProperty("bookId")
     private String bookId;
+
+    @FormProperty("bookName")
     private String bookName;
+
+    @FormProperty("startPage")
     private int startPage;
+
+    @FormProperty("countPages")
     private int countPages;
+
+    @JsonProperty("fileTitle")
     private MultipartFile fileTitle;
+
+    @JsonProperty("fileContent")
     private MultipartFile fileContent;
 
     public ParamsBookContent(){}

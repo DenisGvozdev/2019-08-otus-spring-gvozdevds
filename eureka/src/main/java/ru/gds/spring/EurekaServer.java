@@ -2,13 +2,13 @@ package ru.gds.spring;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 
+@EnableEurekaServer
 @SpringBootApplication
-@EnableMongoRepositories
-public class Main {
+public class EurekaServer {
 
     public static void main(String[] args) {
-        SpringApplication.run(Main.class, args);
+        SpringApplication.run(EurekaServer.class, args);
     }
 }

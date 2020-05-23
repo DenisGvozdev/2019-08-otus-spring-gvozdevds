@@ -6,9 +6,9 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.web.multipart.MultipartFile;
+import ru.gds.spring.constant.Constant;
 import ru.gds.spring.microservice.dto.BookContentDto;
 import ru.gds.spring.microservice.interfaces.BookContentService;
-import ru.gds.spring.microservice.params.ParamsBookContent;
 import ru.gds.spring.microservice.util.FileUtils;
 
 import static org.junit.Assume.assumeTrue;
@@ -19,6 +19,9 @@ class BookContentServiceTest {
 
     @Autowired
     BookContentService bookContentService;
+
+    @Autowired
+    FileUtils fileUtils;
 
     @Test
     void insertBookTest() {
@@ -49,15 +52,14 @@ class BookContentServiceTest {
     }
 
     private BookContentDto saveBookContent(String bookId, String bookName, MultipartFile image, MultipartFile text) {
-        return bookContentService.save(
-                new ParamsBookContent(bookId, bookName, 1, 50, image, text));
+        return bookContentService.save(bookId, bookName, Constant.FILE_TYPE_CONTENT, text);
     }
 
     private MultipartFile getFileImage() {
-        return FileUtils.getMultipartFile("classpath:files/NicPerumov_ChernoeKopye.jpg");
+        return fileUtils.getMultipartFile("classpath:files/NicPerumov_ChernoeKopye.jpg");
     }
 
     private MultipartFile getFileText() {
-        return FileUtils.getMultipartFile("classpath:files/NickPerumovChernoeKopye.txt");
+        return fileUtils.getMultipartFile("classpath:files/NickPerumovChernoeKopye.txt");
     }
 }

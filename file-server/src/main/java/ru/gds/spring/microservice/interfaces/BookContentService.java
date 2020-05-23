@@ -1,8 +1,8 @@
 package ru.gds.spring.microservice.interfaces;
 
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.web.multipart.MultipartFile;
 import ru.gds.spring.microservice.dto.BookContentDto;
-import ru.gds.spring.microservice.params.ParamsBookContent;
 
 public interface BookContentService {
 
@@ -10,7 +10,7 @@ public interface BookContentService {
 
     FileSystemResource findFileByBookId(String bookId);
 
-    BookContentDto save(ParamsBookContent params);
+    BookContentDto save(String bookId, String bookName, String fileType, MultipartFile file);
 
     String deleteByBookId(String id);
 }
