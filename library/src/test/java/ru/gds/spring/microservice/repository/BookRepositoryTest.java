@@ -2,8 +2,12 @@ package ru.gds.spring.microservice.repository;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.cloud.netflix.ribbon.RibbonAutoConfiguration;
+import org.springframework.cloud.openfeign.FeignAutoConfiguration;
+import org.springframework.cloud.openfeign.ribbon.FeignRibbonClientAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -23,6 +27,10 @@ import static org.junit.Assume.assumeTrue;
 @DataMongoTest
 @ComponentScan({"ru.gds.spring"})
 @AutoConfigureTestDatabase
+@ImportAutoConfiguration({
+        RibbonAutoConfiguration.class,
+        FeignRibbonClientAutoConfiguration.class,
+        FeignAutoConfiguration.class})
 class BookRepositoryTest {
 
     @Autowired
@@ -31,7 +39,7 @@ class BookRepositoryTest {
     @Autowired
     MongoTemplate mongoTemplate;
 
-    //@Test
+    @Test
     void insertBookTest() {
         Book book = new Book(
                 "Мастер и Маргарита",
@@ -45,7 +53,7 @@ class BookRepositoryTest {
         assumeTrue(book.getId() != null);
     }
 
-    //@Test
+    @Test
     void updateBookTest() {
         Book book = getFirstBook();
         assumeTrue(book != null);
@@ -62,7 +70,7 @@ class BookRepositoryTest {
         assumeTrue(bookName.equals(book.getName()));
     }
 
-    //@Test
+    @Test
     void deleteBookTest() {
         int countAuthors = getAuthorList().size();
         int countGenres = getGenreList().size();

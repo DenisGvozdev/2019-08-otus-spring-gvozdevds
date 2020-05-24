@@ -2,8 +2,12 @@ package ru.gds.spring.microservice.repository;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.cloud.netflix.ribbon.RibbonAutoConfiguration;
+import org.springframework.cloud.openfeign.FeignAutoConfiguration;
+import org.springframework.cloud.openfeign.ribbon.FeignRibbonClientAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import ru.gds.spring.microservice.domain.Role;
@@ -14,7 +18,11 @@ import static org.junit.Assume.assumeTrue;
 @DataMongoTest
 @ComponentScan({"ru.gds.spring"})
 @AutoConfigureTestDatabase
-public class RoleRepositoryTest {
+@ImportAutoConfiguration({
+        RibbonAutoConfiguration.class,
+        FeignRibbonClientAutoConfiguration.class,
+        FeignAutoConfiguration.class})
+class RoleRepositoryTest {
 
     @Autowired
     RoleRepository roleRepository;
@@ -22,14 +30,14 @@ public class RoleRepositoryTest {
     @Autowired
     MongoTemplate mongoTemplate;
 
-    //@Test
+    @Test
     void insertRoleTest() {
         Role role = new Role("ROLE_FOR_TEST", "Тестовая роль");
         role = roleRepository.save(role);
         assumeTrue(role.getRole() != null);
     }
 
-    //@Test
+    @Test
     void updateRoleTest() {
         Role role = roleRepository.findByRole("ROLE_TST");
         assumeTrue(role != null);
@@ -40,7 +48,7 @@ public class RoleRepositoryTest {
         assumeTrue(description.equals(role.getDescription()));
     }
 
-    //@Test
+    @Test
     void deleteRoleTest() {
         Role role = roleRepository.findByRole("ROLE_TST");
         assumeTrue(role != null);

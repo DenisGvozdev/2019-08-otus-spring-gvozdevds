@@ -2,15 +2,15 @@ package ru.gds.spring.microservice.repository;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.cloud.netflix.ribbon.RibbonAutoConfiguration;
+import org.springframework.cloud.openfeign.FeignAutoConfiguration;
+import org.springframework.cloud.openfeign.ribbon.FeignRibbonClientAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.test.context.ContextConfiguration;
-import ru.gds.spring.microservice.config.AppProperties;
 import ru.gds.spring.microservice.domain.Author;
 import ru.gds.spring.microservice.interfaces.AuthorRepository;
-import ru.gds.spring.microservice.interfaces.Sender;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -21,15 +21,16 @@ import static org.junit.Assume.assumeTrue;
 @DataMongoTest
 @ComponentScan({"ru.gds.spring"})
 @AutoConfigureTestDatabase
+@ImportAutoConfiguration({
+        RibbonAutoConfiguration.class,
+        FeignRibbonClientAutoConfiguration.class,
+        FeignAutoConfiguration.class})
 class AuthorRepositoryTest {
 
     @Autowired
     AuthorRepository authorRepository;
 
-    @Autowired
-    Sender sender;
-
-    //@Test
+    @Test
     void insertAuthorTest() {
         Author author = new Author(
                 "Михаил",
@@ -40,7 +41,7 @@ class AuthorRepositoryTest {
         assumeTrue(author.getId() != null);
     }
 
-    //@Test
+    @Test
     void updateAuthorTest() {
         Author author = getFirstAuthor();
         assumeTrue(author != null);
@@ -54,7 +55,7 @@ class AuthorRepositoryTest {
         assumeTrue(firstName.equals(author.getFirstName()));
     }
 
-    //@Test
+    @Test
     void deleteAuthorTest() {
         Author author = getAuthorByName("Временный");
         assumeTrue(author != null);

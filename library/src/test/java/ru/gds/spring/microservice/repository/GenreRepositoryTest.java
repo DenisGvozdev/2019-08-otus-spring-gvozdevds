@@ -2,8 +2,12 @@ package ru.gds.spring.microservice.repository;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.cloud.netflix.ribbon.RibbonAutoConfiguration;
+import org.springframework.cloud.openfeign.FeignAutoConfiguration;
+import org.springframework.cloud.openfeign.ribbon.FeignRibbonClientAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import ru.gds.spring.microservice.domain.Genre;
 import ru.gds.spring.microservice.interfaces.GenreRepository;
@@ -16,19 +20,23 @@ import static org.junit.Assume.assumeTrue;
 @DataMongoTest
 @ComponentScan({"ru.gds.spring"})
 @AutoConfigureTestDatabase
+@ImportAutoConfiguration({
+        RibbonAutoConfiguration.class,
+        FeignRibbonClientAutoConfiguration.class,
+        FeignAutoConfiguration.class})
 class GenreRepositoryTest {
 
     @Autowired
     GenreRepository genreRepository;
 
-    //@Test
+    @Test
     void insertGenreTest() {
         Genre genre = new Genre("Исторический");
         genre = genreRepository.save(genre);
         assumeTrue(genre.getId() != null);
     }
 
-    //@Test
+    @Test
     void updateGenreTest() {
         Genre genre = getGenreByName("Приключения");
         assumeTrue(genre != null);
@@ -39,7 +47,7 @@ class GenreRepositoryTest {
         assumeTrue(genreName.equals(genre.getName()));
     }
 
-    //@Test
+    @Test
     void deleteGenreTest() {
         Genre genre = getGenreByName("Временный");
         assumeTrue(genre != null);

@@ -2,8 +2,12 @@ package ru.gds.spring.microservice.repository;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.cloud.netflix.ribbon.RibbonAutoConfiguration;
+import org.springframework.cloud.openfeign.FeignAutoConfiguration;
+import org.springframework.cloud.openfeign.ribbon.FeignRibbonClientAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import ru.gds.spring.microservice.domain.Role;
@@ -19,6 +23,10 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 @DataMongoTest
 @ComponentScan({"ru.gds.spring"})
 @AutoConfigureTestDatabase
+@ImportAutoConfiguration({
+        RibbonAutoConfiguration.class,
+        FeignRibbonClientAutoConfiguration.class,
+        FeignAutoConfiguration.class})
 class UserRepositoryTest {
 
     @Autowired
@@ -27,7 +35,7 @@ class UserRepositoryTest {
     @Autowired
     MongoTemplate mongoTemplate;
 
-    //@Test
+    @Test
     void insertUserTest() {
         User user = new User("testUser",
                 "password",
@@ -41,7 +49,7 @@ class UserRepositoryTest {
         assumeTrue(user.get_id() != null);
     }
 
-    //@Test
+    @Test
     void updateUserTest() {
         User user = getUserByName("test");
         assumeTrue(user != null);
@@ -52,7 +60,7 @@ class UserRepositoryTest {
         assumeTrue(phone.equals(user.getPhone()));
     }
 
-    //@Test
+    @Test
     void deleteUserTest() {
         User user = getUserByName("test");
         assumeTrue(user != null);

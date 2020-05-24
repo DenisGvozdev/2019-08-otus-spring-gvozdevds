@@ -2,8 +2,12 @@ package ru.gds.spring.microservice.repository;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.cloud.netflix.ribbon.RibbonAutoConfiguration;
+import org.springframework.cloud.openfeign.FeignAutoConfiguration;
+import org.springframework.cloud.openfeign.ribbon.FeignRibbonClientAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import ru.gds.spring.microservice.domain.Book;
@@ -18,6 +22,10 @@ import static org.junit.Assume.assumeTrue;
 @DataMongoTest
 @ComponentScan({"ru.gds.spring"})
 @AutoConfigureTestDatabase
+@ImportAutoConfiguration({
+        RibbonAutoConfiguration.class,
+        FeignRibbonClientAutoConfiguration.class,
+        FeignAutoConfiguration.class})
 class CommentRepositoryTest {
 
     @Autowired
@@ -26,7 +34,7 @@ class CommentRepositoryTest {
     @Autowired
     MongoTemplate mongoTemplate;
 
-    //@Test
+    @Test
     void insertCommentTest() {
         Book book = getFirstBook();
         Comment comment = new Comment(book, "Тестовый комментарий", new Date());
@@ -34,7 +42,7 @@ class CommentRepositoryTest {
         assumeTrue(comment.getId() != null);
     }
 
-    //@Test
+    @Test
     void findCommentByBookTest() {
         Comment comment = getFirstComment();
         assumeTrue(comment != null && comment.getBook() != null);
@@ -43,7 +51,7 @@ class CommentRepositoryTest {
         assumeTrue(!commentList.isEmpty());
     }
 
-    //@Test
+    @Test
     void deleteCommentTest() {
         List<Comment> commentList = getCommentList();
         int countCommets = commentList.size();

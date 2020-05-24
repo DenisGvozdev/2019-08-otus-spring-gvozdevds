@@ -35,27 +35,28 @@ public class BookController {
 
     @PostMapping("/books")
     public BookDto add(ParamsBook params) {
-        BookDto bookDto = bookService.save(params);
-
-        ParamsBookContent reqParams = bookService.prepareRequestForAddBookContent(params, bookDto);
-        BookContentDto saveFilesResult = sender.addUpdateBookContent(reqParams);
-        bookDto.setStatus(saveFilesResult.getStatus());
-        bookDto.setMessage(saveFilesResult.getMessage());
-        return bookDto;
+        return saveUpdateBook(params);
     }
 
     @PutMapping("books/{id}")
     public BookDto update(ParamsBook params) {
-        BookDto bookDto = bookService.save(params);
-        ParamsBookContent reqParams = bookService.prepareRequestForAddBookContent(params, bookDto);
-        BookContentDto saveFilesResult = sender.addUpdateBookContent(reqParams);
-        bookDto.setStatus(saveFilesResult.getStatus());
-        bookDto.setMessage(saveFilesResult.getMessage());
-        return bookDto;
+        return saveUpdateBook(params);
     }
 
     @DeleteMapping("books/{bookId}")
     public String delete(@PathVariable(value = "bookId") String bookId) {
         return bookService.deleteById(bookId);
+    }
+
+    private BookDto saveUpdateBook(ParamsBook params) {
+        BookDto bookDto = bookService.save(params);
+        if (bookDto == null)
+            return new BookDto();
+
+        ParamsBookContent reqParams = bookService.prepareRequestForAddBookContent(params, bookDto);
+        BookContentDto saveFilesResult = sender.addUpdateBookContent(reqParams);
+        bookDto.setStatus(saveFilesResult.getStatus());
+        bookDto.setMessage(saveFilesResult.getMessage());
+        return bookDto;
     }
 }
