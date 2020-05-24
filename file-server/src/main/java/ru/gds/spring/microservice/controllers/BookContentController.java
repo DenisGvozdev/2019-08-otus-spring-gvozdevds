@@ -19,7 +19,7 @@ public class BookContentController {
         this.contentService = contentService;
     }
 
-    @GetMapping("/bookId/{bookId}/pageStart/{pageStart}/countPages/{countPages}")
+    @GetMapping("/{bookId}/{pageStart}/{countPages}")
     public BookContentDto findByBookId(
             @RequestParam("bookId") String bookId,
             @RequestParam("pageStart") int pageStart,
@@ -27,13 +27,15 @@ public class BookContentController {
         return contentService.getPagesForBook(bookId, pageStart, countPages);
     }
 
-    @GetMapping("/bookId/{bookId}")
+    @GetMapping("/{bookId}")
     @ResponseBody
     public FileSystemResource findFileByBookId(@RequestParam("bookId") String bookId) {
         return contentService.findFileByBookId(bookId);
     }
 
-    @PostMapping(path = "/add", consumes = MULTIPART_FORM_DATA_VALUE, produces = APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/{bookId}/{bookName}/{type}/{file}",
+            consumes = MULTIPART_FORM_DATA_VALUE,
+            produces = APPLICATION_JSON_VALUE)
     public BookContentDto add(
             @RequestParam(value = "bookId") String bookId,
             @RequestParam(value = "bookName") String bookName,

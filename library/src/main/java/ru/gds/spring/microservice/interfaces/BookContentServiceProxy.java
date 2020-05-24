@@ -12,17 +12,17 @@ import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 @FeignClient(value = "file-server")
 public interface BookContentServiceProxy {
 
-    @GetMapping("/bookId/{bookId}/pageStart/{pageStart}/countPages/{countPages}")
+    @GetMapping("/bookId/pageStart/countPages")
     String findByBookId(
             @RequestParam("bookId") String bookId,
             @RequestParam("pageStart") int pageStart,
             @RequestParam("countPages") int countPages);
 
-    @GetMapping("/bookId/{bookId}")
+    @GetMapping("/bookId/")
     @ResponseBody
     String findFileByBookId(@RequestParam("bookId") String bookId);
 
-    @PostMapping(path = "/add", consumes = MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(path = "/bookId/bookName/type/file", consumes = MULTIPART_FORM_DATA_VALUE)
     BookContentDto add(
             @RequestParam(value = "bookId") String bookId,
             @RequestParam(value = "bookName") String bookName,
