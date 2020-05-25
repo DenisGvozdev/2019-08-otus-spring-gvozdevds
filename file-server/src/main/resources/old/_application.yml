@@ -1,0 +1,22 @@
+spring:
+  profiles:
+    active: development
+  data:
+    mongodb:
+      database: libraryFiles
+  servlet:
+    multipart:
+      max-file-size: 128MB
+      max-request-size: 128MB
+      enabled: true
+app:
+  #fileDirectory: /opt/project
+  fileDirectory: C:\fileStorage\
+
+logging:
+  level:
+    org:
+      springframework: info
+
+server:
+  port: 7001

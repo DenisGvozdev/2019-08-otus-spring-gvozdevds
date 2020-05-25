@@ -6,59 +6,14 @@
 
     <groupId>library-spring-gds</groupId>
     <artifactId>library-spring-gds</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <name>spring-framework-00</name>
-    <description>Home work 0</description>
-    <packaging>jar</packaging>
+    <version>1.0.0</version>
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.2.RELEASE</version>
-    </parent>
+    <packaging>pom</packaging>
 
-    <properties>
-        <java.version>1.8</java.version>
-        <downloadSources>true</downloadSources>
-        <downloadJavadocs>true</downloadJavadocs>
-    </properties>
-
-    <dependencies>
-
-        <!-- SpringBoot -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-        </dependency>
-
-        <!-- H2 in memory DataBase-->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <!--scope>test</scope-->
-            <version>1.4.197</version>
-        </dependency>
-
-        <!-- Log4j logger-->
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
-        </dependency>
-
-    </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
-
+    <modules>
+        <module>file-server</module>
+        <module>library</module>
+        <module>eureka</module>
+        <module>hystrix-dashboard</module>
+    </modules>
 </project>

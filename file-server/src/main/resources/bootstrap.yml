@@ -1,0 +1,57 @@
+server:
+  port: 7001
+  tomcat:
+    max-http-header-size: 30M
+
+app:
+  fileDirectory: C:\fileStorage\
+
+spring:
+  application:
+    name: file-server
+  cloud:
+    config:
+      fail-fast: true
+      uri: http://127.0.0.1:5000
+  profiles:
+    active: development
+  data:
+    mongodb:
+      database: libraryFiles
+  servlet:
+    multipart:
+      max-file-size: 128MB
+      max-request-size: 128MB
+      enabled: true
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include=*
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8001/eureka
+    register-with-eureka: true
+    fetch-registry: true
+  server:
+    eviction-interval-timer-in-ms: 15000
+  instance:
+    lease-renewal-interval-in-seconds: 30
+    lease-expiration-duration-in-seconds: 90
+    instance-id: ${spring.application.name}:${server.port}
+    prefer-ip-address: true
+
+use:
+  feign:
+    client: true
+
+logging:
+  level:
+    org:
+      springframework: info
