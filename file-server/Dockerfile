@@ -17,6 +17,5 @@ RUN mkdir -p $PROJECT_DIR
 WORKDIR $PROJECT_DIR
 COPY --from=0 $PROJECT_DIR/target/file-server* $PROJECT_DIR/
 #VOLUME /data/db
-EXPOSE 8080
-EXPOSE 27017
-CMD ["java", "-jar", "/opt/project/file-server-1.0.0.jar"]
+EXPOSE 7001
+CMD ["java", "-jar", "/opt/project/file-server.jar"]

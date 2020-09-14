@@ -14,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.unit.DataSize;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import ru.gds.spring.microservice.constant.Constant;
 
 import javax.servlet.MultipartConfigElement;
@@ -34,7 +36,7 @@ public class AppProperties {
     private String fileServerUrl;
     private String fileDirectory;
 
-    AppProperties(ObjectFactory<HttpMessageConverters> messageConverters){
+    AppProperties(ObjectFactory<HttpMessageConverters> messageConverters) {
         this.messageConverters = messageConverters;
     }
 
@@ -48,7 +50,7 @@ public class AppProperties {
     }
 
     @Bean
-    public Encoder feignEncoder () {
+    public Encoder feignEncoder() {
         return new SpringFormEncoder(new SpringEncoder(messageConverters));
     }
 
@@ -62,9 +64,22 @@ public class AppProperties {
         mappingJackson2HttpMessageConverter.setObjectMapper(objectMapper);
 
         List<MediaType> list = new ArrayList<>();
-        list.add(MediaType.APPLICATION_JSON );
+        list.add(MediaType.APPLICATION_JSON);
         mappingJackson2HttpMessageConverter.setSupportedMediaTypes(list);
         return mappingJackson2HttpMessageConverter;
+    }
+
+    @Bean
+    public ClassLoaderTemplateResolver secondaryTemplateResolver() {
+        ClassLoaderTemplateResolver secondaryTemplateResolver = new ClassLoaderTemplateResolver();
+        secondaryTemplateResolver.setPrefix("templates/");
+        secondaryTemplateResolver.setSuffix(".html");
+        secondaryTemplateResolver.setTemplateMode(TemplateMode.HTML);
+        secondaryTemplateResolver.setCharacterEncoding("UTF-8");
+        secondaryTemplateResolver.setOrder(1);
+        secondaryTemplateResolver.setCheckExistence(true);
+
+        return secondaryTemplateResolver;
     }
 
     public String getFileServerUrl() {

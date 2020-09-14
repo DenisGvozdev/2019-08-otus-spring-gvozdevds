@@ -1,5 +1,8 @@
 package ru.gds.spring.microservice.dto;
 
+import ru.gds.spring.microservice.constant.Constant;
+import ru.gds.spring.microservice.domain.BookContent;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,5 +112,24 @@ public class BookContentDto {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public static BookContentDto toDtoLight(BookContent bookContent) {
+        BookContentDto bookContentDto = new BookContentDto();
+
+        int pageNumber = 0;
+        for (String page : bookContent.getPages()) {
+            pageNumber += 1;
+            bookContentDto.getPageList().add(new PageDto(pageNumber, null, page));
+        }
+
+        bookContentDto.setBookId(bookContent.getBookId());
+        bookContentDto.setBookName(bookContent.getBookName());
+        bookContentDto.setStartPage(1);
+        bookContentDto.setCountPages(bookContentDto.getPageList().size());
+        bookContentDto.setFileName(bookContent.getContentFileName());
+        bookContentDto.setFilePath(bookContent.getContentFilePath());
+        bookContentDto.setStatus(Constant.OK);
+        return bookContentDto;
     }
 }

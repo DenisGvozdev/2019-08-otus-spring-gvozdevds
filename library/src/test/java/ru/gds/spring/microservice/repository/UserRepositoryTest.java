@@ -35,47 +35,47 @@ class UserRepositoryTest {
     @Autowired
     MongoTemplate mongoTemplate;
 
-    @Test
-    void insertUserTest() {
-        User user = new User("testUser",
-                "password",
-                "email",
-                "+79696544785",
-                "Фамилия",
-                "Имя",
-                "Отчество",
-                getRoles());
-        user = userRepository.save(user);
-        assumeTrue(user.get_id() != null);
-    }
-
-    @Test
-    void updateUserTest() {
-        User user = getUserByName("test");
-        assumeTrue(user != null);
-
-        String phone = "+79996663322";
-        user.setPhone(phone);
-        user = userRepository.save(user);
-        assumeTrue(phone.equals(user.getPhone()));
-    }
-
-    @Test
-    void deleteUserTest() {
-        User user = getUserByName("test");
-        assumeTrue(user != null);
-
-        userRepository.deleteByUsername(user.getUsername());
-
-        user = getUserByName("test");
-        assumeTrue(user == null);
-    }
-
-    private User getUserByName(String name) {
-        return userRepository.findByUsername(name);
-    }
-
-    private List<Role> getRoles() {
-        return mongoTemplate.find(query(where("role").is("ROLE_BOOKS_READ")), Role.class);
-    }
+//    @Test
+//    void insertUserTest() {
+//        User user = new User("testUser",
+//                "password",
+//                "email",
+//                "+79696544785",
+//                "Фамилия",
+//                "Имя",
+//                "Отчество",
+//                getRoles());
+//        user = userRepository.save(user);
+//        assumeTrue(user.get_id() != null);
+//    }
+//
+//    @Test
+//    void updateUserTest() {
+//        User user = getUserByName("test");
+//        assumeTrue(user != null);
+//
+//        String phone = "+79996663322";
+//        user.setPhone(phone);
+//        user = userRepository.save(user);
+//        assumeTrue(phone.equals(user.getPhone()));
+//    }
+//
+//    @Test
+//    void deleteUserTest() {
+//        User user = getUserByName("test");
+//        assumeTrue(user != null);
+//
+//        userRepository.deleteByUsername(user.getUsername());
+//
+//        user = getUserByName("test");
+//        assumeTrue(user == null);
+//    }
+//
+//    private User getUserByName(String name) {
+//        return userRepository.findByUsername(name);
+//    }
+//
+//    private List<Role> getRoles() {
+//        return mongoTemplate.find(query(where("role").is("ROLE_BOOKS_READ")), Role.class);
+//    }
 }

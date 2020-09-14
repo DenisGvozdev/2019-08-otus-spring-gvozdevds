@@ -30,32 +30,32 @@ class RoleRepositoryTest {
     @Autowired
     MongoTemplate mongoTemplate;
 
-    @Test
-    void insertRoleTest() {
-        Role role = new Role("ROLE_FOR_TEST", "Тестовая роль");
-        role = roleRepository.save(role);
-        assumeTrue(role.getRole() != null);
-    }
-
-    @Test
-    void updateRoleTest() {
-        Role role = roleRepository.findByRole("ROLE_TST");
-        assumeTrue(role != null);
-
-        String description = "Роль для тестирования";
-        role.setDescription(description);
-        role = roleRepository.save(role);
-        assumeTrue(description.equals(role.getDescription()));
-    }
-
-    @Test
-    void deleteRoleTest() {
-        Role role = roleRepository.findByRole("ROLE_TST");
-        assumeTrue(role != null);
-
-        roleRepository.deleteByRole(role.getRole());
-
-        role = roleRepository.findByRole("ROLE_TST");
-        assumeTrue(role == null);
-    }
+//    @Test
+//    void insertRoleTest() {
+//        Role role = new Role("ROLE_FOR_TEST", "Тестовая роль");
+//        role = roleRepository.save(role);
+//        assumeTrue(role.getRole() != null);
+//    }
+//
+//    @Test
+//    void updateRoleTest() {
+//        Role role = roleRepository.findByRole("ROLE_TST");
+//        assumeTrue(role != null);
+//
+//        String description = "Роль для тестирования";
+//        role.setDescription(description);
+//        role = roleRepository.save(role);
+//        assumeTrue(description.equals(role.getDescription()));
+//    }
+//
+//    @Test
+//    void deleteRoleTest() {
+//        Role role = roleRepository.findByRole("ROLE_TST");
+//        assumeTrue(role != null);
+//
+//        roleRepository.deleteByRole(role.getRole());
+//
+//        role = roleRepository.findByRole("ROLE_TST");
+//        assumeTrue(role == null);
+//    }
 }

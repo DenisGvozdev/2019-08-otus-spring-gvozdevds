@@ -11,9 +11,9 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>file-server</module>
+        <!--module>file-server</module-->
         <module>library</module>
-        <module>eureka</module>
-        <module>hystrix-dashboard</module>
+        <!--module>eureka</module-->
+        <!--module>hystrix-dashboard</module-->
     </modules>
 </project>

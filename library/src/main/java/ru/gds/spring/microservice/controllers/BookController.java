@@ -1,8 +1,10 @@
 package ru.gds.spring.microservice.controllers;
 
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.gds.spring.microservice.dto.BookContentDto;
 import ru.gds.spring.microservice.dto.BookDto;
+import ru.gds.spring.microservice.interfaces.BookContentService;
 import ru.gds.spring.microservice.interfaces.BookService;
 import ru.gds.spring.microservice.interfaces.Sender;
 import ru.gds.spring.microservice.params.ParamsBook;
@@ -14,11 +16,13 @@ import java.util.List;
 public class BookController {
 
     private final BookService bookService;
-    private final Sender sender;
+    private final BookContentService bookContentService;
+    //private final Sender sender;
 
-    BookController(BookService bookService, Sender sender) {
+    BookController(BookService bookService, BookContentService bookContentService/*, Sender sender*/) {
         this.bookService = bookService;
-        this.sender = sender;
+        this.bookContentService = bookContentService;
+        //this.sender = sender;
     }
 
     @GetMapping("books")
@@ -54,7 +58,7 @@ public class BookController {
             return new BookDto();
 
         ParamsBookContent reqParams = bookService.prepareRequestForAddBookContent(params, bookDto);
-        BookContentDto saveFilesResult = sender.addUpdateBookContent(reqParams);
+        BookContentDto saveFilesResult = bookContentService.addUpdateBookContent(reqParams);
         bookDto.setStatus(saveFilesResult.getStatus());
         bookDto.setMessage(saveFilesResult.getMessage());
         return bookDto;

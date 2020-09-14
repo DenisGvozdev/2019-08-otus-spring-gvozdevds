@@ -51,70 +51,70 @@ class UserControllerTest {
     @MockBean
     UserRepository userRepository;
 
-    @ParameterizedTest(name = "#{index} - username=admin, authorities=ROLE_ADMINISTRATION URL={0}")
-    @DisplayName("Проверка API: 1 - поиск всех пользователей; 2 - поиск пользователя по username")
-    @WithMockUser(username = "admin", authorities = {"ROLE_ADMINISTRATION"})
-    @ValueSource(strings = {"/users", "/users/?username=admin&email="})
-    void getUserForAdminTest(String url) throws Exception {
-        mockMvc.perform(get(url)
-                .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().is(200))
-                .andExpect(jsonPath("$.length()").isNotEmpty());
-    }
-
-    @Test
-    @DisplayName("Проверка API: добавления пользователя для пользователя admin")
-    @WithMockUser(username = "admin", authorities = {"ROLE_ADMINISTRATION"})
-    void addUserTest() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/users")
-                .param("name", "Тестовый"))
-                .andExpect(status().is(200));
-    }
-
-    @Test
-    @DisplayName("Проверка API: редактирование пользователя для пользователя admin")
-    @WithMockUser(username = "admin", authorities = {"ROLE_ADMINISTRATION"})
-    void updateUserTest() throws Exception {
-        mockMvc.perform(getBuilderPUT("/users/1")
-                .param("name", "Тестовый"))
-                .andExpect(status().is(200));
-    }
-
-    @Test
-    @DisplayName("Проверка API: удаление пользователя для пользователя admin")
-    @WithMockUser(username = "admin", authorities = {"ROLE_ADMINISTRATION"})
-    void removeUserByIdForAdminTest() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders
-                .delete("/users/1")
-                .param("id", "1")
-                .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().is(200));
-    }
-
-    // ACL отключен, поэтому тест пока не актуален
-    // @Test
-    @DisplayName("Проверка API: удаление пользователя для пользователя user")
-    @WithMockUser(username = "user", authorities = {"ROLE_BOOKS_READ"})
-    void removeUserByIdForUserTest() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders
-                .delete("/users/1")
-                .param("id", "1")
-                .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().is(403));
-    }
-
-    private MockMultipartHttpServletRequestBuilder getBuilderPUT(String url) {
-        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(url);
-        builder.with(new RequestPostProcessor() {
-            @Override
-            public MockHttpServletRequest postProcessRequest(MockHttpServletRequest request) {
-                request.setMethod("PUT");
-                return request;
-            }
-        });
-        return builder;
-    }
+//    @ParameterizedTest(name = "#{index} - username=admin, authorities=ROLE_ADMINISTRATION URL={0}")
+//    @DisplayName("Проверка API: 1 - поиск всех пользователей; 2 - поиск пользователя по username")
+//    @WithMockUser(username = "admin", authorities = {"ROLE_ADMINISTRATION"})
+//    @ValueSource(strings = {"/users", "/users/?username=admin&email="})
+//    void getUserForAdminTest(String url) throws Exception {
+//        mockMvc.perform(get(url)
+//                .accept(MediaType.APPLICATION_JSON))
+//                .andDo(print())
+//                .andExpect(status().is(200))
+//                .andExpect(jsonPath("$.length()").isNotEmpty());
+//    }
+//
+//    @Test
+//    @DisplayName("Проверка API: добавления пользователя для пользователя admin")
+//    @WithMockUser(username = "admin", authorities = {"ROLE_ADMINISTRATION"})
+//    void addUserTest() throws Exception {
+//        mockMvc.perform(MockMvcRequestBuilders.multipart("/users")
+//                .param("name", "Тестовый"))
+//                .andExpect(status().is(200));
+//    }
+//
+//    @Test
+//    @DisplayName("Проверка API: редактирование пользователя для пользователя admin")
+//    @WithMockUser(username = "admin", authorities = {"ROLE_ADMINISTRATION"})
+//    void updateUserTest() throws Exception {
+//        mockMvc.perform(getBuilderPUT("/users/1")
+//                .param("name", "Тестовый"))
+//                .andExpect(status().is(200));
+//    }
+//
+//    @Test
+//    @DisplayName("Проверка API: удаление пользователя для пользователя admin")
+//    @WithMockUser(username = "admin", authorities = {"ROLE_ADMINISTRATION"})
+//    void removeUserByIdForAdminTest() throws Exception {
+//        mockMvc.perform(MockMvcRequestBuilders
+//                .delete("/users/1")
+//                .param("id", "1")
+//                .accept(MediaType.APPLICATION_JSON))
+//                .andDo(print())
+//                .andExpect(status().is(200));
+//    }
+//
+//    // ACL отключен, поэтому тест пока не актуален
+//    // @Test
+//    @DisplayName("Проверка API: удаление пользователя для пользователя user")
+//    @WithMockUser(username = "user", authorities = {"ROLE_BOOKS_READ"})
+//    void removeUserByIdForUserTest() throws Exception {
+//        mockMvc.perform(MockMvcRequestBuilders
+//                .delete("/users/1")
+//                .param("id", "1")
+//                .accept(MediaType.APPLICATION_JSON))
+//                .andDo(print())
+//                .andExpect(status().is(403));
+//    }
+//
+//    private MockMultipartHttpServletRequestBuilder getBuilderPUT(String url) {
+//        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(url);
+//        builder.with(new RequestPostProcessor() {
+//            @Override
+//            public MockHttpServletRequest postProcessRequest(MockHttpServletRequest request) {
+//                request.setMethod("PUT");
+//                return request;
+//            }
+//        });
+//        return builder;
+//    }
 }

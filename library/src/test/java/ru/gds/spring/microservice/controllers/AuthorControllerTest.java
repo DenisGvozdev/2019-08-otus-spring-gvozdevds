@@ -51,78 +51,78 @@ class AuthorControllerTest {
     @MockBean
     AuthorRepository authorRepository;
 
-    @ParameterizedTest(name = "#{index} - username=admin, authorities=ROLE_ADMINISTRATION URL={0}")
-    @DisplayName("Проверка API: 1 - поиск всех авторов; 2 - поиск авторов по книге")
-    @WithMockUser(username = "admin", authorities = {"ROLE_ADMINISTRATION"})
-    @ValueSource(strings = {"/authors", "/authors/?bookId=1"})
-    void getAuthorForAdminTest(String url) throws Exception {
-        mockMvc.perform(get(url)
-                .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().is(200))
-                .andExpect(jsonPath("$.length()").isNotEmpty());
-    }
-
-    @Test
-    @DisplayName("Проверка API: добавления автора для пользователя admin")
-    @WithMockUser(username = "admin", authorities = {"ROLE_ADMINISTRATION"})
-    void addAuthorTest() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/authors")
-                .param("firstName", "Плотников")
-                .param("secondName", "Павел")
-                .param("thirdName", "Оплотович")
-                .param("fio", "")
-                .param("birthDate", "01.01.1985"))
-                .andExpect(status().is(200));
-    }
-
-    @Test
-    @DisplayName("Проверка API: редактирование автора для пользователя admin")
-    @WithMockUser(username = "admin", authorities = {"ROLE_ADMINISTRATION"})
-    void updateAuthorTest() throws Exception {
-        mockMvc.perform(getBuilderPUT("/authors/1")
-                .param("firstName", "Плотников")
-                .param("secondName", "Павел")
-                .param("thirdName", "Оплотович")
-                .param("fio", "")
-                .param("birthDate", "02.02.1985"))
-                .andExpect(status().is(200));
-    }
-
-    @Test
-    @DisplayName("Проверка API: удаление автора для пользователя admin")
-    @WithMockUser(username = "admin", authorities = {"ROLE_ADMINISTRATION"})
-    void removeAuthorByIdForAdminTest() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders
-                .delete("/authors/1")
-                .param("id", "1")
-                .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().is(200));
-    }
-
-    // ACL отключен, поэтому тест пока не актуален
-    // @Test
-    @DisplayName("Проверка API: удаление автора для пользователя user")
-    @WithMockUser(username = "user", authorities = {"ROLE_BOOKS_READ"})
-    void removeAuthorByIdForUserTest() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders
-                .delete("/authors/1")
-                .param("id", "1")
-                .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().is(403));
-    }
-
-    private MockMultipartHttpServletRequestBuilder getBuilderPUT(String url) {
-        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(url);
-        builder.with(new RequestPostProcessor() {
-            @Override
-            public MockHttpServletRequest postProcessRequest(MockHttpServletRequest request) {
-                request.setMethod("PUT");
-                return request;
-            }
-        });
-        return builder;
-    }
+//    @ParameterizedTest(name = "#{index} - username=admin, authorities=ROLE_ADMINISTRATION URL={0}")
+//    @DisplayName("Проверка API: 1 - поиск всех авторов; 2 - поиск авторов по книге")
+//    @WithMockUser(username = "admin", authorities = {"ROLE_ADMINISTRATION"})
+//    @ValueSource(strings = {"/authors", "/authors/?bookId=1"})
+//    void getAuthorForAdminTest(String url) throws Exception {
+//        mockMvc.perform(get(url)
+//                .accept(MediaType.APPLICATION_JSON))
+//                .andDo(print())
+//                .andExpect(status().is(200))
+//                .andExpect(jsonPath("$.length()").isNotEmpty());
+//    }
+//
+//    @Test
+//    @DisplayName("Проверка API: добавления автора для пользователя admin")
+//    @WithMockUser(username = "admin", authorities = {"ROLE_ADMINISTRATION"})
+//    void addAuthorTest() throws Exception {
+//        mockMvc.perform(MockMvcRequestBuilders.multipart("/authors")
+//                .param("firstName", "Плотников")
+//                .param("secondName", "Павел")
+//                .param("thirdName", "Оплотович")
+//                .param("fio", "")
+//                .param("birthDate", "01.01.1985"))
+//                .andExpect(status().is(200));
+//    }
+//
+//    @Test
+//    @DisplayName("Проверка API: редактирование автора для пользователя admin")
+//    @WithMockUser(username = "admin", authorities = {"ROLE_ADMINISTRATION"})
+//    void updateAuthorTest() throws Exception {
+//        mockMvc.perform(getBuilderPUT("/authors/1")
+//                .param("firstName", "Плотников")
+//                .param("secondName", "Павел")
+//                .param("thirdName", "Оплотович")
+//                .param("fio", "")
+//                .param("birthDate", "02.02.1985"))
+//                .andExpect(status().is(200));
+//    }
+//
+//    @Test
+//    @DisplayName("Проверка API: удаление автора для пользователя admin")
+//    @WithMockUser(username = "admin", authorities = {"ROLE_ADMINISTRATION"})
+//    void removeAuthorByIdForAdminTest() throws Exception {
+//        mockMvc.perform(MockMvcRequestBuilders
+//                .delete("/authors/1")
+//                .param("id", "1")
+//                .accept(MediaType.APPLICATION_JSON))
+//                .andDo(print())
+//                .andExpect(status().is(200));
+//    }
+//
+//    // ACL отключен, поэтому тест пока не актуален
+//    // @Test
+//    @DisplayName("Проверка API: удаление автора для пользователя user")
+//    @WithMockUser(username = "user", authorities = {"ROLE_BOOKS_READ"})
+//    void removeAuthorByIdForUserTest() throws Exception {
+//        mockMvc.perform(MockMvcRequestBuilders
+//                .delete("/authors/1")
+//                .param("id", "1")
+//                .accept(MediaType.APPLICATION_JSON))
+//                .andDo(print())
+//                .andExpect(status().is(403));
+//    }
+//
+//    private MockMultipartHttpServletRequestBuilder getBuilderPUT(String url) {
+//        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(url);
+//        builder.with(new RequestPostProcessor() {
+//            @Override
+//            public MockHttpServletRequest postProcessRequest(MockHttpServletRequest request) {
+//                request.setMethod("PUT");
+//                return request;
+//            }
+//        });
+//        return builder;
+//    }
 }

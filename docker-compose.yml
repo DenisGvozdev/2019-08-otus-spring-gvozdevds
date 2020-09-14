@@ -9,18 +9,21 @@ services:
     #volumes:
     #  - my_data: /data/db
 
-  file-rest-api:
-    image: file-rest-api
-    container_name: file-rest-api
-    build:
-      context: .
-      dockerfile: file-server/Dockerfile
-    depends_on:
-      - mongodb
-    ports:
-      - 8081:8080
-    links:
-      - mongodb
+ # file-rest-api:
+ #   image: file-rest-api
+ #   container_name: file-rest-api
+ #   build:
+ #     context: .
+ #     dockerfile: file-server/Dockerfile
+ #   depends_on:
+ #     - mongodb
+ #   ports:
+ #     - 7001:7001
+    #  - 8081:8080
+ #   expose:
+ #    - 7001
+ #   links:
+ #     - mongodb
 
   library:
     image: library
@@ -31,8 +34,45 @@ services:
     depends_on:
       - mongodb
     ports:
-      - 8080:8080
+      - 7002:7002
+      #- 8080:8080
+    expose:
+      - 7002
     links:
       - mongodb
+
+#  eureka-server:
+#    image: eureka-server
+#    container_name: eureka-server
+#    build:
+#      context: .
+#      dockerfile: eureka/Dockerfile
+#    depends_on:
+#      - mongodb
+#    ports:
+#      - 8001:8001
+#      - 8002:8002
+#      #- 8001:8002
+#    expose:
+#      - 8001
+#      - 8002
+#    links:
+#      - mongodb
+
+#  hystrix-dashboard:
+#    image: hystrix-dashboard
+#    container_name: hystrix-dashboard
+#    build:
+#      context: .
+#      dockerfile: hystrix-dashboard/Dockerfile
+#    depends_on:
+#      - mongodb
+#    ports:
+#      - 8788:8788
+#    expose:
+#      - 8788
+#      #- 8788:8002
+#    links:
+#      - mongodb
 #volumes:
 #  my_data:

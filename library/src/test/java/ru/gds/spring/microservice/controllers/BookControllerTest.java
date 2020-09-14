@@ -85,82 +85,82 @@ class BookControllerTest {
     AclSidRepository aclSidRepository;
      */
 
-    @ParameterizedTest(name = "#{index} - username=admin, authorities=ROLE_ADMINISTRATION URL={0}")
-    @DisplayName("Проверка API: 1 - поиск всех книг; 2 - поиск конкретной книги")
-    @WithMockUser(username = "admin", authorities = {"ROLE_ADMINISTRATION"})
-    @ValueSource(strings = {"/books", "/books/?bookId=&name=Кольцо"})
-    void getBookForAdminTest(String url) throws Exception {
-        mockMvc.perform(get(url)
-                .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().is(200))
-                .andExpect(jsonPath("$.length()").isNotEmpty());
-    }
-
-
-    @Test
-    @DisplayName("Проверка API: добавления книги для пользователя admin")
-    @WithMockUser(username = "admin", authorities = {"ROLE_ADMINISTRATION"})
-    void addBookTest() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.multipart("/books")
-                .file("file", "Файл".getBytes())
-                .param("name", "Новая книга")
-                .param("description", "Описание книги")
-                .param("statusId", "1")
-                .param("genreIds", "1,2")
-                .param("authorIds", "1,2"))
-                .andExpect(status().is(200));
-    }
-
-    @Test
-    @DisplayName("Проверка API: редактирование книги для пользователя admin")
-    @WithMockUser(username = "admin", authorities = {"ROLE_ADMINISTRATION"})
-    void updateBookTest() throws Exception {
-        mockMvc.perform(getBuilderPUT("/books/1")
-                .file("file", "Файл".getBytes())
-                .param("id", "1")
-                .param("name", "Новая книга")
-                .param("description", "Описание книги")
-                .param("statusId", "1")
-                .param("genreIds", "1,2")
-                .param("authorIds", "1,2"))
-                .andExpect(status().is(200));
-    }
-
-    @Test
-    @DisplayName("Проверка API: удаление книги для пользователя admin")
-    @WithMockUser(username = "admin", authorities = {"ROLE_ADMINISTRATION"})
-    void removeBookByIdForAdminTest() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders
-                .delete("/books/1")
-                .param("bookId", "1")
-                .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().is(200));
-    }
-
-    // ACL отключен, поэтому тест пока не актуален
-    // @Test
-    @DisplayName("Проверка API: удаление книги для пользователя user")
-    @WithMockUser(username = "user", authorities = {"ROLE_BOOKS_READ"})
-    void removeBookByIdForUserTest() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders
-                .delete("/books/1")
-                .param("bookId", "1")
-                .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().is(403));
-    }
-
-    private MockMultipartHttpServletRequestBuilder getBuilderPUT(String url) {
-        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(url);
-        builder.with(new RequestPostProcessor() {
-            @Override
-            public MockHttpServletRequest postProcessRequest(MockHttpServletRequest request) {
-                request.setMethod("PUT");
-                return request;
-            }
-        });
-        return builder;
-    }
+//    @ParameterizedTest(name = "#{index} - username=admin, authorities=ROLE_ADMINISTRATION URL={0}")
+//    @DisplayName("Проверка API: 1 - поиск всех книг; 2 - поиск конкретной книги")
+//    @WithMockUser(username = "admin", authorities = {"ROLE_ADMINISTRATION"})
+//    @ValueSource(strings = {"/books", "/books/?bookId=&name=Кольцо"})
+//    void getBookForAdminTest(String url) throws Exception {
+//        mockMvc.perform(get(url)
+//                .accept(MediaType.APPLICATION_JSON))
+//                .andDo(print())
+//                .andExpect(status().is(200))
+//                .andExpect(jsonPath("$.length()").isNotEmpty());
+//    }
+//
+//
+//    @Test
+//    @DisplayName("Проверка API: добавления книги для пользователя admin")
+//    @WithMockUser(username = "admin", authorities = {"ROLE_ADMINISTRATION"})
+//    void addBookTest() throws Exception {
+//        mockMvc.perform(MockMvcRequestBuilders.multipart("/books")
+//                .file("file", "Файл".getBytes())
+//                .param("name", "Новая книга")
+//                .param("description", "Описание книги")
+//                .param("statusId", "1")
+//                .param("genreIds", "1,2")
+//                .param("authorIds", "1,2"))
+//                .andExpect(status().is(200));
+//    }
+//
+//    @Test
+//    @DisplayName("Проверка API: редактирование книги для пользователя admin")
+//    @WithMockUser(username = "admin", authorities = {"ROLE_ADMINISTRATION"})
+//    void updateBookTest() throws Exception {
+//        mockMvc.perform(getBuilderPUT("/books/1")
+//                .file("file", "Файл".getBytes())
+//                .param("id", "1")
+//                .param("name", "Новая книга")
+//                .param("description", "Описание книги")
+//                .param("statusId", "1")
+//                .param("genreIds", "1,2")
+//                .param("authorIds", "1,2"))
+//                .andExpect(status().is(200));
+//    }
+//
+//    @Test
+//    @DisplayName("Проверка API: удаление книги для пользователя admin")
+//    @WithMockUser(username = "admin", authorities = {"ROLE_ADMINISTRATION"})
+//    void removeBookByIdForAdminTest() throws Exception {
+//        mockMvc.perform(MockMvcRequestBuilders
+//                .delete("/books/1")
+//                .param("bookId", "1")
+//                .accept(MediaType.APPLICATION_JSON))
+//                .andDo(print())
+//                .andExpect(status().is(200));
+//    }
+//
+//    // ACL отключен, поэтому тест пока не актуален
+//    // @Test
+//    @DisplayName("Проверка API: удаление книги для пользователя user")
+//    @WithMockUser(username = "user", authorities = {"ROLE_BOOKS_READ"})
+//    void removeBookByIdForUserTest() throws Exception {
+//        mockMvc.perform(MockMvcRequestBuilders
+//                .delete("/books/1")
+//                .param("bookId", "1")
+//                .accept(MediaType.APPLICATION_JSON))
+//                .andDo(print())
+//                .andExpect(status().is(403));
+//    }
+//
+//    private MockMultipartHttpServletRequestBuilder getBuilderPUT(String url) {
+//        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(url);
+//        builder.with(new RequestPostProcessor() {
+//            @Override
+//            public MockHttpServletRequest postProcessRequest(MockHttpServletRequest request) {
+//                request.setMethod("PUT");
+//                return request;
+//            }
+//        });
+//        return builder;
+//    }
 }

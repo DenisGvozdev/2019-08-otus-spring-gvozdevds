@@ -28,37 +28,37 @@ class StatusRepositoryTest {
     @Autowired
     StatusRepository statusRepository;
 
-    @Test
-    void insertStatusTest() {
-        Status status = new Status("archive");
-        status = statusRepository.save(status);
-        assumeTrue(status.getId() != null);
-    }
-
-    @Test
-    void updateStatusTest() {
-        Status status = getStatusByName("active");
-        assumeTrue(status != null);
-
-        String statusName = "activeStatus";
-        status.setName(statusName);
-        status = statusRepository.save(status);
-        assumeTrue(statusName.equals(status.getName()));
-    }
-
-    @Test
-    void deleteStatusTest() {
-        Status status = getStatusByName("Временный");
-        assumeTrue(status != null);
-
-        statusRepository.deleteById(status.getId());
-
-        status = getStatusByName("Временный");
-        assumeTrue(status == null);
-    }
-
-    private Status getStatusByName(String name) {
-        List<Status> statusList = statusRepository.findAllByName(name, null);
-        return (!statusList.isEmpty()) ? statusList.get(0) : null;
-    }
+//    @Test
+//    void insertStatusTest() {
+//        Status status = new Status("archive");
+//        status = statusRepository.save(status);
+//        assumeTrue(status.getId() != null);
+//    }
+//
+//    @Test
+//    void updateStatusTest() {
+//        Status status = getStatusByName("active");
+//        assumeTrue(status != null);
+//
+//        String statusName = "activeStatus";
+//        status.setName(statusName);
+//        status = statusRepository.save(status);
+//        assumeTrue(statusName.equals(status.getName()));
+//    }
+//
+//    @Test
+//    void deleteStatusTest() {
+//        Status status = getStatusByName("Временный");
+//        assumeTrue(status != null);
+//
+//        statusRepository.deleteById(status.getId());
+//
+//        status = getStatusByName("Временный");
+//        assumeTrue(status == null);
+//    }
+//
+//    private Status getStatusByName(String name) {
+//        List<Status> statusList = statusRepository.findAllByName(name, null);
+//        return (!statusList.isEmpty()) ? statusList.get(0) : null;
+//    }
 }
