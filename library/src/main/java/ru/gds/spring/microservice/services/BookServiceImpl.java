@@ -1,6 +1,7 @@
 package ru.gds.spring.microservice.services;
 
 import org.apache.log4j.Logger;
+
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,6 +14,9 @@ import ru.gds.spring.microservice.util.CommonUtils;
 import ru.gds.spring.microservice.domain.*;
 import ru.gds.spring.microservice.interfaces.*;
 import ru.gds.spring.microservice.util.FileUtils;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -27,18 +31,21 @@ public class BookServiceImpl implements BookService {
     private final AuthorRepository authorRepository;
     private final StatusRepository statusRepository;
     private final CommonUtils commonUtils;
+    private final MongoTemplate mongoTemplate;
 
     BookServiceImpl(BookRepository bookRepository,
                     GenreRepository genreRepository,
                     AuthorRepository authorRepository,
                     StatusRepository statusRepository,
-                    CommonUtils commonUtils) {
+                    CommonUtils commonUtils,
+                    MongoTemplate mongoTemplate) {
 
         this.bookRepository = bookRepository;
         this.genreRepository = genreRepository;
         this.authorRepository = authorRepository;
         this.statusRepository = statusRepository;
         this.commonUtils = commonUtils;
+        this.mongoTemplate = mongoTemplate;
     }
 
     public List<BookDto> findAllLight() {
@@ -78,13 +85,29 @@ public class BookServiceImpl implements BookService {
         return new BookDto();
     }
 
-    public List<BookDto> findByParam(String id, String name) {
+    public List<BookDto> findByParam(String id, String name, String authorId, String genreId) {
         try {
             if (!StringUtils.isEmpty(id)) {
                 return findAllById(id);
 
-            } else if (!StringUtils.isEmpty(name)) {
+            } else if (!StringUtils.isEmpty(name) && StringUtils.isEmpty(authorId) && StringUtils.isEmpty(genreId)) {
                 return findByNameLight(name);
+            } else if (!StringUtils.isEmpty(name) || !StringUtils.isEmpty(authorId) || !StringUtils.isEmpty(genreId)) {
+                Query query = new Query();
+                if(!StringUtils.isEmpty(name)){
+                    query.addCriteria(Criteria.where("name").is(name));
+                }
+                if(!StringUtils.isEmpty(authorId)){
+                    query.addCriteria(Criteria.where("authors._id").is(authorId));
+                }
+                if(!StringUtils.isEmpty(genreId)){
+                    query.addCriteria(Criteria.where("genres._id").is(genreId));
+                }
+                return  mongoTemplate
+                        .find(query, Book.class)
+                        .stream()
+                        .map(book -> BookDto.toDtoLight(book, true))
+                        .collect(Collectors.toList());
             }
         } catch (Exception e) {
             logger.error("Book not found");

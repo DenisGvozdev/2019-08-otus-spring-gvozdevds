@@ -8,6 +8,12 @@ $(function () {
     // По-умолчанию показываем все книги
     findAllBooks();
 
+    // Подгружаем жанры для фильтра на главной странице
+    fillGenres(null, true);
+
+    // Подгружаем авторов для фильтра на главной странице
+    fillAuthors(null, true);
+
     // Вешаем событие на открытие модального окна Добавление/Редактирование/Просмотр книги
     $("#myModal").on('shown', function () {
 
@@ -23,15 +29,15 @@ $(function () {
         if (isShowForm || isEditForm) {
             setButtonClickEvents("formCreateUpdateBook", isEditForm, isShowForm, isAddForm);
             fillMainFields(bookId, isEditForm, isAddForm, isShowForm);
-            fillAuthors(bookId);
-            fillGenres(bookId);
+            fillAuthors(bookId, false);
+            fillGenres(bookId, false);
             fillStatuses(bookId);
             setDisableFields(isShowForm);
         } else {
             setButtonClickEvents("formCreateUpdateBook", isEditForm, isShowForm, isAddForm);
             fillMainFields(null, isEditForm, isAddForm, isShowForm);
-            fillAuthors(null);
-            fillGenres(null);
+            fillAuthors(null, false);
+            fillGenres(null, false);
             fillStatuses(null);
         }
     });

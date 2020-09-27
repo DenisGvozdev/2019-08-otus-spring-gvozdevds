@@ -13,7 +13,7 @@ public interface BookService {
 
     BookDto findById(String id);
 
-    List<BookDto> findByParam(String id, String name);
+    List<BookDto> findByParam(String id, String name, String author, String genre);
 
     BookDto save(ParamsBook params);
 

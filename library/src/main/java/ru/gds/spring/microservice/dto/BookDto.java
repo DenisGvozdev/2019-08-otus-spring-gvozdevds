@@ -1,10 +1,12 @@
 package ru.gds.spring.microservice.dto;
 
+import org.springframework.util.StringUtils;
 import ru.gds.spring.microservice.constant.Constant;
 import ru.gds.spring.microservice.domain.Author;
 import ru.gds.spring.microservice.domain.Book;
 import ru.gds.spring.microservice.domain.Genre;
 import ru.gds.spring.microservice.domain.Status;
+import ru.gds.spring.microservice.util.FileUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -145,6 +147,20 @@ public class BookDto {
         bookDto.setCreateDate(book.getCreateDate());
         bookDto.setDescription(book.getDescription());
         bookDto.setWrite(write);
+        try {
+            String base64SignatureImage = Base64.getEncoder().encodeToString(book.getImage());
+            if(StringUtils.isEmpty(base64SignatureImage)){
+                base64SignatureImage = FileUtils.getDefaultBookTitleBase64();
+            }
+            String encodedImage = URLEncoder.encode(base64SignatureImage, "utf-8");
+            String extension = "data:image/jpg;base64,";
+            bookDto.setImage(book.getImage());
+            bookDto.setImageExtension(extension);
+            bookDto.setImageString(extension + encodedImage);
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         bookDto.setStatus(Constant.OK);
         return bookDto;
     }

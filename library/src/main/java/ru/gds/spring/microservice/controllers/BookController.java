@@ -33,8 +33,10 @@ public class BookController {
     @GetMapping("books/{param}")
     public List<BookDto> findByParam(
             @RequestParam(value = "bookId") String id,
-            @RequestParam(value = "name") String name) {
-        return bookService.findByParam(id, name);
+            @RequestParam(value = "name") String name,
+            @RequestParam(value = "author") String author,
+            @RequestParam(value = "genre") String genre) {
+        return bookService.findByParam(id, name, author, genre);
     }
 
     @PostMapping("/books")

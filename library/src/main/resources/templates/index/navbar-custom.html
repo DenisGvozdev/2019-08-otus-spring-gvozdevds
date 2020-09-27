@@ -1,6 +1,11 @@
 <div class="navbar-custom">
-    <a class="brand" href="/">Моя библиотека</a>
-    <ul class="nav nav-pills">
+    <div class="navbar-custom-left">
+        <ul class="nav nav-pills">
+        <li>
+            <div class="logo">
+                <a class="brand" href="/">Моя библиотека</a>
+            </div>
+        </li>
         <li>
             <form action="/" method="get" class="one">
                 <input type="submit" class="all-books-button" value="Все книги">
@@ -17,10 +22,12 @@
                 </form>
             </div>
         </li>
-    </ul>
-    <div class="authorization">
-        <a id="helloUser" href="/login"></a><br/>
-        <a id="exitUser" href="/logout" hidden="">Выход</a>
+        </ul>
+    </div>
+    <div class="navbar-custom-right">
+        <div class="authorization">
+            <a id="helloUser" href="/login"></a><br/>
+            <a id="exitUser" href="/logout" hidden="">Выход</a>
+        </div>
     </div>
 </div>
-<!--/div-->

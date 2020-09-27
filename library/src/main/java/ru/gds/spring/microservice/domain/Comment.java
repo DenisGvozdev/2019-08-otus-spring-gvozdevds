@@ -12,18 +12,19 @@ public class Comment {
 
     @Id
     private String id;
-
     private Book book;
-
     private String comment;
-
     private Date createDate;
+    private String username;
 
-    public Comment(Book book, String comment, Date createDate) {
+    public Comment(Book book, String comment, Date createDate, String username) {
         this.book = book;
         this.comment = comment;
         this.createDate = createDate;
+        this.username = username;
     }
+
+    public Comment(){}
 
     public String getId() {
         return id;
@@ -55,5 +56,13 @@ public class Comment {
 
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

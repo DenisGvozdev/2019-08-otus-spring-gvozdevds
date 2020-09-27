@@ -3,6 +3,7 @@ body {
     font-family: Calibri, Myriad;
     font-size: 10pt;
     height: 100%;
+    width: 100%;
 }
 
 div.container{
@@ -14,20 +15,107 @@ div.row{
 }
 
 div.main {
-    width: 99%;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    min-height: 100%;
-    z-index: 3;
+}
+
+div.right-menu {
+    width: 17%;
+    border: 0px solid black;
+    float: right;
+    padding: 5px 20px 0px 5px;
+}
+
+div.right-menu-form {
+    width: 100%;
+}
+
+div.right-menu-add-button-div {
+    width: 100%;
+    text-align: left;
+}
+
+div.right-menu-form-header-div {
+    width: 100%;
+    text-align: left;
+}
+
+.inputTextRighForm {
+    width: 100%;
+}
+
+div.right-menu-form-button {
+    width: 100%;
+    text-align: center;
 }
 
 div.books {
-    border: 1px solid black;
-    width: 98%;
-    margin-left: 10px;
-    margin-right: 10px;
-    flex: 1 0 auto;
+    width: 82%;
+    float: left;
+    margin: 0px 0px 0px 5px;
 }
+
+div.listBooks {
+
+}
+
+div.bookItem {
+    width: 100%;
+    height: 155px;
+    margin: 5px 0px 5px 0px;
+    border: 1px solid green;
+    position: relative;
+}
+
+img.bookImage {
+    height: 153px;
+    /*width: 100%;*/
+}
+
+div.bookImageDiv {
+    /*height: 150px;*/
+    width: 10%;
+    float: left;
+}
+
+div.bookInfoDiv {
+    height: 150px;
+    width: 90%;
+    float: left;
+    padding: 0px 5px 0px 5px;
+    text-align: left;
+}
+
+div.nameAndButtonsDiv {
+    width: 100%;
+    text-align: left;
+}
+
+div.bookNameDiv {
+    width: 70%;
+    text-align: left;
+    font-size:18px;
+    font-weight:bold;
+    float: left;
+}
+
+div.bookButtonsDiv {
+    width: 30%;
+    text-align: right;
+    font-size:14px;
+    vertical-align: bottom;
+    float: right;
+}
+
+div.bookDescriptionDiv {
+    width: 100%;
+    height: 120px;
+    text-align: left;
+    font-size:14px;
+    overflow-x: hidden;
+    overflow-y: auto;
+ }
 
 table.books {
     text-align: center;
@@ -42,6 +130,7 @@ table.dataTable tbody tr.selected {
 form.one {
     padding-top: 3px;
     padding-bottom: 3px;
+    padding-right: 20px;
     vertical-align: top;
 }
 
@@ -91,8 +180,6 @@ div.findBooks {
     margin:0 auto;
 }
 
-/*tr:nth-child(even) {background: #F5F5F5}*/
-
 tr{
     position:relative;
 }
@@ -131,6 +218,13 @@ div.bookForm {
     float: right;
 }
 
+div.form-element {
+    float: left;
+    text-align: left;
+    margin: 0px 0px 5px 0px;
+    width: 100%;
+}
+
 div.groupForm {
     width: 100%;
 }
@@ -158,9 +252,8 @@ select.selectFields {
 
 .navbar-custom-main {
     background-color: lightgreen;
-    margin: 0px 100px 0px 100px;
     padding: 5px 5px 0px 5px;
-    width: 635px;
+    width: 100%;
 }
 
 .navbar-custom {
@@ -169,20 +262,31 @@ select.selectFields {
     padding: 0px 0px 0px 0px;
 }
 
-.navbar-custom, .navbar-custom,
 .navbar-custom .navbar-text {
     color: #807c0d;
 }
 
+div.navbar-custom-left {
+    float: left;
+}
+
+div.navbar-custom-right {
+    width: 150px;
+    float: right;
+}
+
+div.logo {
+    padding: 5px 10px 0px 10px;
+}
+
 div.authorization {
-    padding-top: 5px;
-    text-align: center;
+    width: 100%;
+    padding: 5px 0px 0px 0px;
 }
 
 .container-fluid-custom{
-    margin: 0px 100px 0px 100px;
     padding: 0px 0px 0px 0px;
-    width: 635px;
+    width: 100%;
 }
 
 div.authors {

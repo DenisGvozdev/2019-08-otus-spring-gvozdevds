@@ -1,20 +1,62 @@
+<div class="right-menu">
+    <div class="right-menu-add-button-div">
+        <button id="buttonAddBook"
+                type="button"
+                class="refButton"
+                onclick="showBookForm({bookId: null}, 'add')" hidden>
+            <span class="glyphicon glyphicon-plus"></span>
+            <span><strong>Добавить книгу</strong></span>
+        </button>
+    </div>
+    <div class="right-menu-form-header-div">
+        <h4 id="formRightMenuHeader">Поиск</h4>
+    </div>
+    <form id="formRightMenu" title="Поиск" action="" method="get" class="right-menu-form">
+
+        <input name="name" class="inputTextRighForm" type="search" placeholder="Название книги">
+
+        <div class="form-element">
+            <div class="form-group">
+                <label for="rightMenuFormGeneIds" class="labelInput">Жанр</label>
+                <select id="rightMenuFormGeneIds"
+                        name="genre"
+                        class="form-control"
+                        multiple="multiple">
+                </select>
+            </div>
+        </div>
+
+        <div class="form-element">
+            <div class="form-group">
+                <label for="rightMenuFormAuthorIds" class="labelInput">Автор</label>
+                <select id="rightMenuFormAuthorIds"
+                        name="author"
+                        class="form-control"
+                        multiple="multiple">
+                </select>
+            </div>
+        </div>
+
+        <div class="right-menu-form-button">
+            <button class="search"
+                    id="buttonRightmenuSearch"
+                    type="button"
+                    onclick="findBookByParams('formRightMenu')">
+                Найти
+            </button>
+            <button class="search"
+                    id="buttonRightmenuRefresh"
+                    type="button"
+                    onclick="findAllBooks()">
+                Сброс
+            </button>
+        </div>
+    </form>
+</div>
+
 <div class="books">
-    <table class="books" id="tableBooks">
-        <thead>
-        <tr>
-            <th id="thBookName">Название</th>
-            <th id="thBookDescription">Описание</th>
-            <th id="bookCrudButtons">
-                <button id="buttonAddBook" type="button" class="refButton"
-                        onclick="showBookForm({bookId: null}, 'add')" hidden>
-                    <span class="glyphicon glyphicon-plus"></span>
-                    <span><strong>Добавить</strong></span>
-                </button>
-            </th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+    <div id="tableBooks">
+    </div>
+    <div id="listBooks">
+    </div>
 </div>

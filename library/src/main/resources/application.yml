@@ -28,10 +28,13 @@ spring:
         active: development
 
       database: mydb
-      uri: mongodb://0.0.0.0:27017/mydb
-      host: 0.0.0.0
-      #uri: mongodb://127.0.0.1:27017/mydb
-      #host: 127.0.0.1
+#      uri: mongodb://dgvozdev:2mL3VmSLfzMngDBPassword@0.0.0.0:27017
+#      username: dgvozdev
+#      password: 2mL3VmSLfzMngDBPassword
+#      authentication-database: mydb
+#      host: 0.0.0.0
+      uri: mongodb://127.0.0.1:27017/mydb
+      host: 127.0.0.1
       port: 27017
 
   #thymeleaf:
